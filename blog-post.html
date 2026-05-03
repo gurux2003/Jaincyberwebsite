@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Blog Post | Jain Cyber Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.post-layout{display:grid;grid-template-columns:1fr 320px;gap:48px;align-items:start;margin-top:-40px;position:relative;z-index:2}
+.post-article{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.post-cover{height:320px;background:linear-gradient(135deg,var(--ink3),var(--card2));display:flex;align-items:center;justify-content:center;font-size:80px;border-bottom:1px solid var(--line);position:relative}
+.post-cat-badge{position:absolute;top:16px;left:16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#000;background:var(--blue);padding:4px 12px;border-radius:100px;letter-spacing:.06em}
+.post-body{padding:40px}
+.post-meta-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.post-meta-item{font-family:var(--mono);font-size:11px;color:var(--txt3);display:flex;align-items:center;gap:6px}
+.post-meta-item i{color:var(--blue);font-size:10px}
+.post-body h1{font-size:clamp(24px,3vw,38px);font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:20px}
+.post-content{font-size:16px;color:var(--txt2);line-height:1.8}
+.post-content h2{font-family:var(--sans);font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.02em;margin:36px 0 14px}
+.post-content h3{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--txt);margin:28px 0 10px}
+.post-content p{margin-bottom:18px}
+.post-content ul,.post-content ol{margin:14px 0 18px 20px;display:flex;flex-direction:column;gap:8px}
+.post-content li{line-height:1.65}
+.post-content strong{color:var(--txt);font-weight:700}
+.post-content em{color:var(--blue);font-style:italic}
+.post-content blockquote{border-left:3px solid var(--blue);padding:14px 18px;background:rgba(29,114,245,.05);border-radius:0 5px 5px 0;margin:22px 0;font-size:15px;font-style:italic;color:var(--txt)}
+.post-content code{font-family:var(--mono);font-size:13px;background:var(--ink3);padding:2px 7px;border-radius:4px;color:var(--blue)}
+.post-content pre{background:var(--ink3);border:1px solid var(--line);border-radius:var(--r);padding:20px;overflow-x:auto;margin:20px 0}
+.post-content pre code{background:none;padding:0}
+.post-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.post-tag{font-family:var(--mono);font-size:10px;color:var(--blue);background:rgba(29,114,245,.08);border:1px solid rgba(29,114,245,.2);padding:4px 12px;border-radius:100px}
+.post-share{display:flex;align-items:center;gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.share-label{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;margin-right:4px}
+.share-btn{background:var(--ink3);border:1px solid var(--line);border-radius:6px;padding:8px 14px;font-family:var(--mono);font-size:11px;color:var(--txt2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.share-btn:hover{border-color:var(--blue);color:var(--blue)}
+.post-author{background:var(--card2);border:1px solid var(--line);border-radius:5px;padding:20px;margin-top:24px;display:flex;align-items:center;gap:16px}
+.pa-avatar{width:52px;height:52px;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.pa-name{font-size:15px;font-weight:700;margin-bottom:3px}
+.pa-role{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;display:block}
+.pa-bio{font-size:13px;color:var(--txt2);line-height:1.6}
+/* Sidebar */
+.post-sidebar{position:sticky;top:90px;display:flex;flex-direction:column;gap:18px}
+.sidebar-widget{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.sw-head{padding:14px 18px;background:var(--ink3);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.16em;text-transform:uppercase}
+.sw-body{padding:18px}
+.related-post-link{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);text-decoration:none;transition:all .2s}
+.related-post-link:last-child{border-bottom:none;padding-bottom:0}
+.related-post-link:hover{transform:translateX(3px)}
+.rpl-icon{font-size:22px;flex-shrink:0}
+.rpl-title{font-size:13px;font-weight:600;color:var(--txt);line-height:1.4;margin-bottom:4px;transition:color .2s}
+.related-post-link:hover .rpl-title{color:var(--blue)}
+.rpl-meta{font-family:var(--mono);font-size:10px;color:var(--txt3)}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.toc-item{font-size:13px;color:var(--txt2);cursor:pointer;padding:4px 0;border-left:2px solid var(--line);padding-left:12px;transition:all .2s}
+.toc-item:hover{color:var(--blue);border-left-color:var(--blue)}
+.toc-item.h3{padding-left:24px;font-size:12px}
+/* Related bottom section */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.related-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all .25s;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.related-card:hover{border-color:var(--line2);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.rc-img{height:130px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
+.rc-cat{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:9px;font-weight:700;color:#000;background:var(--blue);padding:2px 9px;border-radius:100px}
+.rc-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.rc-body h3{font-size:14px;font-weight:700;letter-spacing:-.01em;line-height:1.4;margin-bottom:8px;transition:color .2s;flex:1}
+.related-card:hover h3{color:var(--blue)}
+.rc-meta{font-family:var(--mono);font-size:10px;color:var(--txt3)}
+@media(max-width:1100px){.post-layout{grid-template-columns:1fr}.post-sidebar{position:static}.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.post-body{padding:24px}.post-cover{height:200px;font-size:56px}.related-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></a>
+  <div class="nav-center">
+    <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+    <div class="nav-item"><a href="services.html" class="nav-link">Services</a></div>
+    <div class="nav-item"><a href="industries.html" class="nav-link">Industries</a></div>
+    <div class="nav-item"><a href="about.html" class="nav-link">About</a></div>
+    <div class="nav-item"><a href="case-studies.html" class="nav-link">Case Studies</a></div>
+    <div class="nav-item"><a href="blog.html" class="nav-link active">Blog</a></div>
+    <div class="nav-item"><a href="resources.html" class="nav-link">Resources</a></div>
+    <div class="nav-item"><a href="contact.html" class="nav-link">Contact</a></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-phone"><i class="fas fa-phone" style="color:var(--blue);font-size:11px"></i><a href="tel:+919509679668">+91-9509679668</a></div>
+    <button class="btn btn-blue btn-sm" onclick="openModal()"><i class="fas fa-shield-halved"></i> Free Assessment</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="#" onclick="openModal();return false" class="highlight">→ Free Assessment</a>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero" style="padding-bottom:80px">
+  <div class="page-hero-grid"></div><div class="page-hero-glow"></div>
+  <div class="wrap" style="position:relative">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><a href="blog.html">Blog</a><span>/</span><span id="post-breadcrumb">Article</span></div>
+  </div>
+</div>
+
+<section class="section" style="padding-top:40px">
+  <div class="wrap">
+    <div class="post-layout">
+      <!-- Article -->
+      <article class="post-article reveal">
+        <div class="post-cover" id="post-cover">
+          <span id="post-icon">🔐</span>
+          <span class="post-cat-badge" id="post-cat">OT Security</span>
+        </div>
+        <div class="post-body">
+          <div class="post-meta-bar">
+            <span class="post-meta-item"><i class="fas fa-calendar"></i><span id="post-date">Loading...</span></span>
+            <span class="post-meta-item"><i class="fas fa-clock"></i><span id="post-read">5 min read</span></span>
+            <span class="post-meta-item"><i class="fas fa-user"></i><span id="post-author-name">Jain Cyber Team</span></span>
+            <span class="post-meta-item"><i class="fas fa-eye"></i><span id="post-views">0 views</span></span>
+          </div>
+          <h1 id="post-title">Loading article...</h1>
+          <div class="post-content" id="post-content">
+            <div style="text-align:center;padding:40px;color:var(--txt3);font-family:var(--mono)">Loading...</div>
+          </div>
+          <div class="post-tags" id="post-tags"></div>
+          <div class="post-share">
+            <span class="share-label">Share</span>
+            <button class="share-btn" onclick="share('linkedin')"><i class="fab fa-linkedin-in"></i> LinkedIn</button>
+            <button class="share-btn" onclick="share('twitter')"><i class="fab fa-x-twitter"></i> Twitter</button>
+            <button class="share-btn" onclick="copyLink()"><i class="fas fa-link"></i> Copy Link</button>
+          </div>
+          <div class="post-author" id="post-author-card">
+            <div class="pa-avatar">👨‍💼</div>
+            <div>
+              <div class="pa-name" id="pa-name">Virendra Kothari</div>
+              <span class="pa-role">Founder & Principal OT Security Consultant</span>
+              <p class="pa-bio">20+ years in OT/IT cybersecurity. Core specialist in Railway & Metro SCADA security. IEC 62443 certified assessor protecting India's critical infrastructure.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="post-sidebar">
+        <div class="sidebar-widget">
+          <div class="sw-head">Table of Contents</div>
+          <div class="sw-body">
+            <ul class="toc-list" id="toc-list">
+              <li class="toc-item" onclick="scrollTo(0,400)">Introduction</li>
+              <li class="toc-item" onclick="scrollTo(0,800)">Key Threats</li>
+              <li class="toc-item" onclick="scrollTo(0,1200)">Best Practices</li>
+              <li class="toc-item" onclick="scrollTo(0,1600)">Conclusion</li>
+            </ul>
+          </div>
+        </div>
+        <div class="sidebar-widget">
+          <div class="sw-head">Free Assessment</div>
+          <div class="sw-body">
+            <p style="font-size:13px;color:var(--txt2);line-height:1.65;margin-bottom:14px">Concerned about your OT security posture? Get a free expert assessment tailored to your environment.</p>
+            <button onclick="openModal()" class="btn btn-blue" style="width:100%;justify-content:center;padding:11px"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+          </div>
+        </div>
+        <div class="sidebar-widget">
+          <div class="sw-head">Related Articles</div>
+          <div class="sw-body" id="related-sidebar">
+            <a href="blog-post.html?id=2" class="related-post-link"><span class="rpl-icon">📋</span><div><div class="rpl-title">IEC 62443-3-2: A Practical OT Risk Assessment Guide</div><div class="rpl-meta">7 min read</div></div></a>
+            <a href="blog-post.html?id=3" class="related-post-link"><span class="rpl-icon">🔐</span><div><div class="rpl-title">Top 5 OT Threats Facing Indian Manufacturing</div><div class="rpl-meta">6 min read</div></div></a>
+            <a href="blog-post.html?id=4" class="related-post-link"><span class="rpl-icon">📜</span><div><div class="rpl-title">ISO 27001 vs IEC 62443: Which for OT?</div><div class="rpl-meta">9 min read</div></div></a>
+          </div>
+        </div>
+        <div class="sidebar-widget">
+          <div class="sw-head">Share This Article</div>
+          <div class="sw-body" style="display:flex;flex-direction:column;gap:8px">
+            <button class="share-btn" onclick="share('linkedin')" style="width:100%;justify-content:center"><i class="fab fa-linkedin-in"></i> Share on LinkedIn</button>
+            <button class="share-btn" onclick="share('twitter')" style="width:100%;justify-content:center"><i class="fab fa-x-twitter"></i> Share on Twitter</button>
+            <button class="share-btn" onclick="copyLink()" style="width:100%;justify-content:center"><i class="fas fa-link"></i> Copy Link</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- Related articles -->
+<section class="section" style="background:var(--ink2);padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:32px">
+      <span class="eyebrow">// Keep Reading</span>
+      <h2 class="h2" style="font-size:clamp(22px,2.5vw,34px)">Related <span class="accent">Articles</span></h2>
+    </div>
+    <div class="related-grid reveal">
+      <a href="blog-post.html?id=2" class="related-card"><div class="rc-img"><span>📋</span><span class="rc-cat">Compliance</span></div><div class="rc-body"><h3>IEC 62443-3-2: A Practical Guide for OT Risk Assessment</h3><div class="rc-meta">Nov 2024 · 7 min read</div></div></a>
+      <a href="blog-post.html?id=3" class="related-card"><div class="rc-img"><span>🔐</span><span class="rc-cat">OT Security</span></div><div class="rc-body"><h3>Top 5 OT Cybersecurity Threats Facing Indian Manufacturing</h3><div class="rc-meta">Oct 2024 · 6 min read</div></div></a>
+      <a href="blog-post.html?id=4" class="related-card"><div class="rc-img"><span>📜</span><span class="rc-cat">Compliance</span></div><div class="rc-body"><h3>ISO 27001 vs IEC 62443: Which Does Your OT Network Need?</h3><div class="rc-meta">Sep 2024 · 9 min read</div></div></a>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <h2 class="h2">Put This Knowledge <span class="accent">Into Action</span></h2>
+    <p class="body-lg">Request a free OT security assessment and let our experts apply these insights to your specific environment.</p>
+    <div class="actions">
+      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="blog.html" class="btn btn-outline btn-lg"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="footer-brand-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></div><p>India's premier OT/ICS cybersecurity firm. Expert insights and assessments for critical infrastructure.</p><div class="footer-contact-row"><i class="fas fa-location-dot"></i><span>Indore, Madhya Pradesh, India</span></div><div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+919509679668">+91-9509679668</a></div><div class="footer-contact-row"><i class="fas fa-envelope"></i><a href="mailto:virendra.kothari@jaincybersolutions.com">virendra.kothari@jaincybersolutions.com</a></div></div>
+      <div class="footer-col"><h5>Blog Topics</h5><ul><li><a href="blog.html">OT Security</a></li><li><a href="blog.html">Railway & Metro</a></li><li><a href="blog.html">Compliance</a></li><li><a href="blog.html">Case Studies</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Security Assessment</a></li><li><a href="services.html">Risk Analysis</a></li><li><a href="services.html">Gap Analysis</a></li><li><a href="services.html">Training</a></li></ul></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="resources.html">Reports</a></li><li><a href="resources.html">Guides</a></li><li><a href="resources.html">Tools</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Jain Cyber Solutions. All rights reserved.</p><div class="footer-socials"><a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a><a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a><a href="mailto:virendra.kothari@jaincybersolutions.com"><i class="fas fa-envelope"></i></a></div><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+  </div>
+</footer>
+
+<div class="modal-backdrop" id="modal-assessment" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div class="modal-stripe"></div>
+    <div class="modal-head"><h3>Request Free Assessment</h3><p>Our team responds within 24 hours.</p><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><form onsubmit="submitLead(this);return false" style="display:flex;flex-direction:column;gap:14px">
+      <div class="f2"><div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your name" required></div><div class="fg"><label class="fl">Phone *</label><input name="phone" class="fi" placeholder="+91-XXXXXXXXXX" required></div></div>
+      <div class="f2"><div class="fg"><label class="fl">Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div><div class="fg"><label class="fl">Company</label><input name="company" class="fi" placeholder="Organization"></div></div>
+      <div class="fg"><label class="fl">Details</label><textarea name="message" class="fi"></textarea></div>
+      <button type="submit" class="btn-submit"><i class="fas fa-shield-halved"></i> Submit Request</button>
+    </form></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/site-data.js"></script>
+<script>
+const ICONS = {'OT Security':'🔐','Railway':'🚇','Compliance':'📋','IT Security':'💻','Case Study':'📊','Training':'🎓','News':'📰'};
+
+const FALLBACK_POSTS = {
+  '1': {
+    title: 'Why Railway OT Security Is India\'s #1 Cyber Priority for 2025',
+    category: 'Railway', author: 'Virendra Kothari', readTime: 8,
+    publishedAt: new Date('2024-12-10'), views: 1247, tags: ['Railway','SCADA','IEC 62443','OT Security','Critical Infrastructure'],
+    content: `
+      <h2>Introduction</h2>
+      <p>India's railway network — the fourth largest in the world, carrying over 23 million passengers daily — is undergoing rapid digital transformation. From automatic train protection systems and centralized traffic control to passenger information displays and smart ticketing, modern railways are increasingly dependent on connected operational technology (OT) systems.</p>
+      <p>This digitalization brings enormous efficiency benefits. It also creates a vastly expanded attack surface that sophisticated cyber adversaries are actively probing — and in some cases, successfully exploiting.</p>
+      <blockquote>A successful cyber attack on railway SCADA doesn't just cause financial damage. It can delay millions of commuters, disrupt supply chains, and in worst-case scenarios involving signaling systems, create conditions that endanger passenger safety.</blockquote>
+      <h2>The Evolving Threat Landscape</h2>
+      <p>In 2023, there were over 150 documented cyber incidents targeting railway infrastructure globally — a 340% increase from 2020. While many of these affected European and North American systems, Indian rail is increasingly in the crosshairs of sophisticated threat actors.</p>
+      <p>The threat actors targeting railway OT systems include:</p>
+      <ul>
+        <li><strong>Nation-state sponsored APT groups</strong> — seeking geopolitical leverage through infrastructure disruption</li>
+        <li><strong>Ransomware operators</strong> — targeting operational systems where disruption pressure maximizes ransom payment probability</li>
+        <li><strong>Hacktivists</strong> — seeking public visibility through high-profile critical infrastructure incidents</li>
+        <li><strong>Insiders</strong> — disgruntled employees or contractors with legitimate OT access</li>
+      </ul>
+      <h2>Why Railway OT Is Uniquely Vulnerable</h2>
+      <p>Railway OT environments present security challenges that simply don't exist in enterprise IT contexts:</p>
+      <h3>1. Legacy Systems With Decade-Long Lifecycles</h3>
+      <p>Railway signaling systems, control equipment, and embedded devices often run for 20-30 years. Many SCADA systems in active service today were designed and deployed in the early 2000s, long before cybersecurity was considered in OT design. Patching is constrained by operational requirements and vendor support timelines that have no parallel in IT.</p>
+      <h3>2. Safety-Critical Convergence</h3>
+      <p>Unlike manufacturing OT where a breach might halt production, railway OT includes systems where a security failure can directly impact physical safety. Automatic Train Protection (ATP), interlocking systems, and level crossing controls are safety-critical OT components increasingly connected to networks.</p>
+      <h3>3. Third-Party Vendor Access</h3>
+      <p>Railway OT is maintained by a complex ecosystem of OEMs, system integrators and maintenance contractors — each requiring remote access to operational systems. Managing this access securely while maintaining operational efficiency is one of the hardest problems in railway cybersecurity.</p>
+      <h3>4. OT/IT Convergence</h3>
+      <p>Digital transformation is driving connectivity between passenger information systems (IT), enterprise networks (IT) and operational control systems (OT). Each connection that crosses the OT/IT boundary is a potential attack pathway into safety-critical systems.</p>
+      <h2>The IEC 62443 Framework for Railway Security</h2>
+      <p>IEC 62443 — specifically the 62443-3-2 risk assessment standard — provides the most robust framework available for railway OT security. It introduces the concepts of Security Levels (SL) and Zones & Conduits that map naturally to railway network architecture.</p>
+      <p>A proper IEC 62443-3-2 assessment for a railway environment will:</p>
+      <ul>
+        <li>Identify and classify all OT assets across the network</li>
+        <li>Define Security Zones based on consequence of compromise</li>
+        <li>Identify Conduits between zones and assess their security</li>
+        <li>Assign Target Security Levels based on risk analysis</li>
+        <li>Gap analysis against current security capabilities</li>
+        <li>Generate a prioritized remediation roadmap</li>
+      </ul>
+      <h2>Practical Best Practices for Railway OT Security</h2>
+      <p>Based on our experience assessing railway and metro OT environments across India, the most impactful security improvements are:</p>
+      <h3>Network Segmentation Using Zone & Conduit Model</h3>
+      <p>Implementing proper OT/IT network segmentation using IEC 62443's Zone and Conduit model is the single highest-impact action. This creates defensible boundaries between safety-critical systems (signaling, interlocking) and lower-security-level systems (passenger information, enterprise IT).</p>
+      <h3>Passive Continuous Monitoring</h3>
+      <p>Deploying passive OT monitoring (critical — never active scanning in railway OT) provides visibility into what's actually happening on operational networks. This is typically the first time railway operators discover the full extent of their OT asset inventory and communications patterns.</p>
+      <h3>Secure Vendor Access Management</h3>
+      <p>Implementing just-in-time privileged access management for vendor and maintenance access, with full session recording, eliminates one of the highest-risk attack pathways in railway OT environments.</p>
+      <h3>Incident Response Planning</h3>
+      <p>Developing and exercising OT-specific incident response playbooks — separate from IT incident response — that account for the operational constraints of railway environments. Who do you call at 2 AM when the signaling SCADA shows anomalous behavior? The answer needs to be documented before the incident occurs.</p>
+      <h2>What India's Railway Sector Must Do Now</h2>
+      <p>The window for proactive security investment is narrowing. Based on global threat intelligence and our India-specific assessment experience, we recommend railway organizations prioritize:</p>
+      <ul>
+        <li>Immediate OT asset discovery and inventory using passive methods</li>
+        <li>IEC 62443-3-2 risk assessment to understand current security posture</li>
+        <li>Network segmentation to separate safety-critical OT from other systems</li>
+        <li>Vendor access management implementation</li>
+        <li>OT-specific cybersecurity awareness training for engineering and operations staff</li>
+      </ul>
+      <h2>Conclusion</h2>
+      <p>Railway OT security is not optional — it is a national security imperative. The organizations that invest in understanding and protecting their OT environments today will be far better positioned when — not if — they face a sophisticated cyber attack targeting their operational technology systems.</p>
+      <p>The good news: implementing effective railway OT security doesn't require replacing operational systems or disrupting services. With the right expertise and methodology, significant security improvements can be made passively, without touching a single operational system.</p>
+    `
+  },
+  '2': {
+    title: 'IEC 62443-3-2: A Practical Guide for OT Risk Assessment',
+    category: 'Compliance', author: 'Jain Cyber Team', readTime: 7,
+    publishedAt: new Date('2024-11-15'), views: 843, tags: ['IEC 62443','OT','Risk Assessment','Compliance','IACS'],
+    content: `
+      <h2>What is IEC 62443-3-2?</h2>
+      <p>IEC 62443-3-2 is the security risk assessment standard for Industrial Automation and Control Systems (IACS). It provides a systematic methodology for identifying, analyzing, and managing security risks in OT environments — and it's the most widely adopted framework for this purpose globally.</p>
+      <p>Unlike IT security risk frameworks that assume environments can be patched and updated freely, IEC 62443-3-2 is explicitly designed for the constraints of industrial OT environments: legacy systems, zero-downtime requirements, safety-critical systems, and proprietary industrial protocols.</p>
+      <h2>Key Concepts You Must Understand</h2>
+      <h3>Security Levels (SL)</h3>
+      <p>IEC 62443 defines four Security Levels (SL 1–4) based on the motivation and capability of potential attackers:</p>
+      <ul>
+        <li><strong>SL 1:</strong> Protection against casual or coincidental violation</li>
+        <li><strong>SL 2:</strong> Protection against intentional violation using simple means</li>
+        <li><strong>SL 3:</strong> Protection against sophisticated attack by motivated adversary</li>
+        <li><strong>SL 4:</strong> Protection against state-sponsored or highly sophisticated attack</li>
+      </ul>
+      <h3>Zones and Conduits</h3>
+      <p>The Zone and Conduit model is the architectural foundation of IEC 62443-3-2. A Zone is a grouping of assets with similar security requirements. A Conduit is a communication path between zones that must be secured and monitored. This model maps naturally to industrial network architectures and provides a practical framework for network segmentation decisions.</p>
+      <h2>The IEC 62443-3-2 Assessment Process</h2>
+      <p>A proper assessment follows these structured phases:</p>
+      <h3>Phase 1: Initial Risk Assessment</h3>
+      <p>Identify the system under consideration (SUC), document all assets, and conduct an initial risk assessment to understand the threat landscape relevant to your specific OT environment and sector.</p>
+      <h3>Phase 2: Zone and Conduit Design</h3>
+      <p>Group assets into Security Zones based on consequence of compromise and operational relationships. Define Conduits between zones and assess their current security state. This is where the real OT architecture expertise matters.</p>
+      <h3>Phase 3: Target Security Level Definition</h3>
+      <p>For each Zone, define the Target Security Level (SL-T) based on the risk analysis. This becomes the security requirement that the zone must achieve.</p>
+      <h3>Phase 4: Capability Assessment</h3>
+      <p>Assess the current Security Level (SL-C) of each zone against its Target. The gap between SL-C and SL-T defines the remediation scope.</p>
+      <h2>Common Implementation Mistakes</h2>
+      <p>Based on our experience conducting IEC 62443-3-2 assessments across India, the most common mistakes are:</p>
+      <ul>
+        <li>Using active scanning tools that can crash OT devices — always use passive methods</li>
+        <li>Defining zones too broadly, creating low-security islands around high-consequence assets</li>
+        <li>Forgetting to include vendor and contractor access pathways in the Conduit model</li>
+        <li>Setting unrealistic Target Security Levels that cannot be achieved within operational constraints</li>
+      </ul>
+      <h2>Conclusion</h2>
+      <p>IEC 62443-3-2 provides a robust, practical framework for OT risk assessment that genuinely accounts for industrial constraints. Implemented correctly with genuine OT domain expertise, it delivers a risk-prioritized roadmap that makes OT environments meaningfully more secure without disrupting operations.</p>
+    `
+  },
+  '3': {
+    title: 'Top 5 OT Cybersecurity Threats Facing Indian Manufacturing in 2025',
+    category: 'OT Security', author: 'Jain Cyber Team', readTime: 6,
+    publishedAt: new Date('2024-10-20'), views: 612, tags: ['Manufacturing','OT Security','Ransomware','Threats','PLC'],
+    content: `
+      <h2>Introduction</h2>
+      <p>Indian manufacturing is in the crosshairs of an escalating cyber threat. As production facilities modernize with connected PLCs, DCS systems, and industrial IoT devices, they simultaneously expand their attack surface and become more attractive targets for sophisticated threat actors.</p>
+      <p>Based on our threat intelligence and assessment experience across Indian manufacturing OT environments, here are the five most dangerous threats you need to be prepared for in 2025.</p>
+      <h2>Threat 1: OT-Targeting Ransomware</h2>
+      <p>Ransomware groups have learned that OT environments are uniquely valuable targets. Disrupting production lines creates immediate, quantifiable financial pressure — far more effective leverage than encrypting back-office systems.</p>
+      <p>Modern ransomware variants like EKANS (Snake) are specifically designed to kill OT processes before encrypting files, maximizing operational disruption. The average manufacturing ransomware incident in India costs ₹3.3 Cr and causes 5.7 days of production downtime.</p>
+      <h2>Threat 2: IT-to-OT Lateral Movement</h2>
+      <p>The most common attack pathway into manufacturing OT is through connected IT systems. Once an attacker compromises the enterprise IT network (often via phishing), they probe for connections into the OT network.</p>
+      <p>In our assessments, we find exploitable IT-to-OT connections in over 73% of manufacturing facilities — often connections that operations teams didn't know existed.</p>
+      <h2>Threat 3: Supply Chain and Third-Party Vendor Attacks</h2>
+      <p>OT vendors, system integrators, and maintenance contractors require remote access to production systems. Each of these access pathways is a potential attack vector — and vendor credentials are frequently compromised through IT-side breaches that the manufacturer never hears about.</p>
+      <h2>Threat 4: Legacy PLC and DCS Vulnerabilities</h2>
+      <p>Industrial control equipment often runs for 15-20 years. Many PLCs and DCS systems in active service have known, publicly documented vulnerabilities with no available patches — either because the vendor no longer supports the product or because patching requires production downtime that can't be scheduled.</p>
+      <h2>Threat 5: Insider Threats</h2>
+      <p>Disgruntled employees or contractors with legitimate OT access represent one of the most difficult threats to defend against. Unlike external attackers who must bypass network security, insiders already have authorized access to operational systems.</p>
+      <h2>Conclusion</h2>
+      <p>The good news: all five of these threats can be significantly mitigated with a comprehensive OT security program aligned to IEC 62443. Network segmentation eliminates lateral movement pathways. Vendor access management addresses supply chain risks. Continuous passive monitoring detects anomalous behavior from insiders. A proper risk assessment prioritizes remediation for legacy vulnerabilities.</p>
+      <p>The critical first step is understanding your current security posture through a professional OT risk assessment — before a threat actor does that assessment for you.</p>
+    `
+  }
+};
+
+function loadPost() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || '1';
+  // Prefer localStorage blog if available
+  const localBlogs = (window.getLocalDataSite ? getLocalDataSite('blogs', []) : null) || [];
+  const localPost = localBlogs.find(b => String(b._id) === String(id));
+  const post = localPost || FALLBACK_POSTS[id] || FALLBACK_POSTS['1'];
+
+  document.title = post.title + ' | Jain Cyber Solutions';
+  document.getElementById('post-breadcrumb').textContent = post.category;
+  document.getElementById('post-icon').textContent = ICONS[post.category] || '📄';
+  document.getElementById('post-cat').textContent = post.category;
+  document.getElementById('post-title').textContent = post.title;
+  document.getElementById('post-date').textContent = new Date(post.publishedAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('post-read').textContent = post.readTime + ' min read';
+  document.getElementById('post-author-name').textContent = post.author;
+  document.getElementById('post-views').textContent = post.views.toLocaleString() + ' views';
+  document.getElementById('pa-name').textContent = post.author;
+  document.getElementById('post-content').innerHTML = post.content;
+
+  if (post.tags?.length) {
+    document.getElementById('post-tags').innerHTML = post.tags.map(t =>
+      `<span class="post-tag">${t}</span>`
+    ).join('');
+  }
+
+  // Try backend
+  apiGet('/blogs/' + id).then(data => {
+    if (data?.blog) {
+      const b = data.blog;
+      document.title = b.title + ' | Jain Cyber Solutions';
+      document.getElementById('post-title').textContent = b.title;
+      document.getElementById('post-content').innerHTML = b.content;
+      document.getElementById('post-cat').textContent = b.category;
+      document.getElementById('post-icon').textContent = ICONS[b.category] || '📄';
+      document.getElementById('post-read').textContent = b.readTime + ' min read';
+      document.getElementById('post-author-name').textContent = b.author;
+      document.getElementById('pa-name').textContent = b.author;
+      document.getElementById('post-date').textContent = new Date(b.publishedAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+      if (b.tags?.length) {
+        document.getElementById('post-tags').innerHTML = b.tags.map(t => `<span class="post-tag">${t}</span>`).join('');
+      }
+    }
+  }).catch(() => {});
+}
+
+function share(platform) {
+  const url = encodeURIComponent(location.href);
+  const title = encodeURIComponent(document.title);
+  const urls = {
+    linkedin: `https://linkedin.com/sharing/share-offsite/?url=${url}`,
+    twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`
+  };
+  window.open(urls[platform], '_blank', 'width=600,height=400');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(() => toast('Link copied to clipboard!', 'success'));
+}
+
+loadPost();
+</script>
+</body>
+</html>
+
+

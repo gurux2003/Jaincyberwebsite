@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Partners | Jain Cyber Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.partner-tiers{display:flex;flex-direction:column;gap:48px}
+.tier-label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.tier-label::after{content:'';flex:1;height:1px;background:var(--line)}
+.tier-gold .tier-label{color:var(--blue)}
+.tier-silver .tier-label{color:var(--txt2)}
+.tier-tech .tier-label{color:var(--teal)}
+.partner-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.partner-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px 22px;text-align:center;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:12px}
+.partner-card:hover{border-color:var(--line2);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.partner-icon{width:64px;height:64px;background:var(--ink3);border:1px solid var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.partner-name{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.partner-type{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.08em}
+.partner-desc{font-size:12px;color:var(--txt3);line-height:1.5;text-align:center}
+.program-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.program-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:all .25s;position:relative;overflow:hidden}
+.program-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.program-gold::before{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.program-silver::before{background:linear-gradient(90deg,#888,#bbb)}
+.program-tech::before{background:linear-gradient(90deg,var(--teal),var(--blue2))}
+.program-card:hover{border-color:var(--line2);transform:translateY(-4px);box-shadow:0 18px 48px rgba(0,0,0,.4)}
+.prog-badge{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 12px;border-radius:100px;margin-bottom:16px;letter-spacing:.06em}
+.prog-gold{background:rgba(29,114,245,.12);color:var(--blue);border:1px solid rgba(29,114,245,.3)}
+.prog-silver{background:rgba(180,180,180,.1);color:#bbb;border:1px solid rgba(180,180,180,.2)}
+.prog-tech{background:rgba(0,210,180,.08);color:var(--teal);border:1px solid rgba(0,210,180,.2)}
+.program-card h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+.program-card .price{font-size:28px;font-weight:900;color:var(--blue);margin-bottom:6px;letter-spacing:-.03em}
+.program-card .price-note{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.08em;margin-bottom:20px}
+.prog-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.prog-features li{font-size:13px;color:var(--txt2);display:flex;align-items:flex-start;gap:9px;line-height:1.5}
+.prog-features li::before{content:'✓';color:var(--blue);font-weight:700;flex-shrink:0}
+.prog-features li.grey::before{color:var(--txt3)}
+.prog-features li.grey{opacity:.5}
+.become-btn{width:100%;background:var(--blue);color:#fff;font-family:var(--sans);font-weight:700;font-size:13px;padding:11px;border-radius:6px;border:none;cursor:pointer;transition:all .22s}
+.become-btn:hover{background:var(--blue2)}
+.become-btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line2)}
+.become-btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
+.why-partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.wp-card{background:var(--ink3);padding:32px 26px;transition:background .2s}
+.wp-card:hover{background:var(--card)}
+.wp-icon{font-size:30px;margin-bottom:14px}
+.wp-card h3{font-size:16px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.wp-card p{font-size:14px;color:var(--txt2);line-height:1.65}
+.partner-form-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;max-width:640px;margin:0 auto}
+.pf-stripe{height:3px;background:var(--blue)}
+.pf-head{padding:28px 32px 20px;border-bottom:1px solid var(--line)}
+.pf-head h3{font-size:20px;font-weight:800;margin-bottom:5px}
+.pf-head p{font-size:13px;color:var(--txt2)}
+.pf-body{padding:26px 32px}
+@media(max-width:1100px){.partner-grid{grid-template-columns:1fr 1fr}.program-grid{grid-template-columns:1fr}.why-partner-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.partner-grid{grid-template-columns:1fr}.why-partner-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></a>
+  <div class="nav-center">
+    <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+    <div class="nav-item"><a href="services.html" class="nav-link">Services</a></div>
+    <div class="nav-item"><a href="industries.html" class="nav-link">Industries</a></div>
+    <div class="nav-item"><a href="about.html" class="nav-link">About</a></div>
+    <div class="nav-item"><a href="case-studies.html" class="nav-link">Case Studies</a></div>
+    <div class="nav-item"><a href="blog.html" class="nav-link">Blog</a></div>
+    <div class="nav-item"><a href="resources.html" class="nav-link">Resources</a></div>
+    <div class="nav-item"><a href="contact.html" class="nav-link">Contact</a></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-phone"><i class="fas fa-phone" style="color:var(--blue);font-size:11px"></i><a href="tel:+919509679668">+91-9509679668</a></div>
+    <button class="btn btn-blue btn-sm" onclick="openModal()"><i class="fas fa-shield-halved"></i> Free Assessment</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="about.html">About</a>
+  <a href="blog.html">Blog</a><a href="resources.html">Resources</a><a href="contact.html">Contact</a>
+  <a href="#" onclick="openModal();return false" class="highlight">→ Free Assessment</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-grid"></div><div class="page-hero-glow"></div>
+  <div class="wrap" style="position:relative">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Partners</span></div>
+    <span class="eyebrow">// Partner Program</span>
+    <h1 class="h1" style="margin-bottom:18px">Partner with India's <span class="accent">OT Security Leader</span></h1>
+    <p class="body-lg" style="max-width:620px">Join our growing ecosystem of technology and channel partners. Together we protect India's critical infrastructure with best-in-class OT cybersecurity solutions and services.</p>
+    <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap">
+      <button class="btn btn-blue" onclick="document.getElementById('become-partner').scrollIntoView({behavior:'smooth'})"><i class="fas fa-handshake"></i> Become a Partner</button>
+      <a href="contact.html" class="btn btn-ghost"><i class="fas fa-envelope"></i> Contact Partnerships Team</a>
+    </div>
+  </div>
+</div>
+
+<!-- CURRENT PARTNERS -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:40px">
+      <span class="eyebrow">// Our Partners</span>
+      <h2 class="h2">Trusted <span class="accent">Partner Ecosystem</span></h2>
+      <p class="sec-lead">We work with leading technology vendors, system integrators and channel partners to deliver comprehensive OT cybersecurity solutions across India.</p>
+    </div>
+    <div class="partner-tiers reveal">
+      <div class="tier-gold">
+        <div class="tier-label">⭐ Gold Partners</div>
+        <div class="partner-grid">
+          <div class="partner-card"><div class="partner-icon">🔐</div><div class="partner-name">Claroty</div><div class="partner-type">OT Security Platform</div><div class="partner-desc">Leading OT/IoT security platform for asset visibility and threat detection</div></div>
+          <div class="partner-card"><div class="partner-icon">🛡️</div><div class="partner-name">Dragos</div><div class="partner-type">ICS Threat Intelligence</div><div class="partner-desc">Industrial cybersecurity platform and OT threat intelligence provider</div></div>
+          <div class="partner-card"><div class="partner-icon">📡</div><div class="partner-name">Nozomi Networks</div><div class="partner-type">OT/IoT Security</div><div class="partner-desc">Operational resilience for critical infrastructure OT and IoT environments</div></div>
+          <div class="partner-card"><div class="partner-icon">🔍</div><div class="partner-name">Tenable OT</div><div class="partner-type">Vulnerability Management</div><div class="partner-desc">OT-specific vulnerability management and risk-based security program</div></div>
+        </div>
+      </div>
+      <div class="tier-silver">
+        <div class="tier-label">🥈 Silver Partners</div>
+        <div class="partner-grid">
+          <div class="partner-card"><div class="partner-icon">🌐</div><div class="partner-name">Fortinet</div><div class="partner-type">Network Security</div><div class="partner-desc">Next-generation firewalls and OT network security segmentation solutions</div></div>
+          <div class="partner-card"><div class="partner-icon">🏗️</div><div class="partner-name">Siemens Energy</div><div class="partner-type">OT Systems Integrator</div><div class="partner-desc">Industrial automation and OT systems integration for power infrastructure</div></div>
+          <div class="partner-card"><div class="partner-icon">☁️</div><div class="partner-name">Microsoft Azure</div><div class="partner-type">Cloud & IoT Security</div><div class="partner-desc">Cloud security, Azure Defender for IoT and hybrid OT/IT solutions</div></div>
+          <div class="partner-card"><div class="partner-icon">🔒</div><div class="partner-name">Palo Alto Networks</div><div class="partner-type">Zero Trust Security</div><div class="partner-desc">Zero Trust architecture and OT security solutions for critical infrastructure</div></div>
+        </div>
+      </div>
+      <div class="tier-tech">
+        <div class="tier-label">🤝 Technology Partners</div>
+        <div class="partner-grid">
+          <div class="partner-card"><div class="partner-icon">📊</div><div class="partner-name">IBM QRadar</div><div class="partner-type">SIEM & SOC</div><div class="partner-desc">Security information and event management for OT/IT environments</div></div>
+          <div class="partner-card"><div class="partner-icon">🏭</div><div class="partner-name">Rockwell Automation</div><div class="partner-type">OEM Partner</div><div class="partner-desc">Industrial automation security for Allen-Bradley and FactoryTalk systems</div></div>
+          <div class="partner-card"><div class="partner-icon">🔧</div><div class="partner-name">Honeywell</div><div class="partner-type">OEM Partner</div><div class="partner-desc">Security for Honeywell Experion, Uniformance and process control systems</div></div>
+          <div class="partner-card"><div class="partner-icon">⚡</div><div class="partner-name">ABB</div><div class="partner-type">OEM Partner</div><div class="partner-desc">Cybersecurity for ABB power systems, robotics and industrial automation</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY PARTNER -->
+<section class="section" style="background:var(--ink2)">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:36px">
+      <span class="eyebrow">// Why Partner With Us</span>
+      <h2 class="h2">The Jain Cyber <span class="accent">Partner Advantage</span></h2>
+    </div>
+    <div class="why-partner-grid reveal">
+      <div class="wp-card"><div class="wp-icon">🚇</div><h3>Deep OT Domain Expertise</h3><p>20+ years of OT/ICS security experience that complements technology partner capabilities. We speak engineering, not just IT — giving clients real-world implementation confidence.</p></div>
+      <div class="wp-card"><div class="wp-icon">🌍</div><h3>Pan-India Critical Infrastructure Access</h3><p>Established relationships with Railway, Metro, Power, Manufacturing and Government organizations across India. Your technology reaches the most critical OT environments in the country.</p></div>
+      <div class="wp-card"><div class="wp-icon">📜</div><h3>Standards-Led Credibility</h3><p>IEC 62443, ISO 27001 and NIST aligned methodologies give joint solutions a compliance story that resonates with CISOs, CIOs and regulatory bodies across all verticals.</p></div>
+      <div class="wp-card"><div class="wp-icon">🤝</div><h3>Joint Go-to-Market</h3><p>Co-marketing, joint case studies, webinars and event participation. We invest in partner success with dedicated partnership resources and collaborative sales support.</p></div>
+      <div class="wp-card"><div class="wp-icon">💡</div><h3>Technical Integration</h3><p>Deep technical integration support — we assess, deploy and tune partner technologies in live OT environments, providing real-world implementation expertise others can't match.</p></div>
+      <div class="wp-card"><div class="wp-icon">📈</div><h3>Revenue Opportunity</h3><p>Significant untapped market in Indian OT security. Our pipeline includes Railway, Power, Manufacturing and Government clients with substantial security budgets and urgent needs.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER PROGRAMS -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center;margin-bottom:40px">
+      <span class="eyebrow">// Partner Programs</span>
+      <h2 class="h2">Choose Your <span class="accent">Partner Tier</span></h2>
+      <p class="sec-lead" style="max-width:500px;margin:12px auto 0">Structured tiers designed for technology vendors, system integrators, and channel resellers.</p>
+    </div>
+    <div class="program-grid reveal">
+      <div class="program-card program-gold">
+        <span class="prog-badge prog-gold">⭐ Gold Partner</span>
+        <h3>Gold</h3>
+        <div class="price">Custom</div>
+        <div class="price-note">ANNUAL PARTNERSHIP FEE</div>
+        <ul class="prog-features">
+          <li>Joint go-to-market strategy & co-selling</li>
+          <li>Co-branded case studies and marketing</li>
+          <li>Technical integration and certification</li>
+          <li>Dedicated partner account manager</li>
+          <li>Priority lead referrals and joint pipeline</li>
+          <li>Joint webinars and conference presence</li>
+          <li>Logo placement on JCS website and materials</li>
+          <li>Quarterly business reviews</li>
+        </ul>
+        <button class="become-btn" onclick="openPartnerForm('Gold Partner')">Become a Gold Partner</button>
+      </div>
+      <div class="program-card program-silver">
+        <span class="prog-badge prog-silver">🥈 Silver Partner</span>
+        <h3>Silver</h3>
+        <div class="price">Custom</div>
+        <div class="price-note">ANNUAL PARTNERSHIP FEE</div>
+        <ul class="prog-features">
+          <li>Referral partnership agreement</li>
+          <li>Partner portal access and resources</li>
+          <li>Joint marketing opportunities</li>
+          <li>Technical enablement training</li>
+          <li>Lead referral program participation</li>
+          <li>Logo placement on JCS website</li>
+          <li class="grey">Dedicated partner account manager</li>
+          <li class="grey">Quarterly business reviews</li>
+        </ul>
+        <button class="become-btn ghost" onclick="openPartnerForm('Silver Partner')">Become a Silver Partner</button>
+      </div>
+      <div class="program-card program-tech">
+        <span class="prog-badge prog-tech">🔗 Technology Partner</span>
+        <h3>Technology</h3>
+        <div class="price">Free</div>
+        <div class="price-note">NO PARTNERSHIP FEE</div>
+        <ul class="prog-features">
+          <li>Technology integration certification</li>
+          <li>Joint solution brief development</li>
+          <li>Blog and resource cross-promotion</li>
+          <li>Technical documentation sharing</li>
+          <li>Event co-presence where aligned</li>
+          <li class="grey">Lead referral program</li>
+          <li class="grey">Dedicated partner account manager</li>
+          <li class="grey">Joint go-to-market planning</li>
+        </ul>
+        <button class="become-btn ghost" onclick="openPartnerForm('Technology Partner')">Become a Tech Partner</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER FORM -->
+<section class="section-sm" id="become-partner" style="background:var(--ink2)">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center;margin-bottom:36px">
+      <span class="eyebrow">// Apply to Partner</span>
+      <h2 class="h2">Start the <span class="accent">Partnership Conversation</span></h2>
+    </div>
+    <div class="partner-form-wrap reveal">
+      <div class="pf-stripe"></div>
+      <div class="pf-head"><h3>Partner Application</h3><p>Fill out this form and our partnerships team will contact you within 2 business days.</p></div>
+      <div class="pf-body">
+        <form id="partner-form" onsubmit="submitPartner(this);return false" style="display:flex;flex-direction:column;gap:14px">
+          <div class="f2"><div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your name" required></div><div class="fg"><label class="fl">Phone *</label><input name="phone" class="fi" placeholder="+91-XXXXXXXXXX" required></div></div>
+          <div class="f2"><div class="fg"><label class="fl">Work Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div><div class="fg"><label class="fl">Company Name *</label><input name="company" class="fi" placeholder="Your organization" required></div></div>
+          <div class="fg"><label class="fl">Partnership Type *</label>
+            <select name="partnerType" class="fi" id="partner-type-select">
+              <option value="">Select partnership type</option>
+              <option>Gold Partner — Technology Vendor / System Integrator</option>
+              <option>Silver Partner — Channel Reseller / Consultant</option>
+              <option>Technology Partner — Software / Hardware Integration</option>
+              <option>Channel Partner — Regional Reseller</option>
+              <option>Other — Let's Discuss</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Your Business</label><textarea name="message" class="fi" style="min-height:90px" placeholder="Briefly describe your company, your customers and how you see a partnership with JCS working..."></textarea></div>
+          <button type="submit" class="btn-submit"><i class="fas fa-handshake"></i> Submit Partnership Application</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <h2 class="h2">Ready to Protect India's <span class="accent">Critical Infrastructure Together?</span></h2>
+    <p class="body-lg">Let's talk about how a partnership can create value for both our organizations and the clients we serve.</p>
+    <div class="actions">
+      <button class="btn btn-blue btn-lg" onclick="document.getElementById('become-partner').scrollIntoView({behavior:'smooth'})"><i class="fas fa-handshake"></i> Apply to Partner</button>
+      <a href="contact.html" class="btn btn-outline btn-lg"><i class="fas fa-envelope"></i> Contact Partnerships Team</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="footer-brand-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></div><p>India's premier OT/ICS cybersecurity firm. Join our partner ecosystem to protect critical infrastructure together.</p><div class="footer-contact-row"><i class="fas fa-location-dot"></i><span>Indore, Madhya Pradesh, India</span></div><div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+919509679668">+91-9509679668</a></div><div class="footer-contact-row"><i class="fas fa-envelope"></i><a href="mailto:virendra.kothari@jaincybersolutions.com">virendra.kothari@jaincybersolutions.com</a></div></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a href="careers.html">Careers</a></li><li><a href="partners.html">Partners</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Security Assessment</a></li><li><a href="services.html">Risk Analysis</a></li><li><a href="services.html">Gap Analysis</a></li><li><a href="services.html">Training</a></li></ul></div>
+      <div class="footer-col"><h5>Industries</h5><ul><li><a href="industries.html#railway">Railway & Metro</a></li><li><a href="industries.html#energy">Power & Energy</a></li><li><a href="industries.html#manufacturing">Manufacturing</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="blog.html">Blog</a></li><li><a href="resources.html">Reports</a></li><li><a href="resources.html">Guides</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Jain Cyber Solutions. All rights reserved.</p><div class="footer-socials"><a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a><a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a><a href="mailto:virendra.kothari@jaincybersolutions.com"><i class="fas fa-envelope"></i></a></div><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+  </div>
+</footer>
+
+<div class="modal-backdrop" id="modal-assessment" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div class="modal-stripe"></div>
+    <div class="modal-head"><h3>Request Free Assessment</h3><p>Our team responds within 24 hours.</p><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><form onsubmit="submitLead(this);return false" style="display:flex;flex-direction:column;gap:14px">
+      <div class="f2"><div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your name" required></div><div class="fg"><label class="fl">Phone *</label><input name="phone" class="fi" placeholder="+91-XXXXXXXXXX" required></div></div>
+      <div class="f2"><div class="fg"><label class="fl">Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div><div class="fg"><label class="fl">Company</label><input name="company" class="fi" placeholder="Organization"></div></div>
+      <div class="fg"><label class="fl">Details</label><textarea name="message" class="fi"></textarea></div>
+      <button type="submit" class="btn-submit"><i class="fas fa-shield-halved"></i> Submit Request</button>
+    </form></div>
+  </div>
+</div>
+<script src="js/main.js"></script>
+<script>
+function openPartnerForm(type) {
+  document.getElementById('partner-type-select').value = type.includes('Gold') ? 'Gold Partner — Technology Vendor / System Integrator' : type.includes('Silver') ? 'Silver Partner — Channel Reseller / Consultant' : 'Technology Partner — Software / Hardware Integration';
+  document.getElementById('become-partner').scrollIntoView({behavior:'smooth'});
+}
+async function submitPartner(form) {
+  const btn = form.querySelector('[type=submit]');
+  const data = Object.fromEntries(new FormData(form));
+  if (!data.name || !data.email || !data.company) { toast('Please fill all required fields','error'); return; }
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+  await apiPost('/contacts', { ...data, subject: 'Partner Application: ' + data.partnerType });
+  toast('Partnership application submitted! Our team will contact you within 2 business days.', 'success');
+  form.reset();
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-handshake"></i> Submit Partnership Application';
+}
+</script>
+</body>
+</html>
+
+

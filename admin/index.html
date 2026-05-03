@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Login | Jain Cyber Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--ink:#0a0f1e;--ink2:#0d1528;--card:#131f38;--orange:#1d72f5;--orange2:#4d9eff;--txt:#F0F6FF;--txt2:#9aaabf;--txt3:#526070;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);--mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--ink);color:var(--txt);min-height:100vh;display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased;background-image:linear-gradient(rgba(29,114,245,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(29,114,245,.03) 1px,transparent 1px);background-size:56px 56px}
+.wrap{width:100%;max-width:420px;padding:20px}
+.logo{text-align:center;margin-bottom:32px}
+.logo-icon{display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.logo-icon img{width:100%;height:auto;max-width:320px;display:block}
+.card{background:var(--card);border:1.5px solid var(--line2);border-radius:12px;overflow:hidden}
+.stripe{height:3px;background:var(--blue)}
+.card-head{padding:24px 28px 18px;border-bottom:1px solid var(--line)}
+.card-head h2{font-size:18px;font-weight:800;margin-bottom:4px}
+.card-head p{font-size:13px;color:var(--txt2)}
+.card-body{padding:22px 28px;display:flex;flex-direction:column;gap:14px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fl{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase}
+.fi{background:var(--ink2);border:1.5px solid var(--line);border-radius:6px;padding:11px 14px;font-family:var(--sans);font-size:14px;color:var(--txt);outline:none;transition:border-color .2s;width:100%}
+.fi:focus{border-color:var(--blue)}.fi::placeholder{color:var(--txt3)}
+.submit{width:100%;background:var(--blue);color:#000;font-family:var(--sans);font-weight:800;font-size:14px;padding:13px;border-radius:6px;border:none;cursor:pointer;transition:all .22s;display:flex;align-items:center;justify-content:center;gap:8px}
+.submit:hover{background:var(--blue2)}.submit:disabled{opacity:.6;cursor:not-allowed}
+.err{background:rgba(240,64,64,.08);border:1px solid rgba(240,64,64,.25);border-radius:6px;padding:10px 14px;font-size:12px;color:#f04040;display:none;font-family:var(--mono);line-height:1.6}
+.err.show{display:block}
+.back{text-align:center;margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--txt3)}
+.back a{color:var(--blue);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-icon"><img src="../logo.png" alt="Jain Cyber Solutions logo"></div>
+  </div>
+  <div class="card">
+    <div class="stripe"></div>
+    <div class="card-head"><h2>Sign In</h2><p>Enter your admin credentials to access the dashboard.</p></div>
+    <div class="card-body">
+      <div class="err" id="err"></div>
+      <div class="fg"><label class="fl">Email Address</label><input type="email" id="email" class="fi" placeholder="admin@jaincybersolutions.com"></div>
+      <div class="fg"><label class="fl">Password</label><input type="password" id="password" class="fi" placeholder="••••••••••"></div>
+      <button class="submit" id="btn" onclick="doLogin()"><i class="fas fa-shield-halved"></i> Sign In</button>
+    </div>
+  </div>
+  <div class="back"><a href="../index.html">← Back to Website</a></div>
+</div>
+<script>
+const API='http://localhost:5000/api';
+async function doLogin(){
+  const email=document.getElementById('email').value;
+  const password=document.getElementById('password').value;
+  const btn=document.getElementById('btn');
+  const err=document.getElementById('err');
+  err.classList.remove('show');
+  if(!email||!password){err.textContent='Please enter email and password.';err.classList.add('show');return;}
+  btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Signing in...';
+  try{
+    const r=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data=await r.json();
+    if(r.ok&&data.token){
+      localStorage.setItem('jcs_token',data.token);
+      localStorage.setItem('jcs_admin',JSON.stringify(data.admin));
+      window.location.href='dashboard.html';
+    }else{err.textContent=data.error||'Invalid credentials.';err.classList.add('show');}
+  }catch(e){
+    if(email==='admin@jaincybersolutions.com'&&password==='Admin@JCS2024!'){
+      localStorage.setItem('jcs_token','demo_token');
+      localStorage.setItem('jcs_admin',JSON.stringify({name:'Virendra Kothari',email,role:'admin'}));
+      window.location.href='dashboard.html';
+    }else{
+      err.innerHTML='Server offline. Demo login:<br>Email: admin@jaincybersolutions.com<br>Password: Admin@JCS2024!';
+      err.classList.add('show');
+    }
+  }
+  btn.disabled=false;btn.innerHTML='<i class="fas fa-shield-halved"></i> Sign In';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+if(localStorage.getItem('jcs_token'))window.location.href='dashboard.html';
+</script>
+</body>
+</html>

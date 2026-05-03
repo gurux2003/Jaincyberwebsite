@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Leads | JCS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="admin.css">
+<style>
+.lead-detail{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.detail-row{padding:10px 0;border-bottom:1px solid var(--line)}
+.detail-row:last-child{border-bottom:none}
+.dr-label{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.dr-value{font-size:14px;color:var(--txt)}
+.funnel-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:20px}
+.funnel-cell{background:var(--card);padding:16px;text-align:center}
+.funnel-n{font-size:26px;font-weight:900;color:var(--txt);letter-spacing:-.03em;line-height:1}
+.funnel-l{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;margin-top:5px}
+.export-btn{background:var(--ink3);border:1px solid var(--line2);color:var(--txt2);font-family:var(--mono);font-size:11px;padding:7px 14px;border-radius:5px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.export-btn:hover{border-color:var(--blue);color:var(--blue)}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Assessment Leads</div>
+    <div class="topbar-right">
+      <div class="search-bar"><i class="fas fa-search"></i><input type="text" id="search" placeholder="Search leads..." oninput="renderLeads()"></div>
+      <button class="export-btn" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
+      <a href="../index.html" target="_blank" class="topbar-btn" style="margin-left:8px"><i class="fas fa-globe"></i> View Site</a>
+    </div>
+  </div>
+  <div class="content">
+    <!-- Funnel stats -->
+    <div class="funnel-bar" id="funnel">
+      <div class="funnel-cell"><div class="funnel-n" id="fn-new" style="color:var(--blue)">—</div><div class="funnel-l">New</div></div>
+      <div class="funnel-cell"><div class="funnel-n" id="fn-contacted" style="color:var(--blue2)">—</div><div class="funnel-l">Contacted</div></div>
+      <div class="funnel-cell"><div class="funnel-n" id="fn-qualified" style="color:var(--teal)">—</div><div class="funnel-l">Qualified</div></div>
+      <div class="funnel-cell"><div class="funnel-n" id="fn-closed" style="color:var(--green)">—</div><div class="funnel-l">Closed / Won</div></div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="bfil active" onclick="filterStatus('all',this)" style="font-family:var(--mono);font-size:10px;padding:5px 12px;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .2s">All Leads</button>
+      <button class="bfil" onclick="filterStatus('new',this)" style="font-family:var(--mono);font-size:10px;padding:5px 12px;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .2s">🔴 New</button>
+      <button class="bfil" onclick="filterStatus('contacted',this)" style="font-family:var(--mono);font-size:10px;padding:5px 12px;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .2s">🔵 Contacted</button>
+      <button class="bfil" onclick="filterStatus('qualified',this)" style="font-family:var(--mono);font-size:10px;padding:5px 12px;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .2s">🟢 Qualified</button>
+      <button class="bfil" onclick="filterStatus('closed',this)" style="font-family:var(--mono);font-size:10px;padding:5px 12px;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .2s">✅ Closed</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">All Leads <span id="lead-count" style="font-family:var(--mono);font-size:11px;color:var(--txt3);font-weight:400;margin-left:8px"></span></div>
+      </div>
+      <div class="panel-body table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Company</th><th>Industry</th><th>Assessment</th><th>Phone</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="leads-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead detail modal -->
+<div class="modal-bg" id="lead-modal" onclick="if(event.target===this)closeLeadModal()">
+  <div class="modal-box">
+    <div class="modal-stripe"></div>
+    <div class="modal-head">
+      <h3 id="lead-modal-title">Lead Details</h3>
+      <button class="modal-close" onclick="closeLeadModal()">×</button>
+    </div>
+    <div class="modal-body" id="lead-modal-body"></div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+<script>
+requireAuth();
+document.getElementById('sidebar').innerHTML = renderSidebar('leads');
+loadBadges();
+
+let allLeads = [], currentFilter = 'all';
+
+async function loadLeads() {
+  allLeads = getLocalData('leads', DEMO_DATA.leads) || DEMO_DATA.leads;
+  try {
+    const r = await api('GET', '/leads');
+    if (r?.ok && r.data.leads?.length) {
+      allLeads = r.data.leads;
+      setLocalData('leads', allLeads);
+    }
+  } catch(e) {}
+  updateFunnel();
+  renderLeads();
+}
+
+function updateFunnel() {
+  ['new','contacted','qualified','closed'].forEach(s => {
+    const el = document.getElementById('fn-' + s);
+    if (el) el.textContent = allLeads.filter(l => l.status === s).length;
+  });
+}
+
+function filterStatus(s, btn) {
+  currentFilter = s;
+  document.querySelectorAll('.bfil').forEach(b => { b.style.background='transparent'; b.style.color='var(--txt3)'; b.style.borderColor='var(--line)'; });
+  btn.style.background = 'var(--blue)'; btn.style.color = '#fff'; btn.style.borderColor = 'var(--blue)';
+  renderLeads();
+}
+
+function renderLeads() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const filtered = allLeads.filter(l => {
+    const matchS = currentFilter === 'all' || l.status === currentFilter;
+    const matchQ = !search || l.name.toLowerCase().includes(search) || (l.company||'').toLowerCase().includes(search) || l.email.toLowerCase().includes(search) || (l.industry||'').toLowerCase().includes(search);
+    return matchS && matchQ;
+  });
+  document.getElementById('lead-count').textContent = `(${filtered.length})`;
+  document.getElementById('leads-table').innerHTML = filtered.length ? filtered.map(l => `
+    <tr>
+      <td><div class="td-name">${l.name}</div><div style="font-size:11px;color:var(--txt3)">${l.email}</div></td>
+      <td style="font-size:13px">${l.company||'—'}</td>
+      <td style="font-size:12px;color:var(--txt3)">${l.industry||'—'}</td>
+      <td style="font-size:12px;max-width:180px">${truncate(l.assessment||'—',40)}</td>
+      <td style="font-family:var(--mono);font-size:12px"><a href="tel:${l.phone}" style="color:var(--blue)">${l.phone}</a></td>
+      <td>
+        <select onchange="updateLeadStatus('${l._id}',this.value)" class="fi" style="padding:4px 8px;font-size:11px;width:auto">
+          ${['new','contacted','qualified','closed'].map(s=>`<option value="${s}" ${l.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+        </select>
+      </td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--txt3)">${fmtDate(l.createdAt)}</td>
+      <td style="white-space:nowrap">
+        <button class="act-btn" onclick="viewLead('${l._id}')"><i class="fas fa-eye"></i> View</button>
+        <a href="mailto:${l.email}" class="act-btn success" style="margin-left:4px"><i class="fas fa-envelope"></i></a>
+        <a href="tel:${l.phone}" class="act-btn" style="margin-left:4px"><i class="fas fa-phone"></i></a>
+        <button class="act-btn danger" onclick="deleteLead('${l._id}')" style="margin-left:4px"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>`).join('') :
+    `<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--txt3);font-family:var(--mono);font-size:12px">No leads found.</td></tr>`;
+}
+
+async function updateLeadStatus(id, status) {
+  await api('PUT', '/leads/' + id, { status });
+  const lead = allLeads.find(l => l._id === id);
+  if (lead) lead.status = status;
+  updateFunnel();
+  // Update badge
+  const newCount = allLeads.filter(l => l.status === 'new').length;
+  const badge = document.getElementById('badge-leads');
+  if (badge) { badge.textContent = newCount; badge.style.display = newCount > 0 ? 'block' : 'none'; }
+  toast('Lead status updated to ' + status, 'success');
+  setLocalData('leads', allLeads);
+}
+
+function viewLead(id) {
+  const l = allLeads.find(x => x._id === id);
+  if (!l) return;
+  document.getElementById('lead-modal-title').textContent = l.name + ' — Lead Details';
+  document.getElementById('lead-modal-body').innerHTML = `
+    <div class="lead-detail">
+      <div class="detail-row"><div class="dr-label">Full Name</div><div class="dr-value">${l.name}</div></div>
+      <div class="detail-row"><div class="dr-label">Email</div><div class="dr-value"><a href="mailto:${l.email}" style="color:var(--blue)">${l.email}</a></div></div>
+      <div class="detail-row"><div class="dr-label">Phone</div><div class="dr-value"><a href="tel:${l.phone}" style="color:var(--blue)">${l.phone}</a></div></div>
+      <div class="detail-row"><div class="dr-label">Company</div><div class="dr-value">${l.company||'—'}</div></div>
+      <div class="detail-row"><div class="dr-label">Industry</div><div class="dr-value">${l.industry||'—'}</div></div>
+      <div class="detail-row"><div class="dr-label">Assessment Type</div><div class="dr-value">${l.assessment||'—'}</div></div>
+      <div class="detail-row"><div class="dr-label">Status</div><div class="dr-value"><span class="status-badge status-${l.status}">${l.status}</span></div></div>
+      <div class="detail-row"><div class="dr-label">Received</div><div class="dr-value">${fmtTime(l.createdAt)}</div></div>
+    </div>
+    ${l.message?`<div style="margin-top:14px"><div class="dr-label" style="font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px">Message / Additional Details</div><div style="background:var(--ink2);border:1px solid var(--line);border-radius:6px;padding:14px;font-size:13px;color:var(--txt2);line-height:1.65">${l.message}</div></div>`:''}
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+      <a href="mailto:${l.email}" class="save-btn" style="text-decoration:none"><i class="fas fa-envelope"></i> Email ${l.name.split(' ')[0]}</a>
+      <a href="tel:${l.phone}" class="save-btn" style="background:var(--teal);text-decoration:none"><i class="fas fa-phone"></i> Call Now</a>
+      <button class="cancel-btn" onclick="closeLeadModal()">Close</button>
+    </div>`;
+  document.getElementById('lead-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeLeadModal() {
+  document.getElementById('lead-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+async function deleteLead(id) {
+  if (!window.confirm('Delete this lead? This cannot be undone.')) return;
+  await api('DELETE', '/leads/' + id);
+  allLeads = allLeads.filter(l => l._id !== id);
+  updateFunnel(); renderLeads();
+  toast('Lead deleted', 'success');
+  setLocalData('leads', allLeads);
+}
+
+function exportCSV() {
+  const headers = ['Name','Email','Phone','Company','Industry','Assessment','Status','Date'];
+  const rows = allLeads.map(l => [l.name,l.email,l.phone,l.company||'',l.industry||'',l.assessment||'',l.status,fmtDate(l.createdAt)]);
+  const csv = [headers, ...rows].map(r => r.map(c => `"${(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'jcs-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  toast('Leads exported as CSV', 'success');
+}
+
+loadLeads();
+</script>
+</body>
+</html>

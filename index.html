@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Jain Cyber Solutions | OT/ICS Cybersecurity — Railway, Metro & Critical Infrastructure</title>
+<meta name="description" content="India's premier OT/ICS cybersecurity firm. Railway & Metro SCADA specialists. IEC 62443, ISO 27001, NIST CSF.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="css/main.css">
+<style>
+/* HOME-SPECIFIC */
+#hero{position:relative;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding-top:var(--nav-h);overflow:visible}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 100%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(29,114,245,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(29,114,245,.045) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 90% 90% at 50% 50%,black 40%,transparent 100%)}
+.hero-orb{position:absolute;pointer-events:none;border-radius:50%}
+.hero-orb-1{width:700px;height:700px;top:-150px;right:-50px;background:radial-gradient(circle,rgba(29,114,245,.1) 0%,transparent 70%)}
+.hero-orb-2{width:400px;height:400px;bottom:0;left:25%;background:radial-gradient(circle,rgba(29,114,245,.06) 0%,transparent 70%)}
+.hero-left{padding:80px 40px 80px 60px;position:relative;z-index:2}
+.hero-chip{display:inline-flex;align-items:center;gap:9px;background:rgba(29,114,245,.1);border:1px solid rgba(29,114,245,.3);padding:6px 14px;border-radius:100px;margin-bottom:26px}
+.hero-chip-dot{width:7px;height:7px;background:var(--teal);border-radius:50%;animation:dot-pulse 2s infinite}
+@keyframes dot-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero-chip span{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase}
+.hero-h1{font-size:clamp(40px,4.8vw,74px);font-weight:900;letter-spacing:-.04em;line-height:1.03;margin-bottom:22px}
+.hero-h1 .line-muted{font-weight:300;color:var(--txt2);font-size:.72em;display:block;letter-spacing:-.01em;margin-top:4px}
+.hero-desc{font-size:17px;color:var(--txt2);max-width:480px;line-height:1.72;margin-bottom:38px}
+.hero-desc strong{color:var(--blue);font-weight:600}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:52px}
+.hero-stats{display:flex;gap:0;border-top:1px solid var(--line);padding-top:28px}
+.hstat{padding:0 32px 0 0;margin-right:32px;border-right:1px solid var(--line)}
+.hstat:last-child{border-right:none;margin-right:0;padding-right:0}
+.hstat-n{font-size:36px;font-weight:900;color:var(--txt);letter-spacing:-.04em;line-height:1}
+.hstat-n sup{font-size:.5em;color:var(--blue)}
+.hstat-l{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.12em;text-transform:uppercase;margin-top:5px}
+.hero-right{position:relative;height:100vh;overflow:visible}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%}
+.float-badge{position:absolute;z-index:3;background:rgba(13,21,40,.92);border:1px solid var(--line2);border-radius:8px;padding:12px 16px;backdrop-filter:blur(16px);animation:flt 5s ease-in-out infinite}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.fb1{top:20%;right:6%;animation-delay:0s}.fb2{bottom:26%;left:4%;animation-delay:2.2s}.fb3{top:56%;right:3%;animation-delay:1s}
+.fb-lbl{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+.fb-val{font-size:22px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.fb-val.orange{color:var(--blue)}.fb-val.teal{color:var(--teal)}.fb-val.red{color:var(--red)}
+.fb-sub{font-family:var(--mono);font-size:10px;color:var(--txt3);margin-top:3px}
+.live-ticker{position:absolute;bottom:0;left:0;right:0;z-index:4;background:rgba(10,15,30,.85);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px 0;overflow:hidden}
+.ticker-track{display:flex;gap:60px;white-space:nowrap;animation:tick 32s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{font-family:var(--mono);font-size:11px;color:var(--txt3);display:flex;align-items:center;gap:10px}
+.ticker-item::before{content:'';width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0;animation:dot-pulse 2s infinite}
+
+/* Standards strip */
+.std-strip{background:var(--ink2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0}
+.std-strip-inner{display:flex;align-items:center;gap:32px;overflow:hidden;justify-content:center;flex-wrap:wrap}
+.std-pill{font-family:var(--mono);font-size:11px;color:var(--txt3);padding:5px 14px;border:1px solid var(--line);border-radius:100px;white-space:nowrap;transition:all .2s}
+.std-pill:hover{border-color:var(--line3);color:var(--blue)}
+
+/* Services tab layout */
+.svc-layout{display:grid;grid-template-columns:260px 1fr;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.svc-tabs{background:var(--ink3);border-right:1px solid var(--line);padding:8px}
+.svc-tab{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:6px;cursor:pointer;transition:all .2s;margin-bottom:2px;border:1px solid transparent}
+.svc-tab:hover{background:rgba(29,114,245,.06)}
+.svc-tab.active{background:rgba(29,114,245,.1);border-color:rgba(29,114,245,.2)}
+.svc-tab-icon{font-size:17px;flex-shrink:0;width:24px;text-align:center}
+.svc-tab-name{font-size:13px;font-weight:600;color:var(--txt2)}
+.svc-tab.active .svc-tab-name{color:var(--txt)}
+.svc-tab-n{font-family:var(--mono);font-size:9px;color:var(--txt3);margin-left:auto}
+.svc-content{padding:36px}
+.svc-panel{display:none}
+.svc-panel.active{display:block}
+.svc-panel-hd{display:flex;align-items:flex-start;gap:18px;margin-bottom:26px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.svc-icon-big{width:54px;height:54px;background:rgba(29,114,245,.1);border:1px solid rgba(29,114,245,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.svc-panel-hd h3{font-size:21px;font-weight:800;letter-spacing:-.02em;margin-bottom:7px}
+.svc-panel-hd p{font-size:14px;color:var(--txt2);line-height:1.65}
+.svc-panel-body{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.svc-detail h4{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.16em;text-transform:uppercase;margin-bottom:13px}
+.svc-detail ul{display:flex;flex-direction:column;gap:9px}
+.svc-detail ul li{font-size:13px;color:var(--txt2);display:flex;align-items:flex-start;gap:9px;line-height:1.5}
+.svc-detail ul li::before{content:'→';color:var(--blue);font-family:var(--mono);font-size:12px;flex-shrink:0}
+.svc-deliverable{grid-column:1/-1;background:rgba(0,210,180,.05);border:1px solid rgba(0,210,180,.2);border-radius:6px;padding:14px 18px}
+.svc-del-label{font-family:var(--mono);font-size:9px;color:var(--teal);letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px}
+.svc-deliverable p{font-size:14px;color:var(--txt);font-weight:600}
+
+/* Stats band */
+.stats-band{background:var(--ink2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:60px 0}
+.stats-cells{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stat-cell{padding:36px 28px;background:var(--card);border-right:1px solid var(--line);text-align:center;transition:background .2s;position:relative;overflow:hidden}
+.stat-cell:last-child{border-right:none}
+.stat-cell:hover{background:var(--card2)}
+.stat-cell::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--blue);transform:scaleX(0);transition:transform .3s}
+.stat-cell:hover::before{transform:scaleX(1)}
+.stat-n{font-size:clamp(38px,3.5vw,56px);font-weight:900;color:var(--txt);letter-spacing:-.04em;line-height:1}
+.stat-n .unit{color:var(--blue);font-size:.6em}
+.stat-l{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-top:10px}
+.stat-d{font-size:13px;color:var(--txt3);margin-top:6px;line-height:1.5}
+
+/* Industry grid */
+.ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ind-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 20px;transition:all .25s;cursor:default;position:relative;overflow:hidden}
+.ind-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.ind-card:hover{border-color:var(--line2);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.ind-card:hover::after{transform:scaleX(1)}
+.ind-icon{font-size:30px;margin-bottom:13px}
+.ind-card h3{font-size:14px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.ind-card p{font-size:12px;color:var(--txt3);line-height:1.55}
+.ind-tag{margin-top:12px;font-family:var(--mono);font-size:9px;color:var(--blue);background:rgba(29,114,245,.08);border:1px solid rgba(29,114,245,.2);padding:3px 9px;border-radius:100px;display:inline-block;letter-spacing:.06em}
+
+/* Why us */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.why-console{background:var(--ink3);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.con-bar{height:36px;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 13px;gap:7px}
+.con-dot{width:10px;height:10px;border-radius:50%}
+.con-title{font-family:var(--mono);font-size:10px;color:var(--txt3);margin-left:8px}
+.con-body{padding:18px 20px;font-family:var(--mono);font-size:12px;line-height:1.95}
+.cl{display:flex;gap:8px}.cp{color:var(--teal)}.cc{color:var(--txt)}
+.co{color:var(--txt3);padding-left:14px}.cok{color:var(--teal)}.cwrn{color:var(--blue)}.cerr{color:var(--red)}
+.cur{display:inline-block;width:8px;height:14px;background:var(--blue);animation:blink 1s infinite;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.why-scores{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.wscore{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;text-align:center}
+.wscore-n{font-size:28px;font-weight:900;color:var(--blue);letter-spacing:-.03em;line-height:1}
+.wscore-l{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+.why-points{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.why-pt{display:flex;align-items:flex-start;gap:15px;padding:18px;background:var(--card);border:1px solid var(--line);border-radius:6px;transition:border-color .2s}
+.why-pt:hover{border-color:var(--line2)}
+.why-pt-icon{width:38px;height:38px;background:rgba(29,114,245,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.why-pt h4{font-size:14px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em}
+.why-pt p{font-size:13px;color:var(--txt2);line-height:1.6}
+
+/* Case cards */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.case-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all .25s}
+.case-card:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 18px 48px rgba(0,0,0,.4)}
+.case-hd{padding:18px 22px;background:var(--card2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.case-sector{font-family:var(--mono);font-size:10px;font-weight:600;color:#000;background:var(--blue);padding:3px 10px;border-radius:100px;letter-spacing:.06em}
+.case-hd h3{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.case-bd{padding:18px 22px}
+.case-lbl{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+.case-bd p{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:12px}
+.case-results{display:flex;flex-wrap:wrap;gap:7px}
+.case-chip{background:rgba(0,210,180,.06);border:1px solid rgba(0,210,180,.2);padding:4px 11px;border-radius:100px;font-family:var(--mono);font-size:10px;color:var(--teal)}
+
+/* Blog preview */
+.blog-home-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.blog-home-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:all .25s;text-decoration:none;color:inherit}
+.blog-home-card:hover{border-color:var(--line2);transform:translateY(-4px);box-shadow:0 18px 48px rgba(0,0,0,.4)}
+.bhc-img{height:170px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
+.bhc-cat{position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:10px;font-weight:600;color:#000;background:var(--blue);padding:3px 10px;border-radius:100px}
+.bhc-body{padding:20px;flex:1;display:flex;flex-direction:column}
+.bhc-meta{font-family:var(--mono);font-size:10px;color:var(--txt3);display:flex;gap:10px;margin-bottom:10px}
+.bhc-body h3{font-size:15px;font-weight:700;letter-spacing:-.01em;line-height:1.4;margin-bottom:9px;transition:color .2s}
+.blog-home-card:hover h3{color:var(--blue)}
+.bhc-body p{font-size:13px;color:var(--txt2);line-height:1.65;flex:1;margin-bottom:14px}
+.bhc-link{font-family:var(--mono);font-size:11px;color:var(--blue);display:flex;align-items:center;gap:6px;transition:gap .2s}
+.blog-home-card:hover .bhc-link{gap:10px}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.faq-item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .2s}
+.faq-item:hover{border-color:var(--line2)}
+.faq-item.open{border-color:rgba(29,114,245,.35)}
+.faq-q{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:18px 20px;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.45}
+.faq-icon{width:22px;height:22px;border:1px solid var(--line2);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:16px;flex-shrink:0;line-height:1;transition:all .3s;margin-top:1px}
+.faq-item.open .faq-icon{background:var(--blue);border-color:var(--blue);color:#000;transform:rotate(45deg)}
+.faq-a{display:none;padding:0 20px 16px;font-size:13px;color:var(--txt2);line-height:1.7;border-top:1px solid var(--line);padding-top:13px;margin:0 20px 16px}
+.faq-item.open .faq-a{display:block}
+
+@media(max-width:1100px){
+  #hero{grid-template-columns:1fr}
+  .hero-right{height:50vw;min-height:280px}
+  .float-badge{display:none}
+  .svc-layout{grid-template-columns:1fr}
+  .svc-tabs{display:grid;grid-template-columns:repeat(4,1fr);border-right:none;border-bottom:1px solid var(--line)}
+  .svc-panel-body{grid-template-columns:1fr}
+  .stats-cells{grid-template-columns:1fr 1fr}
+  .ind-grid{grid-template-columns:1fr 1fr}
+  .why-grid{grid-template-columns:1fr}
+  .case-grid{grid-template-columns:1fr}
+  .blog-home-grid{grid-template-columns:1fr 1fr}
+  .blog-home-card:first-child{grid-column:1/-1}
+  .faq-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .hero-left{padding:48px 20px}
+  .hero-stats{flex-wrap:wrap;gap:16px}
+  .hstat{border-right:none;margin-right:0;padding-right:0}
+  .svc-tabs{grid-template-columns:1fr 1fr}
+  .stats-cells{grid-template-columns:1fr}
+  .ind-grid{grid-template-columns:1fr}
+  .blog-home-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></a>
+  <div class="nav-center">
+    <div class="nav-item">
+      <span class="nav-link active">Home</span>
+    </div>
+    <div class="nav-item">
+      <a href="services.html" class="nav-link">Services <span class="nav-arrow">▾</span></a>
+      <div class="nav-mega wide">
+        <div class="mega-section">
+          <div class="mega-head">Assessment Services</div>
+          <a href="services.html#sca" class="mega-link"><span class="mega-link-icon">🛡️</span><div><span class="mega-link-name">Security Control Assessment</span><span class="mega-link-desc">IEC 62443-4-2, NIST CSF, ISO 27002</span></div></a>
+          <a href="services.html#raa" class="mega-link"><span class="mega-link-icon">📊</span><div><span class="mega-link-name">Risk Assessment & Analysis</span><span class="mega-link-desc">ISO 31000, NIST SP 800-30, IEC 62443-3-2</span></div></a>
+          <a href="services.html#gap" class="mega-link"><span class="mega-link-icon">🔍</span><div><span class="mega-link-name">Gap Analysis & Remediation</span><span class="mega-link-desc">Standards gap + prioritized roadmap</span></div></a>
+          <a href="services.html#audit" class="mega-link"><span class="mega-link-icon">📋</span><div><span class="mega-link-name">Audit Report & Presentation</span><span class="mega-link-desc">Executive + technical deliverables</span></div></a>
+        </div>
+        <div class="mega-section">
+          <div class="mega-head">Specialist Services</div>
+          <a href="services.html#training" class="mega-link"><span class="mega-link-icon">🎓</span><div><span class="mega-link-name">Awareness Training</span><span class="mega-link-desc">Phishing, OT security, insider threats</span></div></a>
+          <a href="services.html#remediation" class="mega-link"><span class="mega-link-icon">🔧</span><div><span class="mega-link-name">Remediation Support</span><span class="mega-link-desc">Hands-on implementation assistance</span></div></a>
+          <a href="services.html#ai" class="mega-link"><span class="mega-link-icon">🤖</span><div><span class="mega-link-name">AI Risk Assessment</span><span class="mega-link-desc">NIST AI RMF, EU AI Act readiness</span></div></a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a href="industries.html" class="nav-link">Industries <span class="nav-arrow">▾</span></a>
+      <div class="nav-mega">
+        <div class="mega-section">
+          <a href="industries.html#railway" class="mega-link"><span class="mega-link-icon">🚇</span><div><span class="mega-link-name">Railway & Metro</span><span class="mega-link-desc">Core specialization</span></div></a>
+          <a href="industries.html#energy" class="mega-link"><span class="mega-link-icon">⚡</span><div><span class="mega-link-name">Power & Energy</span><span class="mega-link-desc">Grid & SCADA security</span></div></a>
+          <a href="industries.html#manufacturing" class="mega-link"><span class="mega-link-icon">🏭</span><div><span class="mega-link-name">Manufacturing</span><span class="mega-link-desc">OT/IT convergence</span></div></a>
+          <a href="industries.html#oilgas" class="mega-link"><span class="mega-link-icon">🛢️</span><div><span class="mega-link-name">Oil & Gas</span><span class="mega-link-desc">Pipeline & refinery OT</span></div></a>
+          <a href="industries.html#healthcare" class="mega-link"><span class="mega-link-icon">🏥</span><div><span class="mega-link-name">Healthcare</span><span class="mega-link-desc">IoMT & patient data</span></div></a>
+          <a href="industries.html#government" class="mega-link"><span class="mega-link-icon">🏛️</span><div><span class="mega-link-name">Government</span><span class="mega-link-desc">National infrastructure</span></div></a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item"><a href="about.html" class="nav-link">About</a></div>
+    <div class="nav-item"><a href="case-studies.html" class="nav-link">Case Studies</a></div>
+    <div class="nav-item">
+      <a href="resources.html" class="nav-link">Resources <span class="nav-arrow">▾</span></a>
+      <div class="nav-mega">
+        <div class="mega-section">
+          <a href="blog.html" class="mega-link"><span class="mega-link-icon">📰</span><div><span class="mega-link-name">Blog & Insights</span><span class="mega-link-desc">OT security knowledge hub</span></div></a>
+          <a href="resources.html#reports" class="mega-link"><span class="mega-link-icon">📊</span><div><span class="mega-link-name">Reports & Whitepapers</span><span class="mega-link-desc">In-depth OT threat analysis</span></div></a>
+          <a href="resources.html#guides" class="mega-link"><span class="mega-link-icon">📖</span><div><span class="mega-link-name">Standards Guides</span><span class="mega-link-desc">IEC 62443, ISO 27001 explainers</span></div></a>
+          <a href="careers.html" class="mega-link"><span class="mega-link-icon">💼</span><div><span class="mega-link-name">Careers</span><span class="mega-link-desc">Join our expert team</span></div></a>
+          <a href="partners.html" class="mega-link"><span class="mega-link-icon">🤝</span><div><span class="mega-link-name">Partners</span><span class="mega-link-desc">Technology & channel partners</span></div></a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-item"><a href="contact.html" class="nav-link">Contact</a></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-phone"><i class="fas fa-phone" style="color:var(--blue);font-size:11px"></i><a href="tel:+919509679668">+91-9509679668</a></div>
+    <button class="btn btn-blue btn-sm" onclick="openModal()"><i class="fas fa-shield-halved"></i> Free Assessment</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="industries.html">Industries</a>
+  <a href="about.html">About</a><a href="case-studies.html">Case Studies</a>
+  <a href="blog.html">Blog</a><a href="resources.html">Resources</a>
+  <a href="careers.html">Careers</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a>
+  <a href="#" onclick="openModal();return false" class="highlight">→ Free Assessment</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="hero-left">
+    <div class="hero-chip">
+      <div class="hero-chip-dot"></div>
+      <span>Specialization: Railway & Metro SCADA Security</span>
+    </div>
+    <h1 class="hero-h1">
+      Defend What<br>
+      <span style="color:var(--blue)">Powers India</span>
+      <span class="line-muted">OT · ICS · SCADA · Critical Infrastructure</span>
+    </h1>
+    <p class="hero-desc">
+      India's premier OT/ICS cybersecurity firm delivering <strong>IEC 62443-aligned security assessments</strong> for Railway, Metro, Power, Manufacturing & Government infrastructure. From gap analysis to full remediation.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="services.html" class="btn btn-outline btn-lg"><i class="fas fa-list"></i> Explore Services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n"><span data-v="20" data-s="+">0+</span></div><div class="hstat-l">Years Experience</div></div>
+      <div class="hstat"><div class="hstat-n"><span data-v="50" data-s="+">0+</span></div><div class="hstat-l">Projects Delivered</div></div>
+      <div class="hstat"><div class="hstat-n"><span data-v="9">0</span></div><div class="hstat-l">Frameworks</div></div>
+      <div class="hstat"><div class="hstat-n">24<sup>/7</sup></div><div class="hstat-l">Incident Support</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <canvas id="hero-canvas"></canvas>
+    <div class="float-badge fb1"><div class="fb-lbl">Threats Blocked</div><div class="fb-val orange">2,847</div><div class="fb-sub">Last 30 days</div></div>
+    <div class="float-badge fb2"><div class="fb-lbl">OT Risk Level</div><div class="fb-val red">HIGH</div><div class="fb-sub">Indian Critical Infra</div></div>
+    <div class="float-badge fb3"><div class="fb-lbl">Standard</div><div class="fb-val teal">IEC 62443</div><div class="fb-sub">Certified Assessments</div></div>
+    <div class="live-ticker">
+      <div class="ticker-track">
+        <span class="ticker-item">SCADA Vulnerability Detected — Railway OT Network</span>
+        <span class="ticker-item">IEC 62443-3-2 Assessment Completed — Metro Systems</span>
+        <span class="ticker-item">Ransomware Attempt Blocked — Manufacturing SCADA</span>
+        <span class="ticker-item">ISO 27001 Audit Passed — Energy Sector Client</span>
+        <span class="ticker-item">OT Network Segmentation Deployed — Oil & Gas Refinery</span>
+        <span class="ticker-item">AI Risk Assessment Completed — ITES Infrastructure</span>
+        <span class="ticker-item">SCADA Vulnerability Detected — Railway OT Network</span>
+        <span class="ticker-item">IEC 62443-3-2 Assessment Completed — Metro Systems</span>
+        <span class="ticker-item">Ransomware Attempt Blocked — Manufacturing SCADA</span>
+        <span class="ticker-item">ISO 27001 Audit Passed — Energy Sector Client</span>
+        <span class="ticker-item">OT Network Segmentation Deployed — Oil & Gas Refinery</span>
+        <span class="ticker-item">AI Risk Assessment Completed — ITES Infrastructure</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDARDS STRIP -->
+<div class="std-strip">
+  <div class="wrap">
+    <div class="std-strip-inner">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.18em;text-transform:uppercase;flex-shrink:0">Standards We Work With</span>
+      <span class="std-pill">IEC 62443-3-2</span>
+      <span class="std-pill">IEC 62443-4-2</span>
+      <span class="std-pill">ISO 27001</span>
+      <span class="std-pill">ISO 31000</span>
+      <span class="std-pill">NIST CSF</span>
+      <span class="std-pill">NIST SP 800-30</span>
+      <span class="std-pill">ISO 27005</span>
+      <span class="std-pill">MITRE ATT&CK ICS</span>
+      <span class="std-pill">ISO 27002</span>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" style="background:var(--ink2)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">// Services</span>
+      <h2 class="h2">Comprehensive OT/IT<br><span class="accent">Security Services</span></h2>
+      <p class="sec-lead">Every engagement delivers a clear, actionable report. Built for OT, IT, IoT and ITES — with deep Railway & Metro SCADA expertise.</p>
+    </div>
+    <div class="svc-layout reveal">
+      <div class="svc-tabs">
+        <div class="svc-tab active" onclick="switchSvc(0,this)"><span class="svc-tab-icon">🛡️</span><span class="svc-tab-name">Security Assessment</span><span class="svc-tab-n">01</span></div>
+        <div class="svc-tab" onclick="switchSvc(1,this)"><span class="svc-tab-icon">📊</span><span class="svc-tab-name">Risk Analysis</span><span class="svc-tab-n">02</span></div>
+        <div class="svc-tab" onclick="switchSvc(2,this)"><span class="svc-tab-icon">🔍</span><span class="svc-tab-name">Gap Analysis</span><span class="svc-tab-n">03</span></div>
+        <div class="svc-tab" onclick="switchSvc(3,this)"><span class="svc-tab-icon">📋</span><span class="svc-tab-name">Audit & Report</span><span class="svc-tab-n">04</span></div>
+        <div class="svc-tab" onclick="switchSvc(4,this)"><span class="svc-tab-icon">🎓</span><span class="svc-tab-name">Training</span><span class="svc-tab-n">05</span></div>
+        <div class="svc-tab" onclick="switchSvc(5,this)"><span class="svc-tab-icon">🔧</span><span class="svc-tab-name">Remediation</span><span class="svc-tab-n">06</span></div>
+        <div class="svc-tab" onclick="switchSvc(6,this)"><span class="svc-tab-icon">🤖</span><span class="svc-tab-name">AI Risk</span><span class="svc-tab-n">07</span></div>
+      </div>
+      <div class="svc-content">
+        <div class="svc-panel active">
+          <div class="svc-panel-hd"><div class="svc-icon-big">🛡️</div><div><h3>Security Control Assessment</h3><p>Meticulous evaluation of your existing security controls guided by IEC 62443-4-2, NIST CSF, and ISO 27002 — covering all policies, procedures, and technical safeguards.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>What We Assess</h4><ul><li>Access control policies and enforcement mechanisms</li><li>Network segmentation and perimeter defenses</li><li>Incident detection and response capabilities</li><li>Patch management and vulnerability processes</li><li>OT-specific security configurations</li><li>Physical security and supply chain controls</li></ul></div>
+            <div class="svc-detail"><h4>Standards Applied</h4><ul><li>IEC 62443-4-2 — Component security requirements</li><li>NIST CSF — 5 core functions framework</li><li>ISO 27002 — 93 security control categories</li><li>MITRE ATT&CK ICS — threat coverage mapping</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>Security Controls Assessment Report — your definitive blueprint for confidence in your security posture</p></div>
+          </div>
+        </div>
+        <div class="svc-panel">
+          <div class="svc-panel-hd"><div class="svc-icon-big">📊</div><div><h3>Risk Assessment & Analysis</h3><p>Data-driven risk understanding built on ISO 31000, NIST SP 800-30, and IEC 62443-3-2. Identify, quantify and prioritize every risk across your OT/IT environment.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>Assessment Scope</h4><ul><li>Asset identification and full classification</li><li>Threat and vulnerability identification</li><li>Risk likelihood and business impact analysis</li><li>Attack surface and breach path mapping</li><li>Residual risk evaluation and acceptance criteria</li></ul></div>
+            <div class="svc-detail"><h4>Methodology</h4><ul><li>ISO 31000 — Risk management principles</li><li>NIST SP 800-30 — Risk assessment guide</li><li>IEC 62443-3-2 — OT security risk assessment</li><li>Quantitative + qualitative analysis combined</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>Risk Assessment Report + Living Risk Register — your master blueprint for proactive defense</p></div>
+          </div>
+        </div>
+        <div class="svc-panel">
+          <div class="svc-panel-hd"><div class="svc-icon-big">🔍</div><div><h3>Gap Analysis & Remediation Planning</h3><p>Compare your current security posture against rigorous industry standards. Transform vulnerabilities into strengths with a clear, prioritized remediation roadmap.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>Gap Analysis Covers</h4><ul><li>Current vs desired security maturity mapping</li><li>Policy and procedure completeness review</li><li>Technical control gaps and deficiencies</li><li>Compliance shortfalls against chosen standard</li><li>Resource and capability gap identification</li></ul></div>
+            <div class="svc-detail"><h4>Remediation Planning</h4><ul><li>Prioritized action items by risk severity</li><li>Short, medium, and long-term roadmap</li><li>Cost-benefit analysis for each security measure</li><li>Implementation milestones and KPIs</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>Gap Analysis Report + Comprehensive Remediation Roadmap with prioritized actions and timelines</p></div>
+          </div>
+        </div>
+        <div class="svc-panel">
+          <div class="svc-panel-hd"><div class="svc-icon-big">📋</div><div><h3>Audit Report & Executive Presentation</h3><p>Crystal-clear presentations translating complex findings into actionable narratives for all stakeholders — from engineering teams to the boardroom.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>Report Includes</h4><ul><li>Executive summary for C-suite and board</li><li>Technical findings for engineering teams</li><li>Compliance status against applicable standards</li><li>Risk heat maps and visual dashboards</li><li>Prioritized recommendations with ROI analysis</li></ul></div>
+            <div class="svc-detail"><h4>Presentation Delivery</h4><ul><li>In-person or virtual executive briefings</li><li>Technical deep-dive for OT/IT teams</li><li>Stakeholder Q&A facilitation sessions</li><li>Board-ready slide deck provided</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>Final Audit Report + Executive Presentation Slides securing buy-in at all organizational levels</p></div>
+          </div>
+        </div>
+        <div class="svc-panel">
+          <div class="svc-panel-hd"><div class="svc-icon-big">🎓</div><div><h3>Cybersecurity Awareness Training</h3><p>3,700+ cyber attacks hit Indian SMEs annually. Human error is #1. Our programs build a security-first culture at every level of your organization.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>Topics Covered</h4><ul><li>Phishing and social engineering defense</li><li>Password security and MFA best practices</li><li>OT-specific awareness (SCADA, HMI, PLCs)</li><li>Insider threat identification and reporting</li><li>Mobile, remote work and cloud security</li><li>Supply chain and third-party risk</li></ul></div>
+            <div class="svc-detail"><h4>Program Format</h4><ul><li>Customized per industry and staff level</li><li>In-person or live virtual classroom sessions</li><li>Phishing simulation exercises included</li><li>Pre and post-training skill assessments</li><li>Completion certificates for all participants</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>Customized Training Program + Pre/Post Assessments + Completion Certificates for all staff</p></div>
+          </div>
+        </div>
+        <div class="svc-panel">
+          <div class="svc-panel-hd"><div class="svc-icon-big">🔧</div><div><h3>Remediation Support & Implementation</h3><p>We don't just hand you a report and walk away. Hands-on support implementing every recommended security measure. Your success is our mission.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>Implementation Support</h4><ul><li>Guided implementation of all remediation items</li><li>Network segmentation and firewall configuration</li><li>Security policy and procedure development</li><li>OT/IT security tool deployment and tuning</li><li>Secure remote access implementation</li></ul></div>
+            <div class="svc-detail"><h4>Ongoing Support</h4><ul><li>Post-implementation verification testing</li><li>Quarterly security posture reviews</li><li>Incident response retainer options available</li><li>Annual re-assessment at preferred rates</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>Remediation Implementation Plan + Verification Report + Ongoing Support Agreement</p></div>
+          </div>
+        </div>
+        <div class="svc-panel">
+          <div class="svc-panel-hd"><div class="svc-icon-big">🤖</div><div><h3>AI Risk Assessment</h3><p>Comprehensive evaluation of AI system vulnerabilities, biases, and compliance risks aligned with emerging AI governance frameworks for responsible, secure deployment.</p></div></div>
+          <div class="svc-panel-body">
+            <div class="svc-detail"><h4>Assessment Scope</h4><ul><li>AI model security and adversarial attack vectors</li><li>Training data quality and bias evaluation</li><li>Model governance and oversight frameworks</li><li>Privacy and data protection compliance</li><li>EU AI Act compliance readiness assessment</li></ul></div>
+            <div class="svc-detail"><h4>Frameworks Applied</h4><ul><li>NIST AI Risk Management Framework</li><li>ISO/IEC 42001 — AI Management System</li><li>OWASP Top 10 for Machine Learning</li><li>EU AI Act compliance assessment</li></ul></div>
+            <div class="svc-deliverable"><div class="svc-del-label">📄 Key Deliverable</div><p>AI Risk Assessment Report — ensuring responsible, secure and compliant AI deployment</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px" class="reveal d2">
+      <a href="services.html" class="btn btn-ghost"><i class="fas fa-arrow-right"></i> View All Services in Full Detail</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="wrap">
+    <div class="stats-cells reveal">
+      <div class="stat-cell"><div class="stat-n"><span data-v="20" data-s="+">0+</span></div><div class="stat-l">Years Experience</div><div class="stat-d">Deep OT/ICS domain expertise across critical sectors</div></div>
+      <div class="stat-cell"><div class="stat-n"><span data-v="50" data-s="+">0+</span></div><div class="stat-l">Projects Delivered</div><div class="stat-d">Successful engagements across India and beyond</div></div>
+      <div class="stat-cell"><div class="stat-n"><span data-v="9">0</span></div><div class="stat-l">Standards Frameworks</div><div class="stat-d">IEC 62443, ISO 27001, NIST and 6 more</div></div>
+      <div class="stat-cell"><div class="stat-n"><span data-v="100" data-s="%">0%</span></div><div class="stat-l">Client Satisfaction</div><div class="stat-d">Every client receives a clear, actionable deliverable</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- INDUSTRIES -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">// Industries</span>
+      <h2 class="h2">Specialized Across<br><span class="accent">Critical Sectors</span></h2>
+      <p class="sec-lead">From legacy railway signaling to modern cloud infrastructure — we protect what keeps India running.</p>
+    </div>
+    <div class="ind-grid reveal">
+      <div class="ind-card"><div class="ind-icon">🚇</div><h3>Railway & Metro</h3><p>SCADA, signaling systems, OT networks and passenger infrastructure security</p><span class="ind-tag">Core Specialization</span></div>
+      <div class="ind-card"><div class="ind-icon">⚡</div><h3>Power & Energy</h3><p>Grid security, SCADA protection, substation hardening</p><span class="ind-tag">Critical Infrastructure</span></div>
+      <div class="ind-card"><div class="ind-icon">🏭</div><h3>Manufacturing</h3><p>OT/IT convergence, PLC/DCS security, production continuity</p><span class="ind-tag">ICS / OT Focus</span></div>
+      <div class="ind-card"><div class="ind-icon">🛢️</div><h3>Oil & Gas</h3><p>Pipeline SCADA, refinery OT, offshore platform security</p><span class="ind-tag">High Risk</span></div>
+      <div class="ind-card"><div class="ind-icon">🏥</div><h3>Healthcare</h3><p>IoMT devices, medical OT, patient data protection</p><span class="ind-tag">Safety-Critical</span></div>
+      <div class="ind-card"><div class="ind-icon">✈️</div><h3>Aviation</h3><p>Air traffic OT, airport infrastructure security</p><span class="ind-tag">High Consequence</span></div>
+      <div class="ind-card"><div class="ind-icon">🏛️</div><h3>Government</h3><p>National critical infrastructure, smart city OT</p><span class="ind-tag">National Security</span></div>
+      <div class="ind-card"><div class="ind-icon">💻</div><h3>IT, ITES & BFSI</h3><p>Data centers, cloud infrastructure, fintech security</p><span class="ind-tag">Enterprise Scale</span></div>
+    </div>
+    <div style="text-align:center;margin-top:32px" class="reveal d2">
+      <a href="industries.html" class="btn btn-ghost"><i class="fas fa-industry"></i> Explore All Industries</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section" style="background:var(--ink2)">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="reveal">
+        <span class="eyebrow">// Why Jain Cyber Solutions</span>
+        <h2 class="h2">Built by OT Defenders,<br><span class="accent">For OT Defenders</span></h2>
+        <p class="body-md" style="margin-bottom:28px;max-width:480px">Unlike IT-focused security firms, we understand the unique constraints of industrial environments — zero-downtime requirements, legacy equipment, proprietary OT protocols, and safety-critical systems.</p>
+        <div class="why-points">
+          <div class="why-pt"><div class="why-pt-icon">🎯</div><div><h4>OT-Native Approach</h4><p>Purpose-built for industrial reality. We understand Modbus, DNP3, EtherNet/IP and SCADA architectures that IT-focused firms miss.</p></div></div>
+          <div class="why-pt"><div class="why-pt-icon">📜</div><div><h4>Multi-Standard Compliance</h4><p>IEC 62443, ISO 27001, ISO 31000, NIST CSF — aligned to standards that matter for your industry and regulators.</p></div></div>
+          <div class="why-pt"><div class="why-pt-icon">🔄</div><div><h4>End-to-End Lifecycle</h4><p>Assessment to implementation and ongoing monitoring. We don't just hand you a report — we see it through.</p></div></div>
+          <div class="why-pt"><div class="why-pt-icon">🔒</div><div><h4>Cyber Insurance Support</h4><p>Documentation and assessments structured to meet insurance requirements, helping reduce premiums by up to 35%.</p></div></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="why-console">
+          <div class="con-bar">
+            <div class="con-dot" style="background:#FF5F57"></div>
+            <div class="con-dot" style="background:#FEBC2E"></div>
+            <div class="con-dot" style="background:#28C840"></div>
+            <span class="con-title">jcs-ot-scanner.sh — live assessment</span>
+          </div>
+          <div class="con-body">
+            <div class="cl"><span class="cp">$</span><span class="cc"> ./assess --target metro-ot --standard iec62443-3-2</span></div>
+            <div class="co">Initializing JCS OT Security Scanner v4.2...</div>
+            <div class="co">Connecting to OT network (passive mode)...</div>
+            <div class="co"><span class="cok">[✓]</span> Network access established — zero disruption</div>
+            <div class="co">Detecting ICS protocols...</div>
+            <div class="co"><span class="cok">[✓]</span> Modbus TCP, DNP3, EtherNet/IP, Profibus</div>
+            <div class="co">Running passive asset discovery...</div>
+            <div class="co"><span class="cok">[✓]</span> 247 OT devices mapped and profiled</div>
+            <div class="co"><span class="cwrn">[!]</span> 12 PLCs with EOL firmware — CRITICAL</div>
+            <div class="co"><span class="cwrn">[!]</span> 3 open IT→OT attack paths found</div>
+            <div class="co">Running IEC 62443-3-2 compliance check...</div>
+            <div class="co"><span class="cok">[✓]</span> Risk Assessment Report generated</div>
+            <div class="co"><span class="cok">[✓]</span> 47 remediation actions prioritized by risk</div>
+            <div class="cl"><span class="cp">$</span><span class="cur"></span></div>
+          </div>
+        </div>
+        <div class="why-scores">
+          <div class="wscore"><div class="wscore-n">20+</div><div class="wscore-l">Years OT</div></div>
+          <div class="wscore"><div class="wscore-n" style="color:var(--teal)">100%</div><div class="wscore-l">Satisfaction</div></div>
+          <div class="wscore"><div class="wscore-n" style="color:var(--blue2)">9</div><div class="wscore-l">Standards</div></div>
+          <div class="wscore"><div class="wscore-n" style="color:var(--red)">24/7</div><div class="wscore-l">Incident Support</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px">
+      <div>
+        <span class="eyebrow">// Case Studies</span>
+        <h2 class="h2" style="margin-bottom:0">Real Results, <span class="accent">Measurable Impact</span></h2>
+      </div>
+      <a href="case-studies.html" class="btn btn-ghost reveal d2">All Case Studies <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="case-grid reveal">
+      <div class="case-card">
+        <div class="case-hd"><span class="case-sector">Metro Rail</span><h3>OT Security & SCADA Protection</h3></div>
+        <div class="case-bd">
+          <div class="case-lbl">Challenge</div>
+          <p>Metropolitan rail system required OT security for SCADA, signaling, and passenger systems while maintaining 24/7 operations without any disruption.</p>
+          <div class="case-lbl">Solution</div>
+          <p>IEC 62443 compliant architecture with passive monitoring, OT/IT segmentation, and secure remote access protocols deployed non-intrusively.</p>
+          <div class="case-results"><span class="case-chip">IEC 62443-3-2 Compliant</span><span class="case-chip">Zero disruptions</span><span class="case-chip">50% faster detection</span></div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-hd"><span class="case-sector">Manufacturing</span><h3>Ransomware Recovery & Hardening</h3></div>
+        <div class="case-bd">
+          <div class="case-lbl">Challenge</div>
+          <p>Company suffered ransomware attack: 5 days downtime, $400K losses. Required complete infrastructure security overhaul post-breach.</p>
+          <div class="case-lbl">Solution</div>
+          <p>Emergency incident response, forensics, defense-in-depth architecture, backup protocols, and 24/7 continuous monitoring deployed.</p>
+          <div class="case-results"><span class="case-chip">Zero attacks — 30 months</span><span class="case-chip">RTO: Days → 4 hrs</span><span class="case-chip">500+ threats/mo blocked</span></div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-hd"><span class="case-sector">Power Grid</span><h3>Legacy SCADA Security Modernization</h3></div>
+        <div class="case-bd">
+          <div class="case-lbl">Challenge</div>
+          <p>Power distribution facility with legacy SCADA needed security modernization without disrupting 24/7 critical operations.</p>
+          <div class="case-lbl">Solution</div>
+          <p>IEC 62443-based risk assessment, air-gapped network architecture, continuous ICS-specific threat monitoring and playbooks.</p>
+          <div class="case-results"><span class="case-chip">Zero operational downtime</span><span class="case-chip">23 attacks prevented Y1</span><span class="case-chip">MTTD: 45d → 4hrs</span></div>
+        </div>
+      </div>
+      <div class="case-card">
+        <div class="case-hd"><span class="case-sector">Tech Startup</span><h3>SOC 2 Certification in 6 Months</h3></div>
+        <div class="case-bd">
+          <div class="case-lbl">Challenge</div>
+          <p>SaaS startup needed security-by-design SDLC and SOC 2 Type II certification to close major Fortune 500 enterprise deals.</p>
+          <div class="case-lbl">Solution</div>
+          <p>Security-by-design integration, DevSecOps pipeline with automated scanning, and comprehensive SOC 2 audit documentation.</p>
+          <div class="case-results"><span class="case-chip">SOC 2 Type II — 6 months</span><span class="case-chip">$2.3M enterprise won</span><span class="case-chip">240% enterprise growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG PREVIEW -->
+<section class="section" style="background:var(--ink2)">
+  <div class="wrap">
+    <div class="sec-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px">
+      <div>
+        <span class="eyebrow">// Insights & Blog</span>
+        <h2 class="h2" style="margin-bottom:0">OT Security <span class="accent">Knowledge Hub</span></h2>
+      </div>
+      <a href="blog.html" class="btn btn-ghost reveal d2">All Articles <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="blog-home-grid reveal">
+      <a href="blog-post.html?id=1" class="blog-home-card">
+        <div class="bhc-img">🚇<span class="bhc-cat">Railway</span></div>
+        <div class="bhc-body">
+          <div class="bhc-meta"><span>Dec 2024</span><span>·</span><span>8 min read</span><span>·</span><span>Virendra Kothari</span></div>
+          <h3>Why Railway OT Security Is India's #1 Cyber Priority for 2025</h3>
+          <p>Modern rail systems rely on SCADA networks increasingly targeted by nation-state actors and ransomware groups. What organizations must do now to protect critical signaling infrastructure.</p>
+          <span class="bhc-link">Read Article <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
+        </div>
+      </a>
+      <a href="blog-post.html?id=2" class="blog-home-card">
+        <div class="bhc-img" style="font-size:40px">📋<span class="bhc-cat">Compliance</span></div>
+        <div class="bhc-body">
+          <div class="bhc-meta"><span>Nov 2024</span><span>·</span><span>7 min read</span></div>
+          <h3>IEC 62443-3-2: A Practical Guide for OT Risk Assessment</h3>
+          <p>Understanding and implementing IEC 62443-3-2 in real-world industrial control system environments, step by step.</p>
+          <span class="bhc-link">Read Article <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
+        </div>
+      </a>
+      <a href="blog-post.html?id=3" class="blog-home-card">
+        <div class="bhc-img" style="font-size:40px">🔐<span class="bhc-cat">OT Security</span></div>
+        <div class="bhc-body">
+          <div class="bhc-meta"><span>Oct 2024</span><span>·</span><span>6 min read</span></div>
+          <h3>Top 5 OT Cybersecurity Threats Facing Indian Manufacturing</h3>
+          <p>Manufacturing OT networks face growing threats. The 5 attack vectors you need to be prepared for in 2025.</p>
+          <span class="bhc-link">Read Article <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">// FAQ</span>
+      <h2 class="h2">Frequently Asked <span class="accent">Questions</span></h2>
+      <p class="sec-lead">Everything you need to know before engaging with us.</p>
+    </div>
+    <div class="faq-grid reveal">
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Why is OT security different from IT security?<div class="faq-icon">+</div></div><div class="faq-a">OT environments have unique constraints — zero-downtime requirements, legacy equipment that cannot be patched, proprietary industrial protocols (Modbus, DNP3), and safety-critical systems where a breach can cause physical harm or operational shutdown. Standard IT security tools don't account for these and can actually disrupt operations if applied incorrectly to OT networks.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Will your assessments disrupt our OT operations?<div class="faq-icon">+</div></div><div class="faq-a">No. We use passive, non-intrusive assessment methodologies specifically designed for OT environments where operational continuity is non-negotiable. Our team has extensive experience working in live railway, power, and manufacturing environments without causing any operational disruption whatsoever.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What is included in a Security Control Assessment?<div class="faq-icon">+</div></div><div class="faq-a">Our Security Control Assessment evaluates effectiveness of your existing security controls — from policies and procedures to technical safeguards. Guided by IEC 62443-4-2, NIST CSF, and ISO 27002, you receive a comprehensive Security Controls Assessment Report as your definitive blueprint for confidence in your security posture.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Do you provide ongoing support after assessment?<div class="faq-icon">+</div></div><div class="faq-a">Yes. We provide Remediation Support & Implementation services — hands-on guidance through implementation of every recommended measure. We don't just hand you a report and walk away. Our team stays engaged until every action item is implemented and verified.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Can you help us qualify for cyber insurance?<div class="faq-icon">+</div></div><div class="faq-a">Absolutely. Our documentation, risk assessments, and audit reports are structured to meet cyber insurance requirements. Clients have qualified for coverage within 3 months, with premiums up to 35% lower due to strong documented security controls and evidence of continuous risk management.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Which industries do you specialize in?<div class="faq-icon">+</div></div><div class="faq-a">We serve Railway/Metro (our core specialization), Manufacturing, Power & Energy, Healthcare, Oil & Gas, Government, IT/ITES, Aviation, and Banking. We have particularly deep expertise in OT/SCADA environments for critical infrastructure — where IT security firms lack the industrial systems knowledge to be truly effective.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="wrap">
+    <h2 class="h2">Build Resilience &amp; Keep<br>Threats at Bay</h2>
+    <p class="body-lg">Protect your critical infrastructure with India's premier OT cybersecurity experts. First assessment is free.</p>
+    <div class="actions">
+      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="contact.html" class="btn btn-outline btn-lg"><i class="fas fa-envelope"></i> Contact Our Experts</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></div>
+        <p>India's premier OT/ICS cybersecurity firm protecting Railway, Metro, Power, Manufacturing & Government critical infrastructure with IEC 62443-aligned assessments.</p>
+        <div class="footer-contact-row"><i class="fas fa-location-dot"></i><span>Indore, Madhya Pradesh, India</span></div>
+        <div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+919509679668">+91-9509679668</a></div>
+        <div class="footer-contact-row"><i class="fas fa-envelope"></i><a href="mailto:virendra.kothari@jaincybersolutions.com">virendra.kothari@jaincybersolutions.com</a></div>
+      </div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a href="careers.html">Careers</a></li><li><a href="partners.html">Partners</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Security Assessment</a></li><li><a href="services.html">Risk Analysis</a></li><li><a href="services.html">Gap Analysis</a></li><li><a href="services.html">Compliance Audit</a></li><li><a href="services.html">Security Training</a></li><li><a href="services.html">AI Risk Assessment</a></li></ul></div>
+      <div class="footer-col"><h5>Industries</h5><ul><li><a href="industries.html#railway">Railway & Metro</a></li><li><a href="industries.html#energy">Power & Energy</a></li><li><a href="industries.html#manufacturing">Manufacturing</a></li><li><a href="industries.html#oilgas">Oil & Gas</a></li><li><a href="industries.html#healthcare">Healthcare</a></li><li><a href="industries.html#government">Government</a></li></ul></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="blog.html">Blog & Insights</a></li><li><a href="resources.html">Reports</a></li><li><a href="resources.html">Standards Guides</a></li><li><a href="contact.html">Get Assessment</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Jain Cyber Solutions. All rights reserved. Indore, Madhya Pradesh, India.</p>
+      <div class="footer-socials">
+        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a>
+        <a href="mailto:virendra.kothari@jaincybersolutions.com"><i class="fas fa-envelope"></i></a>
+      </div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ASSESSMENT MODAL -->
+<div class="modal-backdrop" id="modal-assessment" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-stripe"></div>
+    <div class="modal-head">
+      <h3>Request Free Assessment</h3>
+      <p>Our expert team responds within 24 hours with a tailored plan for your environment.</p>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <form onsubmit="submitLead(this);return false" style="display:flex;flex-direction:column;gap:14px">
+        <div class="f2">
+          <div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your full name" required></div>
+          <div class="fg"><label class="fl">Phone *</label><input name="phone" class="fi" placeholder="+91-XXXXXXXXXX" required></div>
+        </div>
+        <div class="f2">
+          <div class="fg"><label class="fl">Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div>
+          <div class="fg"><label class="fl">Company</label><input name="company" class="fi" placeholder="Organization name"></div>
+        </div>
+        <div class="fg"><label class="fl">Industry</label>
+          <select name="industry" class="fi">
+            <option value="">Select your industry</option>
+            <option>Railway / Metro Systems</option><option>Manufacturing / Industrial</option>
+            <option>Power & Energy / Utilities</option><option>Healthcare</option>
+            <option>Oil & Gas</option><option>Government / Public Sector</option>
+            <option>IT / ITES</option><option>Banking & Finance</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Assessment Type</label>
+          <select name="assessment" class="fi">
+            <option value="">Select assessment type</option>
+            <option>OT / ICS Security Assessment</option>
+            <option>Risk Assessment (IEC 62443 / ISO 31000)</option>
+            <option>Compliance Audit (ISO 27001)</option>
+            <option>Gap Analysis & Remediation Planning</option>
+            <option>Security Awareness Training</option>
+            <option>AI Risk Assessment</option>
+            <option>Not sure — need consultation</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Additional Details</label>
+          <textarea name="message" class="fi" placeholder="Describe your environment, concerns or specific requirements..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit"><i class="fas fa-shield-halved"></i> Submit Assessment Request</button>
+        <p style="font-family:var(--mono);font-size:10px;color:var(--txt3);text-align:center;letter-spacing:.06em">We never share your information. 100% confidential.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/site-data.js"></script>
+<script>
+window.addEventListener('load', () => {
+  const s = (window.getLocalDataSite ? getLocalDataSite('settings', {}) : {}) || {};
+  try {
+    if (s.address) document.querySelector('#footer .footer-contact-row:nth-child(1) span').textContent = s.address;
+    if (s.phone) document.querySelector('#footer .footer-contact-row:nth-child(2) a').textContent = s.phone;
+    if (s.email) document.querySelector('#footer .footer-contact-row:nth-child(3) a').textContent = s.email;
+  } catch(e) {}
+});
+</script>
+<script>
+function switchSvc(idx, el) {
+  document.querySelectorAll('.svc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.svc-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.svc-panel')[idx].classList.add('active');
+}
+// Build Three.js globe
+window.addEventListener('load', () => buildGlobe('hero-canvas'));
+</script>
+</body>
+</html>
+
+

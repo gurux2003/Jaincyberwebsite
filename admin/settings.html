@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Settings | JCS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="admin.css">
+<style>
+.settings-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:28px}
+.stab{font-size:13px;font-weight:600;color:var(--txt3);padding:11px 20px;border-bottom:2px solid transparent;cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;transition:all .2s}
+.stab:hover{color:var(--txt)}
+.stab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.settings-section{display:none}.settings-section.active{display:block}
+.settings-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:24px;margin-bottom:20px}
+.settings-card h3{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+.settings-card .desc{font-size:13px;color:var(--txt3);margin-bottom:20px}
+.settings-divider{height:1px;background:var(--line);margin:20px 0}
+.danger-zone{background:rgba(240,64,64,.05);border:1px solid rgba(240,64,64,.2);border-radius:8px;padding:20px;margin-bottom:20px}
+.danger-zone h3{font-size:15px;font-weight:700;color:var(--red);margin-bottom:4px}
+.danger-zone p{font-size:13px;color:var(--txt3);margin-bottom:14px}
+.danger-btn{background:var(--red);color:#fff;border:none;border-radius:6px;padding:9px 18px;font-family:var(--sans);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s}
+.danger-btn:hover{background:#c83232}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Settings</div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="saveAllSettings()"><i class="fas fa-save"></i> Save All Settings</button>
+      <a href="../index.html" target="_blank" class="topbar-btn" style="margin-left:8px"><i class="fas fa-globe"></i> View Site</a>
+    </div>
+  </div>
+  <div class="content">
+    <div class="settings-tabs">
+      <button class="stab active" onclick="switchTab('general',this)">General</button>
+      <button class="stab" onclick="switchTab('contact',this)">Contact Info</button>
+      <button class="stab" onclick="switchTab('social',this)">Social Media</button>
+      <button class="stab" onclick="switchTab('seo',this)">SEO</button>
+      <button class="stab" onclick="switchTab('account',this)">My Account</button>
+    </div>
+
+    <!-- General -->
+    <div class="settings-section active" id="tab-general">
+      <div class="settings-card">
+        <h3>Site Information</h3>
+        <div class="desc">Basic information about your company that appears across the website.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="form-grid">
+            <div class="fg"><label class="fl">Company Name</label><input id="s-siteName" class="fi" placeholder="Jain Cyber Solutions"></div>
+            <div class="fg"><label class="fl">Tagline</label><input id="s-siteTagline" class="fi" placeholder="Expert OT Cybersecurity & AI-Powered Services"></div>
+          </div>
+          <div class="fg"><label class="fl">Company Description (footer/meta)</label><textarea id="s-siteDesc" class="fi" style="min-height:80px" placeholder="India's premier OT/ICS cybersecurity firm..."></textarea></div>
+          <div class="form-grid">
+            <div class="fg"><label class="fl">Founded Year</label><input id="s-founded" class="fi" placeholder="2004"></div>
+            <div class="fg"><label class="fl">Headquarters</label><input id="s-hq" class="fi" placeholder="Indore, Madhya Pradesh, India"></div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-card">
+        <h3>Hero Section Stats</h3>
+        <div class="desc">Numbers displayed in the homepage hero section.</div>
+        <div class="form-grid">
+          <div class="fg"><label class="fl">Years Experience</label><input id="s-years" class="fi" type="number" placeholder="20"></div>
+          <div class="fg"><label class="fl">Projects Delivered</label><input id="s-projects" class="fi" type="number" placeholder="50"></div>
+          <div class="fg"><label class="fl">Standards Covered</label><input id="s-standards" class="fi" type="number" placeholder="9"></div>
+          <div class="fg"><label class="fl">Client Satisfaction %</label><input id="s-satisfaction" class="fi" type="number" placeholder="100"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="settings-section" id="tab-contact">
+      <div class="settings-card">
+        <h3>Contact Information</h3>
+        <div class="desc">Contact details shown in the footer, contact page and nav bar.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="form-grid">
+            <div class="fg"><label class="fl">Primary Phone</label><input id="s-phone" class="fi" placeholder="+91-9509679668"></div>
+            <div class="fg"><label class="fl">Secondary Phone</label><input id="s-phone2" class="fi" placeholder="+91-XXXXXXXXXX"></div>
+          </div>
+          <div class="form-grid">
+            <div class="fg"><label class="fl">Primary Email</label><input id="s-email" class="fi" type="email" placeholder="virendra.kothari@jaincybersolutions.com"></div>
+            <div class="fg"><label class="fl">General Inquiry Email</label><input id="s-email2" class="fi" type="email" placeholder="info@jaincybersolutions.com"></div>
+          </div>
+          <div class="fg"><label class="fl">Full Address</label><textarea id="s-address" class="fi" style="min-height:70px" placeholder="Full postal address..."></textarea></div>
+          <div class="form-grid">
+            <div class="fg"><label class="fl">Business Hours</label><input id="s-hours" class="fi" placeholder="Mon–Fri: 9:00 AM – 6:00 PM IST"></div>
+            <div class="fg"><label class="fl">Emergency Contact (24/7)</label><input id="s-emergency" class="fi" placeholder="+91-XXXXXXXXXX"></div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-card">
+        <h3>Email Notifications</h3>
+        <div class="desc">Configure where form submissions and lead notifications are sent.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="fg"><label class="fl">Lead Notification Email</label><input id="s-leadEmail" class="fi" type="email" placeholder="Email to receive new assessment requests"></div>
+          <div class="fg"><label class="fl">Contact Form Notification Email</label><input id="s-contactEmail" class="fi" type="email" placeholder="Email to receive contact form messages"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="settings-section" id="tab-social">
+      <div class="settings-card">
+        <h3>Social Media Links</h3>
+        <div class="desc">Social media profiles shown in the footer and contact page.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="fg"><label class="fl"><i class="fab fa-linkedin-in" style="color:#0077b5;margin-right:5px"></i> LinkedIn URL</label><input id="s-linkedin" class="fi" placeholder="https://linkedin.com/company/jain-cyber-solutions"></div>
+          <div class="fg"><label class="fl"><i class="fab fa-x-twitter" style="margin-right:5px"></i> Twitter/X URL</label><input id="s-twitter" class="fi" placeholder="https://twitter.com/jaincybersolutions"></div>
+          <div class="fg"><label class="fl"><i class="fab fa-youtube" style="color:#ff0000;margin-right:5px"></i> YouTube URL</label><input id="s-youtube" class="fi" placeholder="https://youtube.com/@jaincybersolutions"></div>
+          <div class="fg"><label class="fl"><i class="fab fa-facebook" style="color:#1877f2;margin-right:5px"></i> Facebook URL</label><input id="s-facebook" class="fi" placeholder="https://facebook.com/jaincybersolutions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="settings-section" id="tab-seo">
+      <div class="settings-card">
+        <h3>SEO & Meta Settings</h3>
+        <div class="desc">Search engine optimization settings for the website.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="fg"><label class="fl">Default Meta Title</label><input id="s-metaTitle" class="fi" placeholder="Jain Cyber Solutions | OT/ICS Cybersecurity Experts — Railway, Metro & Critical Infrastructure"></div>
+          <div class="fg"><label class="fl">Default Meta Description</label><textarea id="s-metaDesc" class="fi" style="min-height:80px" placeholder="India's premier OT/ICS cybersecurity firm..."></textarea></div>
+          <div class="fg"><label class="fl">Target Keywords</label><textarea id="s-keywords" class="fi" style="min-height:70px" placeholder="OT cybersecurity India, ICS security, railway SCADA security, IEC 62443..."></textarea></div>
+          <div class="fg"><label class="fl">Google Analytics ID</label><input id="s-ga" class="fi" placeholder="G-XXXXXXXXXX"></div>
+          <div class="fg"><label class="fl">Google Search Console Verification</label><input id="s-gsc" class="fi" placeholder="google-site-verification=..."></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account -->
+    <div class="settings-section" id="tab-account">
+      <div class="settings-card">
+        <h3>My Account</h3>
+        <div class="desc">Update your admin profile information.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="form-grid">
+            <div class="fg"><label class="fl">Full Name</label><input id="a-name" class="fi" placeholder="Your name"></div>
+            <div class="fg"><label class="fl">Email Address</label><input id="a-email" class="fi" type="email" placeholder="admin@jaincybersolutions.com" disabled style="opacity:.6"></div>
+          </div>
+          <button class="save-btn" onclick="saveProfile()" style="align-self:flex-start"><i class="fas fa-save"></i> Save Profile</button>
+        </div>
+      </div>
+      <div class="settings-card">
+        <h3>Change Password</h3>
+        <div class="desc">Update your admin panel password. Use a strong, unique password.</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="fg"><label class="fl">Current Password</label><input id="a-current-pw" class="fi" type="password" placeholder="Your current password"></div>
+          <div class="form-grid">
+            <div class="fg"><label class="fl">New Password</label><input id="a-new-pw" class="fi" type="password" placeholder="Min 8 characters"></div>
+            <div class="fg"><label class="fl">Confirm New Password</label><input id="a-confirm-pw" class="fi" type="password" placeholder="Repeat new password"></div>
+          </div>
+          <button class="save-btn" onclick="changePassword()" style="align-self:flex-start"><i class="fas fa-lock"></i> Change Password</button>
+        </div>
+      </div>
+      <div class="danger-zone">
+        <h3>Danger Zone</h3>
+        <p>Log out from all admin sessions. You will need to sign in again.</p>
+        <button class="danger-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+<script>
+requireAuth();
+document.getElementById('sidebar').innerHTML = renderSidebar('settings');
+loadBadges();
+
+const admin = getAdmin();
+
+// Pre-fill account info
+if (admin) {
+  document.getElementById('a-name').value = admin.name || '';
+  document.getElementById('a-email').value = admin.email || '';
+}
+
+// Default settings values
+const defaults = {
+  siteName: 'Jain Cyber Solutions',
+  siteTagline: 'Expert OT Cybersecurity & AI-Powered Services',
+  siteDesc: "India's premier OT/ICS cybersecurity firm protecting Railway, Metro, Power, Manufacturing & Government critical infrastructure.",
+  hq: 'Indore, Madhya Pradesh, India',
+  founded: '2004',
+  years: '20',
+  projects: '50',
+  standards: '9',
+  satisfaction: '100',
+  phone: '+91-9509679668',
+  email: 'virendra.kothari@jaincybersolutions.com',
+  address: 'Indore, Madhya Pradesh, India — 452001',
+  hours: 'Mon–Fri: 9:00 AM – 6:00 PM IST',
+  linkedin: 'https://linkedin.com',
+  twitter: 'https://twitter.com',
+  metaTitle: 'Jain Cyber Solutions | OT/ICS Cybersecurity — Railway, Metro & Critical Infrastructure',
+  metaDesc: "India's premier OT/ICS cybersecurity firm. IEC 62443, ISO 27001 and NIST CSF aligned assessments for critical infrastructure.",
+  keywords: 'OT cybersecurity India, ICS security, railway SCADA security, IEC 62443, ISO 27001 compliance, industrial cybersecurity',
+};
+
+async function loadSettings() {
+  // Prefer local settings if present (frontend persistence)
+  const local = getLocalData('settings');
+  if (local) {
+    Object.keys(local).forEach(k => {
+      const el = document.getElementById('s-' + k);
+      if (el) el.value = local[k];
+    });
+    applyDefaults();
+    return;
+  }
+  try {
+    const r = await api('GET', '/settings');
+    if (r?.ok) {
+      const s = r.data.settings;
+      Object.keys(s).forEach(k => {
+        const el = document.getElementById('s-' + k);
+        if (el) el.value = s[k];
+      });
+      // cache locally
+      setLocalData('settings', s);
+    } else { applyDefaults(); }
+  } catch(e) { applyDefaults(); }
+}
+
+function applyDefaults() {
+  Object.entries(defaults).forEach(([k, v]) => {
+    const el = document.getElementById('s-' + k);
+    if (el && !el.value) el.value = v;
+  });
+}
+
+async function saveAllSettings() {
+  const settings = {};
+  document.querySelectorAll('[id^="s-"]').forEach(el => {
+    const key = el.id.replace('s-', '');
+    settings[key] = el.value;
+  });
+  const r = await api('PUT', '/settings', settings);
+  if (r?.ok) { toast('Settings saved successfully!', 'success'); setLocalData('settings', settings); }
+  else { setLocalData('settings', settings); toast('Settings saved locally (demo mode)', 'success'); }
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+async function saveProfile() {
+  const name = document.getElementById('a-name').value.trim();
+  if (!name) { toast('Name is required','error'); return; }
+  const adminData = getAdmin();
+  if (adminData) { adminData.name = name; localStorage.setItem('jcs_admin', JSON.stringify(adminData)); }
+  toast('Profile updated!', 'success');
+}
+
+async function changePassword() {
+  const current = document.getElementById('a-current-pw').value;
+  const newPw = document.getElementById('a-new-pw').value;
+  const confirm = document.getElementById('a-confirm-pw').value;
+  if (!current || !newPw || !confirm) { toast('All password fields are required','error'); return; }
+  if (newPw !== confirm) { toast('New passwords do not match','error'); return; }
+  if (newPw.length < 8) { toast('Password must be at least 8 characters','error'); return; }
+  const r = await api('PUT', '/auth/password', { currentPassword: current, newPassword: newPw });
+  if (r?.ok) { toast('Password changed successfully!', 'success'); document.getElementById('a-current-pw').value=''; document.getElementById('a-new-pw').value=''; document.getElementById('a-confirm-pw').value=''; }
+  else { toast(r?.data?.error || 'Failed to change password. Check current password.','error'); }
+}
+
+loadSettings();
+</script>
+</body>
+</html>

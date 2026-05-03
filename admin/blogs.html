@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Blog Posts | JCS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.snow.css">
+<link rel="stylesheet" href="admin.css">
+<style>
+.blog-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bfil{font-family:var(--mono);font-size:10px;padding:5px 12px;border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--txt3);cursor:pointer;transition:all .2s;letter-spacing:.06em}
+.bfil:hover{border-color:var(--line2);color:var(--txt)}
+.bfil.active{background:var(--blue);border-color:var(--blue);color:#000;font-weight:700}
+.blog-row-img{width:48px;height:36px;background:var(--ink3);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.tag-input-wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--ink2);border:1.5px solid var(--line);border-radius:6px;padding:8px 12px;min-height:42px}
+.tag-input-wrap input{background:none;border:none;outline:none;font-family:var(--sans);font-size:13px;color:var(--txt);flex:1;min-width:100px}
+.tag-input-wrap input::placeholder{color:var(--txt3)}
+.tag-chip{background:rgba(29,114,245,.1);border:1px solid rgba(29,114,245,.3);color:var(--blue);font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:100px;display:flex;align-items:center;gap:5px}
+.tag-chip button{background:none;border:none;color:var(--blue);cursor:pointer;font-size:13px;line-height:1;padding:0}
+.cover-preview{width:100%;height:140px;background:var(--ink3);border:1px solid var(--line);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:48px;margin-bottom:10px;overflow:hidden}
+.cover-preview img{width:100%;height:100%;object-fit:cover}
+.editor-wrap{border:1.5px solid var(--line);border-radius:6px;overflow:hidden}
+.ql-toolbar.ql-snow{background:var(--ink3);border:none;border-bottom:1px solid var(--line)}
+.ql-container.ql-snow{background:var(--ink2);border:none;min-height:260px;font-family:var(--sans);font-size:14px;color:var(--txt)}
+.ql-editor{color:var(--txt);min-height:260px}
+.ql-editor.ql-blank::before{color:var(--txt3)}
+.ql-stroke{stroke:var(--txt2)!important}
+.ql-fill{fill:var(--txt2)!important}
+.ql-picker-label{color:var(--txt2)!important}
+.ql-picker-options{background:var(--ink3)!important;border-color:var(--line)!important}
+.ql-picker-item{color:var(--txt2)!important}
+.modal-bg{position:fixed;inset:0;background:rgba(10,15,30,.92);z-index:9000;display:none;align-items:flex-start;justify-content:center;padding:20px;backdrop-filter:blur(16px);overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--card);border:1.5px solid var(--line2);border-radius:10px;width:100%;max-width:780px;position:relative;margin:auto}
+.modal-stripe{height:3px;background:var(--blue);border-radius:10px 10px 0 0}
+.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-size:17px;font-weight:800}
+.modal-close{background:var(--ink2);border:1px solid var(--line);color:var(--txt3);width:28px;height:28px;border-radius:5px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{border-color:var(--blue);color:var(--blue)}
+.modal-body{padding:20px 24px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Blog Posts</div>
+    <div class="topbar-right">
+      <div class="search-bar"><i class="fas fa-search"></i><input type="text" id="search" placeholder="Search posts..." oninput="filterTable()"></div>
+      <button class="topbar-btn" onclick="openEditor()"><i class="fas fa-plus"></i> New Post</button>
+      <a href="../index.html" target="_blank" class="topbar-btn" style="margin-left:8px"><i class="fas fa-globe"></i> View Site</a>
+    </div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="blog-filters" id="cat-filters">
+          <button class="bfil active" onclick="filterCat('all',this)">All</button>
+          <button class="bfil" onclick="filterCat('published',this)">Published</button>
+          <button class="bfil" onclick="filterCat('draft',this)">Drafts</button>
+          <button class="bfil" onclick="filterCat('OT Security',this)">OT Security</button>
+          <button class="bfil" onclick="filterCat('Railway',this)">Railway</button>
+          <button class="bfil" onclick="filterCat('Compliance',this)">Compliance</button>
+        </div>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--txt3)" id="blog-count">— posts</span>
+      </div>
+      <div class="panel-body table-wrap">
+        <table>
+          <thead><tr><th>Cover</th><th>Title</th><th>Category</th><th>Status</th><th>Views</th><th>Author</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="blog-table"><tr><td colspan="8" style="text-align:center;padding:28px;color:var(--txt3);font-family:var(--mono);font-size:12px">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Editor Modal -->
+<div class="modal-bg" id="editor-modal" onclick="if(event.target===this)closeEditor()">
+  <div class="modal-box">
+    <div class="modal-stripe"></div>
+    <div class="modal-head">
+      <h3 id="editor-title">New Blog Post</h3>
+      <button class="modal-close" onclick="closeEditor()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="fg full"><label class="fl">Post Title *</label><input id="b-title" class="fi" placeholder="Enter a compelling blog post title..."></div>
+        <div class="two-col">
+          <div class="fg"><label class="fl">Category</label>
+            <select id="b-category" class="fi">
+              <option>OT Security</option><option>Railway</option><option>Compliance</option>
+              <option>IT Security</option><option>Case Study</option><option>Training</option><option>News</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Status</label>
+            <select id="b-status" class="fi"><option value="draft">Draft</option><option value="published">Published</option></select>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="fg"><label class="fl">Author</label><input id="b-author" class="fi" placeholder="Author name" value="Virendra Kothari"></div>
+          <div class="fg"><label class="fl">Featured Post?</label>
+            <select id="b-featured" class="fi"><option value="false">No</option><option value="true">Yes — Show as Featured</option></select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Excerpt / Meta Description *</label><textarea id="b-excerpt" class="fi" style="min-height:70px" placeholder="Short description (max 300 chars) shown in blog listings and search results..."></textarea></div>
+        <div class="fg">
+          <label class="fl">Cover Image URL</label>
+          <div class="cover-preview" id="cover-preview">📷</div>
+          <input id="b-cover" class="fi" placeholder="https://... or leave blank for emoji cover" oninput="updateCoverPreview()">
+        </div>
+        <div class="fg">
+          <label class="fl">Tags (press Enter to add)</label>
+          <div class="tag-input-wrap" id="tag-wrap">
+            <input type="text" id="tag-input" placeholder="Add tag and press Enter..." onkeydown="addTag(event)">
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Content *</label>
+          <div class="editor-wrap"><div id="quill-editor"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:8px">
+          <button class="cancel-btn" onclick="closeEditor()">Cancel</button>
+          <button class="save-btn" id="save-draft-btn" onclick="saveBlog('draft')"><i class="fas fa-save"></i> Save Draft</button>
+          <button class="save-btn" onclick="saveBlog('published')" style="background:var(--green)"><i class="fas fa-globe"></i> Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script src="admin.js"></script>
+<script>
+requireAuth();
+document.getElementById('sidebar').innerHTML = renderSidebar('blogs');
+loadBadges();
+
+let allBlogs = [], currentFilter = 'all', editId = null, quill = null, tags = [];
+
+// Init Quill
+function initQuill() {
+  if (quill) return;
+  quill = new Quill('#quill-editor', {
+    theme: 'snow',
+    placeholder: 'Write your blog post content here...',
+    modules: {
+      toolbar: [
+        [{ header: [1,2,3,false] }],
+        ['bold','italic','underline','strike'],
+        ['blockquote','code-block'],
+        [{ list: 'ordered' },{ list: 'bullet' }],
+        ['link'],
+        ['clean']
+      ]
+    }
+  });
+}
+
+async function loadBlogs() {
+  // Load from localStorage first (frontend-only persistence)
+  allBlogs = getLocalData('blogs', DEMO_DATA.blogs) || DEMO_DATA.blogs;
+  try {
+    const r = await api('GET', '/blogs/admin/all');
+    if (r?.ok && r.data.blogs?.length) {
+      allBlogs = r.data.blogs;
+      // sync to local
+      setLocalData('blogs', allBlogs);
+    }
+  } catch(e) {}
+  renderTable();
+}
+
+function renderTable() {
+  const search = document.getElementById('search').value.toLowerCase();
+  let filtered = allBlogs.filter(b => {
+    const matchSearch = !search || b.title.toLowerCase().includes(search) || b.category.toLowerCase().includes(search);
+    const matchCat = currentFilter === 'all' || b.status === currentFilter || b.category === currentFilter;
+    return matchSearch && matchCat;
+  });
+  document.getElementById('blog-count').textContent = filtered.length + ' post' + (filtered.length !== 1 ? 's' : '');
+  const ICONS = {'OT Security':'🔐','Railway':'🚇','Compliance':'📋','IT Security':'💻','Case Study':'📊','Training':'🎓','News':'📰'};
+  document.getElementById('blog-table').innerHTML = filtered.length ? filtered.map(b => `
+    <tr>
+      <td><div class="blog-row-img">${ICONS[b.category]||'📄'}</div></td>
+      <td style="max-width:320px"><div class="td-name" style="white-space:normal;line-height:1.4">${truncate(b.title,70)}</div>${b.featured?'<span style="font-family:var(--mono);font-size:9px;color:var(--blue)">⭐ FEATURED</span>':''}</td>
+      <td><span class="status-badge status-new">${b.category}</span></td>
+      <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--blue)">${(b.views||0).toLocaleString()}</td>
+      <td style="font-size:12px;color:var(--txt3)">${b.author||'—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--txt3)">${fmtDate(b.publishedAt||b.createdAt)}</td>
+      <td style="white-space:nowrap">
+        <button class="act-btn" onclick="editBlog('${b._id}')"><i class="fas fa-edit"></i> Edit</button>
+        <button class="act-btn" onclick="toggleStatus('${b._id}','${b.status}')" style="margin-left:4px"><i class="fas fa-${b.status==='published'?'eye-slash':'globe'}"></i></button>
+        <button class="act-btn danger" onclick="deleteBlog('${b._id}')" style="margin-left:4px"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--txt3);font-family:var(--mono);font-size:12px">No posts found.</td></tr>';
+}
+
+function filterCat(val, btn) {
+  currentFilter = val;
+  document.querySelectorAll('.bfil').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+function filterTable() { renderTable(); }
+
+function openEditor(blog = null) {
+  initQuill();
+  editId = blog?._id || null;
+  tags = blog?.tags || [];
+  document.getElementById('editor-title').textContent = blog ? 'Edit Blog Post' : 'New Blog Post';
+  document.getElementById('b-title').value = blog?.title || '';
+  document.getElementById('b-category').value = blog?.category || 'OT Security';
+  document.getElementById('b-status').value = blog?.status || 'draft';
+  document.getElementById('b-author').value = blog?.author || 'Virendra Kothari';
+  document.getElementById('b-featured').value = String(blog?.featured || false);
+  document.getElementById('b-excerpt').value = blog?.excerpt || '';
+  document.getElementById('b-cover').value = blog?.coverImage || '';
+  quill.root.innerHTML = blog?.content || '';
+  renderTags();
+  updateCoverPreview();
+  document.getElementById('editor-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditor() {
+  document.getElementById('editor-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function editBlog(id) {
+  const blog = allBlogs.find(b => b._id === id);
+  if (blog) openEditor(blog);
+}
+
+function updateCoverPreview() {
+  const url = document.getElementById('b-cover').value;
+  const prev = document.getElementById('cover-preview');
+  if (url) {
+    prev.innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='📷'" alt="Cover">`;
+  } else {
+    const ICONS = {'OT Security':'🔐','Railway':'🚇','Compliance':'📋','IT Security':'💻','Case Study':'📊','Training':'🎓'};
+    prev.innerHTML = ICONS[document.getElementById('b-category').value] || '📄';
+  }
+}
+
+function addTag(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const val = e.target.value.trim();
+    if (val && !tags.includes(val)) { tags.push(val); renderTags(); }
+    e.target.value = '';
+  }
+}
+
+function removeTag(t) { tags = tags.filter(x => x !== t); renderTags(); }
+
+function renderTags() {
+  const wrap = document.getElementById('tag-wrap');
+  const input = document.getElementById('tag-input');
+  wrap.innerHTML = '';
+  tags.forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${t}<button onclick="removeTag('${t}')">×</button>`;
+    wrap.appendChild(chip);
+  });
+  wrap.appendChild(input);
+}
+
+async function saveBlog(status) {
+  const title = document.getElementById('b-title').value.trim();
+  const excerpt = document.getElementById('b-excerpt').value.trim();
+  const content = quill.root.innerHTML;
+  if (!title || !excerpt || !content || content === '<p><br></p>') {
+    toast('Title, excerpt and content are required','error'); return;
+  }
+  const payload = {
+    title, excerpt, content, status,
+    category: document.getElementById('b-category').value,
+    author: document.getElementById('b-author').value,
+    featured: document.getElementById('b-featured').value === 'true',
+    coverImage: document.getElementById('b-cover').value,
+    tags
+  };
+  const r = editId
+    ? await api('PUT', '/blogs/' + editId, payload)
+    : await api('POST', '/blogs', payload);
+  if (r?.ok) {
+    toast(status === 'published' ? 'Post published!' : 'Draft saved!', 'success');
+    closeEditor();
+    // Update local
+    if (editId) {
+      const idx = allBlogs.findIndex(b => b._id === editId);
+      if (idx >= 0) allBlogs[idx] = { ...allBlogs[idx], ...payload };
+    } else {
+      allBlogs.unshift({ _id: 'local_' + Date.now(), ...payload, views: 0, createdAt: new Date() });
+    }
+    renderTable();
+    // persist to localStorage so main site can read it
+    setLocalData('blogs', allBlogs);
+  } else {
+    // Demo mode: update locally
+    toast(status === 'published' ? 'Post published! (demo mode)' : 'Draft saved! (demo mode)', 'success');
+    if (editId) {
+      const idx = allBlogs.findIndex(b => b._id === editId);
+      if (idx >= 0) allBlogs[idx] = { ...allBlogs[idx], ...payload };
+    } else {
+      allBlogs.unshift({ _id: 'local_' + Date.now(), ...payload, views: 0, createdAt: new Date() });
+    }
+    closeEditor(); renderTable();
+    // persist to localStorage (demo mode)
+    setLocalData('blogs', allBlogs);
+  }
+}
+
+async function toggleStatus(id, current) {
+  const newStatus = current === 'published' ? 'draft' : 'published';
+  const r = await api('PUT', '/blogs/' + id, { status: newStatus });
+  const idx = allBlogs.findIndex(b => b._id === id);
+  if (idx >= 0) allBlogs[idx].status = newStatus;
+  toast('Status updated to ' + newStatus, 'success');
+  renderTable();
+}
+
+async function deleteBlog(id) {
+  if (!window.confirm('Delete this blog post? This cannot be undone.')) return;
+  await api('DELETE', '/blogs/' + id);
+  allBlogs = allBlogs.filter(b => b._id !== id);
+  toast('Blog post deleted', 'success');
+  renderTable();
+  setLocalData('blogs', allBlogs);
+}
+
+// Check URL for ?action=new
+if (new URLSearchParams(location.search).get('action') === 'new') {
+  window.addEventListener('load', () => openEditor());
+}
+
+loadBlogs();
+</script>
+</body>
+</html>

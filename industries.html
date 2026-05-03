@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Industries | Jain Cyber Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.ind-section{padding:80px 0;border-bottom:1px solid var(--line);scroll-margin-top:80px}
+.ind-section:last-child{border-bottom:none}
+.ind-section:nth-child(even){background:var(--ink2)}
+.ind-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.ind-layout.flip{direction:rtl}.ind-layout.flip>*{direction:ltr}
+.ind-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.ind-icon-big{width:60px;height:60px;background:rgba(29,114,245,.1);border:1px solid rgba(29,114,245,.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.ind-header h2{font-size:clamp(24px,3vw,38px);font-weight:800;letter-spacing:-.025em;line-height:1.1}
+.ind-challenges{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:20px}
+.ind-ch-label{font-family:var(--mono);font-size:9px;color:var(--blue);letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px}
+.ind-ch-list{display:flex;flex-direction:column;gap:8px}
+.ind-ch-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--txt2);line-height:1.5}
+.ind-ch-item i{color:var(--blue);font-size:12px;margin-top:2px;flex-shrink:0}
+.ind-solutions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ind-sol{background:var(--ink3);border:1px solid var(--line);border-radius:6px;padding:14px;transition:border-color .2s}
+.ind-sol:hover{border-color:var(--line2)}
+.ind-sol-icon{font-size:20px;margin-bottom:8px}
+.ind-sol h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.ind-sol p{font-size:12px;color:var(--txt3);line-height:1.5}
+.ind-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.is-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px;text-align:center}
+.is-n{font-size:24px;font-weight:900;color:var(--blue);letter-spacing:-.03em}
+.is-l{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+.core-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(29,114,245,.12);border:1px solid rgba(29,114,245,.3);padding:5px 14px;border-radius:100px;margin-bottom:16px}
+.core-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:dot-pulse 2s infinite}
+@keyframes dot-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.core-badge span{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase}
+.ind-nav-strip{background:var(--ink2);border-bottom:1px solid var(--line);padding:16px 0;position:sticky;top:70px;z-index:50}
+.ind-nav-inner{display:flex;gap:8px;overflow-x:auto;flex-wrap:nowrap;justify-content:center}
+.ind-nav-link{font-family:var(--mono);font-size:11px;color:var(--txt3);padding:6px 14px;border:1px solid var(--line);border-radius:100px;white-space:nowrap;transition:all .2s;cursor:pointer;text-decoration:none}
+.ind-nav-link:hover{border-color:var(--line2);color:var(--txt)}
+.ind-nav-link.active{background:var(--blue);border-color:var(--blue);color:#000;font-weight:700}
+@media(max-width:1100px){.ind-layout{grid-template-columns:1fr;gap:40px}.ind-layout.flip{direction:ltr}.ind-solutions{grid-template-columns:1fr}}
+@media(max-width:600px){.ind-stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></a>
+  <div class="nav-center">
+    <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+    <div class="nav-item"><a href="services.html" class="nav-link">Services</a></div>
+    <div class="nav-item"><a href="industries.html" class="nav-link active">Industries</a></div>
+    <div class="nav-item"><a href="about.html" class="nav-link">About</a></div>
+    <div class="nav-item"><a href="case-studies.html" class="nav-link">Case Studies</a></div>
+    <div class="nav-item"><a href="blog.html" class="nav-link">Blog</a></div>
+    <div class="nav-item"><a href="resources.html" class="nav-link">Resources</a></div>
+    <div class="nav-item"><a href="contact.html" class="nav-link">Contact</a></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-phone"><i class="fas fa-phone" style="color:var(--blue);font-size:11px"></i><a href="tel:+919509679668">+91-9509679668</a></div>
+    <button class="btn btn-blue btn-sm" onclick="openModal()"><i class="fas fa-shield-halved"></i> Free Assessment</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="industries.html">Industries</a>
+  <a href="about.html">About</a><a href="case-studies.html">Case Studies</a><a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a><a href="#" onclick="openModal();return false" class="highlight">→ Free Assessment</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-grid"></div><div class="page-hero-glow"></div>
+  <div class="wrap" style="position:relative">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Industries</span></div>
+    <span class="eyebrow">// Industries We Serve</span>
+    <h1 class="h1" style="margin-bottom:18px">Specialized Security Across<br><span class="accent">India's Critical Sectors</span></h1>
+    <p class="body-lg" style="max-width:620px">From legacy railway signaling networks to modern cloud infrastructure — we protect what keeps India running with sector-specific OT/IT cybersecurity expertise.</p>
+  </div>
+</div>
+
+<div class="ind-nav-strip">
+  <div class="ind-nav-inner">
+    <a href="#railway" class="ind-nav-link active">🚇 Railway & Metro</a>
+    <a href="#energy" class="ind-nav-link">⚡ Power & Energy</a>
+    <a href="#manufacturing" class="ind-nav-link">🏭 Manufacturing</a>
+    <a href="#oilgas" class="ind-nav-link">🛢️ Oil & Gas</a>
+    <a href="#healthcare" class="ind-nav-link">🏥 Healthcare</a>
+    <a href="#aviation" class="ind-nav-link">✈️ Aviation</a>
+    <a href="#government" class="ind-nav-link">🏛️ Government</a>
+    <a href="#it" class="ind-nav-link">💻 IT & BFSI</a>
+  </div>
+</div>
+
+<div id="railway" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout">
+      <div class="reveal">
+        <div class="core-badge"><div class="core-dot"></div><span>Core Specialization</span></div>
+        <div class="ind-header"><div class="ind-icon-big">🚇</div><h2>Railway &amp; <span class="accent">Metro Systems</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Our core area of expertise. Railway and metro systems represent India's most critical OT infrastructure — SCADA-controlled signaling, passenger information systems, and traction power networks that must maintain 100% availability while remaining secure from increasingly sophisticated cyber threats.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Legacy SCADA and signaling systems with decades-old firmware that cannot be patched</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>OT/IT convergence creating new attack pathways into safety-critical systems</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Third-party remote access by vendors and maintenance teams without proper controls</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Nation-state actors and ransomware groups specifically targeting railway infrastructure</div>
+          </div>
+        </div>
+        <div class="ind-stats">
+          <div class="is-card"><div class="is-n">100%</div><div class="is-l">Zero Disruption</div></div>
+          <div class="is-card"><div class="is-n">IEC 62443</div><div class="is-l">Standard Applied</div></div>
+          <div class="is-card"><div class="is-n">24/7</div><div class="is-l">Monitoring Support</div></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">🔐</div><h4>SCADA Security Assessment</h4><p>Passive, non-intrusive assessment of signaling SCADA without any operational disruption</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🌐</div><h4>OT Network Segmentation</h4><p>Zone and conduit design per IEC 62443-3-2 for complete OT/IT separation</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📡</div><h4>Protocol Security</h4><p>DNP3, Modbus, IEC 60870-5-104 and railway-specific protocol security analysis</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🛡️</div><h4>Incident Response Plan</h4><p>Railway-specific cyber incident response playbooks and tabletop exercises</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📋</div><h4>Compliance Assessment</h4><p>IEC 62443, RDSO guidelines and Ministry of Railways cybersecurity compliance</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🔧</div><h4>Secure Remote Access</h4><p>Zero-trust remote access architecture for vendor and maintenance access</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="energy" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout flip">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">⚡</div><h2>Power &amp; <span class="accent">Energy</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Power generation and distribution facilities are prime targets for sophisticated cyber attacks. A successful breach can cascade across entire regional grids, causing prolonged blackouts with devastating consequences for hospitals, emergency services and public safety.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Legacy substation automation and protection relay systems with poor security</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Distributed generation and smart grid creating vastly expanded attack surface</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Real-time operational requirements preventing standard IT security approaches</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">🏭</div><h4>Substation Security</h4><p>IEC 61850 and DNP3 protocol security, RTU and protection relay assessment</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📊</div><h4>SCADA Risk Assessment</h4><p>Energy management system and SCADA vulnerability assessment and hardening</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🌐</div><h4>Smart Grid Security</h4><p>AMI infrastructure, smart meter networks and demand response security</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📋</div><h4>Regulatory Compliance</h4><p>CEA cyber security regulations, CERC guidelines and IEC 62443 alignment</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px">Energy Sector Threat Stats</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="padding:14px 0;border-bottom:1px solid var(--line)"><div style="font-size:28px;font-weight:900;color:var(--red);margin-bottom:4px">↑ 340%</div><div style="font-size:13px;color:var(--txt2)">Increase in attacks on Indian power infrastructure (2023-2024)</div></div>
+            <div style="padding:14px 0;border-bottom:1px solid var(--line)"><div style="font-size:28px;font-weight:900;color:var(--blue);margin-bottom:4px">72 hrs</div><div style="font-size:13px;color:var(--txt2)">Average time to detect OT incidents without monitoring</div></div>
+            <div style="padding:14px 0;border-bottom:1px solid var(--line)"><div style="font-size:28px;font-weight:900;color:var(--teal);margin-bottom:4px">₹45 Cr</div><div style="font-size:13px;color:var(--txt2)">Average cost of a major grid outage caused by cyber attack</div></div>
+            <div style="padding:14px 0"><div style="font-size:28px;font-weight:900;color:var(--blue);margin-bottom:4px">IEC 62443</div><div style="font-size:13px;color:var(--txt2)">Our primary assessment standard for energy OT environments</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="manufacturing" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">🏭</div><h2>Manufacturing &amp; <span class="accent">Industrial</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Manufacturing facilities face the double threat of OT/IT convergence security risks and ransomware attacks targeting production systems. A single successful attack can halt production lines for days, costing millions in lost output and damaging client relationships.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>PLC and DCS systems with default credentials and no authentication</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Ransomware specifically targeting industrial networks for maximum leverage</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Supply chain and vendor access creating uncontrolled entry points to OT networks</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">🔩</div><h4>PLC & DCS Security</h4><p>Siemens, Rockwell, Honeywell and Schneider system-specific security hardening</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🛡️</div><h4>Ransomware Defense</h4><p>OT-specific ransomware prevention, detection and rapid recovery planning</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🏗️</div><h4>IEC 62443 Compliance</h4><p>Full IEC 62443-3-2 assessment for client and regulatory requirements</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🔗</div><h4>Supply Chain Security</h4><p>Vendor access controls, third-party risk assessment and remote access security</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden">
+          <div style="padding:16px 20px;background:var(--ink3);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase">Manufacturing Security Quick Stats</div>
+          <div style="padding:20px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px"><span style="color:var(--txt2)">Avg Ransomware Impact</span><span style="font-family:var(--mono);color:var(--red)">₹3.3 Cr</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px"><span style="color:var(--txt2)">Avg Production Downtime</span><span style="font-family:var(--mono);color:var(--blue)">5.7 days</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px"><span style="color:var(--txt2)">OT Networks With No Monitoring</span><span style="font-family:var(--mono);color:var(--red)">73%</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;font-size:13px"><span style="color:var(--txt2)">After JCS Assessment: Zero Incidents</span><span style="font-family:var(--mono);color:var(--teal)">100%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="oilgas" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout flip">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">🛢️</div><h2>Oil &amp; <span class="accent">Gas</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Oil and gas infrastructure presents some of the highest cyber-physical risk anywhere. A successful attack on pipeline SCADA or refinery control systems can cause environmental disasters, explosions, and safety incidents with catastrophic consequences beyond just financial loss.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Remote and geographically dispersed pipeline and wellhead SCADA systems</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Safety instrumented systems (SIS) that must never be disrupted or tampered with</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Nation-state actors specifically targeting energy infrastructure for geopolitical leverage</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">🔌</div><h4>Pipeline SCADA Security</h4><p>Remote terminal unit and pipeline management SCADA assessment</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">⚠️</div><h4>SIS Security Assessment</h4><p>Safety instrumented system cyber security per IEC 61511 and IEC 62443</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🌊</div><h4>Refinery OT Security</h4><p>DCS, historian and refinery SCADA security assessment and hardening</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🏝️</div><h4>Offshore Platform Security</h4><p>Remote offshore facility OT network security and secure connectivity</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:var(--r);padding:28px">
+          <div style="font-size:40px;margin-bottom:16px">🛢️</div>
+          <h3 style="font-size:20px;font-weight:800;margin-bottom:12px">Why Oil & Gas OT Security<br>Cannot Wait</h3>
+          <p style="font-size:14px;color:var(--txt2);line-height:1.7;margin-bottom:20px">The 2021 Colonial Pipeline attack — which cost $4.4M in ransom and disrupted fuel supply for millions — demonstrated that oil & gas OT security is a national security issue, not just an IT concern.</p>
+          <div style="background:rgba(29,114,245,.08);border:1px solid rgba(29,114,245,.2);border-radius:6px;padding:14px">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px">Our Approach</div>
+            <p style="font-size:13px;color:var(--txt2);line-height:1.6">Passive assessment methodology — we never disrupt safety systems. Aligned with IEC 62443, IEC 61511 and API 1164 pipeline SCADA security standards.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="healthcare" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">🏥</div><h2>Healthcare &amp; <span class="accent">Life Sciences</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Healthcare OT and IoMT (Internet of Medical Things) security is uniquely safety-critical. A compromised medical device or hospital building management system doesn't just cost money — it can directly endanger patient lives. Healthcare is now the #1 most targeted sector globally.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Connected medical devices (infusion pumps, imaging systems) with known vulnerabilities</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Hospital BMS/HVAC systems controlling critical environments like operating theaters</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Ransomware attacks on hospitals that directly lead to patient harm and mortality</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">💉</div><h4>Medical Device Security</h4><p>IoMT device inventory, vulnerability assessment and network segmentation</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🏢</div><h4>Hospital BMS Security</h4><p>HVAC, access control and building management OT security assessment</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🔒</div><h4>Patient Data Protection</h4><p>Electronic health record security and patient data privacy compliance</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📋</div><h4>HIPAA & Compliance</h4><p>HIPAA Security Rule alignment and Indian healthcare data protection compliance</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="grid-column:1/-1;background:rgba(240,64,64,.06);border:1px solid rgba(240,64,64,.2);border-radius:var(--r);padding:18px"><div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px">⚠️ Critical Stat</div><div style="font-size:14px;color:var(--txt2);line-height:1.65">Healthcare is the #1 most targeted sector worldwide for 13 consecutive years. Average breach cost: <strong style="color:var(--red)">$10.9M</strong> — highest of any industry.</div></div>
+          <div style="background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--blue)">3x</div><div style="font-family:var(--mono);font-size:9px;color:var(--txt3);margin-top:4px;text-transform:uppercase">More attacks vs other sectors</div></div>
+          <div style="background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--teal)">ISO 27001</div><div style="font-family:var(--mono);font-size:9px;color:var(--txt3);margin-top:4px;text-transform:uppercase">Primary framework applied</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="aviation" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout flip">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">✈️</div><h2>Aviation &amp; <span class="accent">Airports</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Airport and aviation OT security encompasses a vast attack surface — from air traffic management systems and airside OT to passenger processing, baggage handling automation and critical building infrastructure. Safety-critical systems require specialized security expertise.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Air traffic management OT systems with direct safety implications</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Converging IT/OT in modern airport infrastructure creating new attack pathways</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Third-party airlines, ground handlers and vendors with network access</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">🗼</div><h4>ATM System Security</h4><p>Air traffic management OT and communication system security assessment</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🏗️</div><h4>Airport OT Security</h4><p>Baggage handling, HVAC, access control and airside OT assessment</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📡</div><h4>Communication Security</h4><p>Airport communication network, ILS and navigation aid system security</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📋</div><h4>ICAO & DGCA Compliance</h4><p>ICAO Doc 9984, DGCA cybersecurity guidelines and regulatory alignment</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px">
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:16px">Aviation Cyber Security<br>Regulatory Landscape</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--ink3);border-radius:5px"><span style="font-size:20px">📋</span><div><div style="font-size:13px;font-weight:700">ICAO Doc 9984</div><div style="font-size:12px;color:var(--txt3)">Aviation Cybersecurity guidelines</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--ink3);border-radius:5px"><span style="font-size:20px">🇮🇳</span><div><div style="font-size:13px;font-weight:700">DGCA CAR</div><div style="font-size:12px;color:var(--txt3)">Indian aviation cybersecurity regulations</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--ink3);border-radius:5px"><span style="font-size:20px">🌐</span><div><div style="font-size:13px;font-weight:700">EUROCONTROL EATM-CERT</div><div style="font-size:12px;color:var(--txt3)">ATM cybersecurity best practices</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="government" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">🏛️</div><h2>Government &amp; <span class="accent">Public Sector</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">Government and public sector OT infrastructure represents national security — water treatment plants, smart city systems, defense facilities and e-governance platforms. Nation-state actors actively target these systems for espionage, disruption and leverage.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Nation-state sponsored cyber attacks targeting critical national infrastructure</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Legacy government OT systems with long procurement cycles preventing rapid patching</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Complex multi-agency vendor relationships creating shared infrastructure risks</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">💧</div><h4>Water & Utilities</h4><p>Water treatment SCADA, pumping station OT and utility network security</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🏙️</div><h4>Smart City OT</h4><p>Smart city ITS, traffic management and urban infrastructure security</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🖥️</div><h4>e-Governance Security</h4><p>Government IT/ITES infrastructure assessment and data center security</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">📋</div><h4>CERT-In Compliance</h4><p>CERT-In guidelines, NCIIPC standards and government cybersecurity compliance</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px">Regulatory Framework</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="padding:12px;background:rgba(29,114,245,.06);border:1px solid rgba(29,114,245,.15);border-radius:5px"><div style="font-size:14px;font-weight:700;margin-bottom:4px">NCIIPC Guidelines</div><div style="font-size:12px;color:var(--txt3)">National Critical Information Infrastructure Protection Centre</div></div>
+            <div style="padding:12px;background:rgba(29,114,245,.06);border:1px solid rgba(29,114,245,.15);border-radius:5px"><div style="font-size:14px;font-weight:700;margin-bottom:4px">CERT-In Compliance</div><div style="font-size:12px;color:var(--txt3)">Indian Computer Emergency Response Team directives</div></div>
+            <div style="padding:12px;background:rgba(29,114,245,.06);border:1px solid rgba(29,114,245,.15);border-radius:5px"><div style="font-size:14px;font-weight:700;margin-bottom:4px">PDPB Alignment</div><div style="font-size:12px;color:var(--txt3)">Personal Data Protection Bill compliance for citizen data</div></div>
+            <div style="padding:12px;background:rgba(29,114,245,.06);border:1px solid rgba(29,114,245,.15);border-radius:5px"><div style="font-size:14px;font-weight:700;margin-bottom:4px">ISO 27001 & NIST</div><div style="font-size:12px;color:var(--txt3)">International standards alignment for government ISMS</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="it" class="ind-section">
+  <div class="wrap">
+    <div class="ind-layout flip">
+      <div class="reveal">
+        <div class="ind-header"><div class="ind-icon-big">💻</div><h2>IT, ITES &amp; <span class="accent">Banking</span></h2></div>
+        <p class="body-md" style="margin-bottom:20px">IT/ITES companies and BFSI organizations manage vast amounts of sensitive data and financial assets. While not traditional OT environments, they face sophisticated threats including advanced persistent threats (APTs), financial fraud, data breaches, and regulatory compliance requirements.</p>
+        <div class="ind-challenges">
+          <div class="ind-ch-label">Key Security Challenges</div>
+          <div class="ind-ch-list">
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Complex cloud and hybrid infrastructure expanding attack surface rapidly</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Stringent RBI, SEBI and international regulatory compliance requirements</div>
+            <div class="ind-ch-item"><i class="fas fa-triangle-exclamation"></i>Third-party fintech integrations and API security risks</div>
+          </div>
+        </div>
+        <div class="ind-solutions">
+          <div class="ind-sol"><div class="ind-sol-icon">☁️</div><h4>Cloud Security Assessment</h4><p>AWS, Azure, GCP security posture assessment and cloud CSPM review</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🏦</div><h4>BFSI Compliance</h4><p>RBI cybersecurity framework, SEBI guidelines and PCI-DSS alignment</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🔒</div><h4>Data Center Security</h4><p>Physical and logical data center security assessment and hardening</p></div>
+          <div class="ind-sol"><div class="ind-sol-icon">🤖</div><h4>AI Risk Assessment</h4><p>Fintech and ITES AI system security, bias and compliance assessment</p></div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden">
+          <div style="padding:14px 20px;background:var(--ink3);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase">BFSI Compliance Requirements</div>
+          <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;border-bottom:1px solid var(--line)"><span style="font-size:20px">🇮🇳</span><div><div style="font-size:13px;font-weight:700">RBI Cybersecurity Framework</div><div style="font-size:12px;color:var(--txt3)">Reserve Bank of India cybersecurity guidelines for banks</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;border-bottom:1px solid var(--line)"><span style="font-size:20px">📊</span><div><div style="font-size:13px;font-weight:700">SEBI Cybersecurity</div><div style="font-size:12px;color:var(--txt3)">Securities and Exchange Board cybersecurity circular</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;border-bottom:1px solid var(--line)"><span style="font-size:20px">💳</span><div><div style="font-size:13px;font-weight:700">PCI-DSS Compliance</div><div style="font-size:12px;color:var(--txt3)">Payment Card Industry Data Security Standard</div></div></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px"><span style="font-size:20px">🌐</span><div><div style="font-size:13px;font-weight:700">ISO 27001 & SOC 2</div><div style="font-size:12px;color:var(--txt3)">International ISMS and service organization controls</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap">
+    <h2 class="h2">Don't See Your Industry?</h2>
+    <p class="body-lg">We work across all critical infrastructure sectors. Contact us to discuss your specific environment and security requirements.</p>
+    <div class="actions">
+      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="contact.html" class="btn btn-outline btn-lg"><i class="fas fa-comments"></i> Talk to an Expert</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="footer-brand-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></div><p>India's premier OT/ICS cybersecurity firm protecting critical infrastructure across all sectors.</p><div class="footer-contact-row"><i class="fas fa-location-dot"></i><span>Indore, Madhya Pradesh, India</span></div><div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+919509679668">+91-9509679668</a></div><div class="footer-contact-row"><i class="fas fa-envelope"></i><a href="mailto:virendra.kothari@jaincybersolutions.com">virendra.kothari@jaincybersolutions.com</a></div></div>
+      <div class="footer-col"><h5>Industries</h5><ul><li><a href="#railway">Railway & Metro</a></li><li><a href="#energy">Power & Energy</a></li><li><a href="#manufacturing">Manufacturing</a></li><li><a href="#oilgas">Oil & Gas</a></li><li><a href="#healthcare">Healthcare</a></li><li><a href="#aviation">Aviation</a></li><li><a href="#government">Government</a></li><li><a href="#it">IT & BFSI</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Security Assessment</a></li><li><a href="services.html">Risk Analysis</a></li><li><a href="services.html">Gap Analysis</a></li><li><a href="services.html">Compliance Audit</a></li><li><a href="services.html">Training</a></li></ul></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a href="blog.html">Blog</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="tel:+919509679668">+91-9509679668</a></li><li><a href="mailto:virendra.kothari@jaincybersolutions.com">Email Us</a></li><li><a href="contact.html">Request Assessment</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Jain Cyber Solutions. All rights reserved.</p><div class="footer-socials"><a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a><a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a><a href="mailto:virendra.kothari@jaincybersolutions.com"><i class="fas fa-envelope"></i></a></div><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+  </div>
+</footer>
+
+<div class="modal-backdrop" id="modal-assessment" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div class="modal-stripe"></div>
+    <div class="modal-head"><h3>Request Free Assessment</h3><p>Our team responds within 24 hours.</p><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><form onsubmit="submitLead(this);return false" style="display:flex;flex-direction:column;gap:14px">
+      <div class="f2"><div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your name" required></div><div class="fg"><label class="fl">Phone *</label><input name="phone" class="fi" placeholder="+91-XXXXXXXXXX" required></div></div>
+      <div class="f2"><div class="fg"><label class="fl">Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div><div class="fg"><label class="fl">Company</label><input name="company" class="fi" placeholder="Organization"></div></div>
+      <div class="fg"><label class="fl">Industry</label><select name="industry" class="fi"><option value="">Select industry</option><option>Railway / Metro Systems</option><option>Manufacturing / Industrial</option><option>Power & Energy</option><option>Healthcare</option><option>Oil & Gas</option><option>Government</option><option>IT / ITES</option><option>Other</option></select></div>
+      <div class="fg"><label class="fl">Details</label><textarea name="message" class="fi" placeholder="Describe your environment..."></textarea></div>
+      <button type="submit" class="btn-submit"><i class="fas fa-shield-halved"></i> Submit Request</button>
+    </form></div>
+  </div>
+</div>
+<script src="js/main.js"></script>
+<script>
+// Highlight nav strip on scroll
+const navLinks = document.querySelectorAll('.ind-nav-link');
+const sections = ['railway','energy','manufacturing','oilgas','healthcare','aviation','government','it'];
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 140) current = id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Resources | Jain Cyber Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.res-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:48px}
+.res-tab{font-size:14px;font-weight:600;color:var(--txt3);padding:12px 24px;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none}
+.res-tab:hover{color:var(--txt)}
+.res-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.res-section{display:none}.res-section.active{display:block}
+.report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.report-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all .25s;cursor:pointer}
+.report-card:hover{border-color:var(--line2);transform:translateY(-4px);box-shadow:0 18px 48px rgba(0,0,0,.4)}
+.rc-cover{height:180px;background:linear-gradient(135deg,var(--ink3),var(--card2));display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;border-bottom:1px solid var(--line)}
+.rc-type{position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:9px;font-weight:700;color:#000;background:var(--blue);padding:3px 10px;border-radius:100px;letter-spacing:.06em}
+.rc-body{padding:20px}
+.rc-body h3{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-height:1.4}
+.rc-body p{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:16px}
+.rc-meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;color:var(--txt3);margin-bottom:14px}
+.rc-dl{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:600;letter-spacing:.06em;cursor:pointer;transition:gap .2s}
+.report-card:hover .rc-dl{gap:11px}
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.guide-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;align-items:flex-start;gap:18px;transition:all .25s;cursor:pointer}
+.guide-card:hover{border-color:var(--line2);transform:translateX(4px)}
+.guide-icon{width:52px;height:52px;background:rgba(29,114,245,.1);border:1px solid rgba(29,114,245,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.guide-card h3{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.guide-card p{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:12px}
+.guide-tags{display:flex;flex-wrap:wrap;gap:6px}
+.guide-tag{font-family:var(--mono);font-size:9px;color:var(--blue);background:rgba(29,114,245,.08);border:1px solid rgba(29,114,245,.2);padding:2px 8px;border-radius:100px}
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.video-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all .25s}
+.video-card:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.vc-thumb{height:180px;background:var(--card2);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+.vc-play{width:60px;height:60px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#000;transition:transform .2s}
+.video-card:hover .vc-play{transform:scale(1.1)}
+.vc-duration{position:absolute;bottom:10px;right:10px;font-family:var(--mono);font-size:10px;color:#fff;background:rgba(0,0,0,.7);padding:2px 8px;border-radius:4px}
+.vc-body{padding:18px}
+.vc-body h3{font-size:14px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;line-height:1.4}
+.vc-body p{font-size:12px;color:var(--txt2);line-height:1.55}
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tool-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;transition:all .25s;text-align:center}
+.tool-card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.tool-icon{font-size:36px;margin-bottom:12px}
+.tool-card h3{font-size:14px;font-weight:700;margin-bottom:7px}
+.tool-card p{font-size:12px;color:var(--txt3);line-height:1.55;margin-bottom:14px}
+.gated-modal{position:fixed;inset:0;background:rgba(10,15,30,.94);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(20px)}
+.gated-modal.open{display:flex}
+.gated-box{background:var(--card);border:1.5px solid var(--line2);border-radius:12px;width:100%;max-width:480px;padding:36px;position:relative}
+.gated-box h3{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.gated-box p{font-size:14px;color:var(--txt2);margin-bottom:24px;line-height:1.65}
+.gated-close{position:absolute;top:16px;right:16px;background:var(--ink3);border:1px solid var(--line);color:var(--txt3);width:30px;height:30px;border-radius:5px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.gated-close:hover{border-color:var(--blue);color:var(--blue)}
+@media(max-width:1100px){.report-grid{grid-template-columns:1fr 1fr}.guide-grid{grid-template-columns:1fr}.video-grid{grid-template-columns:1fr}.tool-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.report-grid{grid-template-columns:1fr}.tool-grid{grid-template-columns:1fr}.res-tabs{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></a>
+  <div class="nav-center">
+    <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+    <div class="nav-item"><a href="services.html" class="nav-link">Services</a></div>
+    <div class="nav-item"><a href="industries.html" class="nav-link">Industries</a></div>
+    <div class="nav-item"><a href="about.html" class="nav-link">About</a></div>
+    <div class="nav-item"><a href="case-studies.html" class="nav-link">Case Studies</a></div>
+    <div class="nav-item"><a href="blog.html" class="nav-link">Blog</a></div>
+    <div class="nav-item"><a href="resources.html" class="nav-link active">Resources</a></div>
+    <div class="nav-item"><a href="contact.html" class="nav-link">Contact</a></div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-phone"><i class="fas fa-phone" style="color:var(--blue);font-size:11px"></i><a href="tel:+919509679668">+91-9509679668</a></div>
+    <button class="btn btn-blue btn-sm" onclick="openModal()"><i class="fas fa-shield-halved"></i> Free Assessment</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="index.html">Home</a><a href="services.html">Services</a><a href="industries.html">Industries</a>
+  <a href="about.html">About</a><a href="case-studies.html">Case Studies</a><a href="blog.html">Blog</a>
+  <a href="resources.html">Resources</a><a href="contact.html">Contact</a>
+  <a href="#" onclick="openModal();return false" class="highlight">→ Free Assessment</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-grid"></div><div class="page-hero-glow"></div>
+  <div class="wrap" style="position:relative">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Resources</span></div>
+    <span class="eyebrow">// Resources & Knowledge Base</span>
+    <h1 class="h1" style="margin-bottom:18px">OT Security <span class="accent">Resource Library</span></h1>
+    <p class="body-lg" style="max-width:600px">Reports, standards guides, checklists, webinar recordings and tools — everything you need to understand and improve your OT/IT cybersecurity posture.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="res-tabs">
+      <button class="res-tab active" onclick="switchTab('reports',this)">📊 Reports & Whitepapers</button>
+      <button class="res-tab" onclick="switchTab('guides',this)">📖 Standards Guides</button>
+      <button class="res-tab" onclick="switchTab('webinars',this)">🎥 Webinars</button>
+      <button class="res-tab" onclick="switchTab('tools',this)">🛠️ Tools & Checklists</button>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="res-section active" id="tab-reports">
+      <div class="report-grid reveal">
+        <div class="report-card" onclick="openGated('OT Threat Landscape Report 2025')">
+          <div class="rc-cover">📊<span class="rc-type">REPORT</span></div>
+          <div class="rc-body">
+            <div class="rc-meta"><span>2025 · 48 pages</span><span>🔒 Gated</span></div>
+            <h3>OT/ICS Threat Landscape Report — India 2025</h3>
+            <p>Comprehensive analysis of cyber threats targeting India's critical OT infrastructure. Sector-by-sector threat intelligence, attack trends and recommended defensive measures.</p>
+            <div class="rc-dl"><i class="fas fa-download"></i> Download Free Report <i class="fas fa-arrow-right" style="font-size:10px"></i></div>
+          </div>
+        </div>
+        <div class="report-card" onclick="openGated('Railway Cybersecurity Whitepaper')">
+          <div class="rc-cover">🚇<span class="rc-type">WHITEPAPER</span></div>
+          <div class="rc-body">
+            <div class="rc-meta"><span>2024 · 32 pages</span><span>🔒 Gated</span></div>
+            <h3>Securing India's Railway SCADA: A Practical Whitepaper</h3>
+            <p>Deep-dive into railway and metro OT security challenges, IEC 62443-3-2 implementation guidance and a reference security architecture for Indian rail systems.</p>
+            <div class="rc-dl"><i class="fas fa-download"></i> Download Whitepaper <i class="fas fa-arrow-right" style="font-size:10px"></i></div>
+          </div>
+        </div>
+        <div class="report-card" onclick="openGated('IEC 62443 Implementation Guide')">
+          <div class="rc-cover">📋<span class="rc-type">GUIDE</span></div>
+          <div class="rc-body">
+            <div class="rc-meta"><span>2024 · 56 pages</span><span>🔒 Gated</span></div>
+            <h3>IEC 62443 Implementation Guide for Indian Industry</h3>
+            <p>Step-by-step guide to implementing IEC 62443 across manufacturing, energy and critical infrastructure environments in India, tailored for local regulatory context.</p>
+            <div class="rc-dl"><i class="fas fa-download"></i> Download Guide <i class="fas fa-arrow-right" style="font-size:10px"></i></div>
+          </div>
+        </div>
+        <div class="report-card" onclick="openGated('Ransomware Defense OT Guide')">
+          <div class="rc-cover">🔐<span class="rc-type">GUIDE</span></div>
+          <div class="rc-body">
+            <div class="rc-meta"><span>2024 · 28 pages</span><span>🆓 Free</span></div>
+            <h3>Ransomware Defense for OT Networks: A Practical Guide</h3>
+            <p>How to protect industrial OT environments from ransomware attacks — network segmentation, backup strategies, detection and rapid recovery without paying ransom.</p>
+            <div class="rc-dl"><i class="fas fa-download"></i> Download Free <i class="fas fa-arrow-right" style="font-size:10px"></i></div>
+          </div>
+        </div>
+        <div class="report-card" onclick="openGated('AI Risk Assessment Report')">
+          <div class="rc-cover">🤖<span class="rc-type">REPORT</span></div>
+          <div class="rc-body">
+            <div class="rc-meta"><span>2025 · 22 pages</span><span>🔒 Gated</span></div>
+            <h3>AI Risk Assessment Framework for Industrial Organizations</h3>
+            <p>Practical framework for assessing AI system risks in industrial settings, covering model security, data integrity, governance and EU AI Act compliance readiness.</p>
+            <div class="rc-dl"><i class="fas fa-download"></i> Download Report <i class="fas fa-arrow-right" style="font-size:10px"></i></div>
+          </div>
+        </div>
+        <div class="report-card" onclick="openGated('Cyber Insurance OT Checklist')">
+          <div class="rc-cover">📄<span class="rc-type">CHECKLIST</span></div>
+          <div class="rc-body">
+            <div class="rc-meta"><span>2024 · 8 pages</span><span>🆓 Free</span></div>
+            <h3>OT Cyber Insurance Readiness Checklist</h3>
+            <p>The exact documentation and security controls insurers look for when underwriting OT cyber insurance policies. Get coverage faster and reduce premiums significantly.</p>
+            <div class="rc-dl"><i class="fas fa-download"></i> Download Free <i class="fas fa-arrow-right" style="font-size:10px"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIDES -->
+    <div class="res-section" id="tab-guides">
+      <div class="guide-grid reveal">
+        <div class="guide-card" onclick="openGated('IEC 62443 Explainer')">
+          <div class="guide-icon">📜</div>
+          <div>
+            <h3>IEC 62443 Series: Complete Explainer</h3>
+            <p>Everything you need to know about the IEC 62443 series — what each part covers, how they relate to each other, and which parts apply to your organization as an asset owner or service provider.</p>
+            <div class="guide-tags"><span class="guide-tag">IEC 62443</span><span class="guide-tag">OT Security</span><span class="guide-tag">IACS</span></div>
+          </div>
+        </div>
+        <div class="guide-card" onclick="openGated('ISO 27001 Quick Start')">
+          <div class="guide-icon">📜</div>
+          <div>
+            <h3>ISO 27001:2022 Quick-Start Implementation Guide</h3>
+            <p>A practical, plain-English guide to implementing ISO 27001:2022. Covers the 93 controls from Annex A, gap analysis methodology and common implementation pitfalls to avoid.</p>
+            <div class="guide-tags"><span class="guide-tag">ISO 27001</span><span class="guide-tag">ISMS</span><span class="guide-tag">Compliance</span></div>
+          </div>
+        </div>
+        <div class="guide-card" onclick="openGated('NIST CSF for OT')">
+          <div class="guide-icon">📜</div>
+          <div>
+            <h3>NIST Cybersecurity Framework for OT Environments</h3>
+            <p>Applying the NIST CSF 2.0 framework specifically to OT/ICS environments. How the 6 core functions map to industrial control system security practices and common OT scenarios.</p>
+            <div class="guide-tags"><span class="guide-tag">NIST CSF</span><span class="guide-tag">OT Security</span><span class="guide-tag">Framework</span></div>
+          </div>
+        </div>
+        <div class="guide-card" onclick="openGated('MITRE ATT&CK ICS Guide')">
+          <div class="guide-icon">🎯</div>
+          <div>
+            <h3>MITRE ATT&CK for ICS: Practical Use Guide</h3>
+            <p>How to use the MITRE ATT&CK for ICS framework to understand adversary tactics targeting industrial control systems, map your defenses and prioritize detection capabilities.</p>
+            <div class="guide-tags"><span class="guide-tag">MITRE ATT&CK</span><span class="guide-tag">ICS</span><span class="guide-tag">Threat Intel</span></div>
+          </div>
+        </div>
+        <div class="guide-card" onclick="openGated('OT Risk Assessment Methodology')">
+          <div class="guide-icon">📊</div>
+          <div>
+            <h3>OT Risk Assessment Methodology: ISO 31000 + IEC 62443-3-2</h3>
+            <p>Step-by-step methodology for conducting a comprehensive OT risk assessment combining ISO 31000 principles with IEC 62443-3-2 technical requirements — with worked examples.</p>
+            <div class="guide-tags"><span class="guide-tag">ISO 31000</span><span class="guide-tag">IEC 62443-3-2</span><span class="guide-tag">Risk Assessment</span></div>
+          </div>
+        </div>
+        <div class="guide-card" onclick="openGated('CERT-In Guidelines Guide')">
+          <div class="guide-icon">🇮🇳</div>
+          <div>
+            <h3>CERT-In Cybersecurity Guidelines: Compliance Roadmap</h3>
+            <p>What the CERT-In directives and NCIIPC guidelines require, who they apply to and the specific steps Indian organizations must take to achieve and maintain compliance.</p>
+            <div class="guide-tags"><span class="guide-tag">CERT-In</span><span class="guide-tag">NCIIPC</span><span class="guide-tag">India</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEBINARS -->
+    <div class="res-section" id="tab-webinars">
+      <div class="video-grid reveal">
+        <div class="video-card">
+          <div class="vc-thumb"><div class="vc-play">▶</div><span class="vc-duration">48:22</span></div>
+          <div class="vc-body">
+            <h3>Railway OT Security: From Assessment to IEC 62443 Compliance</h3>
+            <p>Virendra Kothari walks through a real railway OT security engagement — discovery, risk assessment, zone design and compliance reporting — with live Q&A.</p>
+            <button onclick="openGated('Webinar: Railway OT Security')" class="btn btn-ghost btn-sm" style="margin-top:12px"><i class="fas fa-play"></i> Watch Recording</button>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="vc-thumb"><div class="vc-play">▶</div><span class="vc-duration">36:15</span></div>
+          <div class="vc-body">
+            <h3>Ransomware in OT: How Attacks Happen and How to Stop Them</h3>
+            <p>Live walkthrough of a manufacturing OT ransomware attack simulation — how attackers move from IT to OT and the technical controls that stop them at each stage.</p>
+            <button onclick="openGated('Webinar: Ransomware in OT')" class="btn btn-ghost btn-sm" style="margin-top:12px"><i class="fas fa-play"></i> Watch Recording</button>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="vc-thumb"><div class="vc-play">▶</div><span class="vc-duration">52:08</span></div>
+          <div class="vc-body">
+            <h3>IEC 62443-3-2 Deep Dive: Risk Assessment Methodology</h3>
+            <p>Technical deep-dive into IEC 62443-3-2 risk assessment methodology — asset identification, zone design, SL targets and compliance evidence documentation.</p>
+            <button onclick="openGated('Webinar: IEC 62443-3-2')" class="btn btn-ghost btn-sm" style="margin-top:12px"><i class="fas fa-play"></i> Watch Recording</button>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="vc-thumb"><div class="vc-play">▶</div><span class="vc-duration">41:30</span></div>
+          <div class="vc-body">
+            <h3>Building a Security Awareness Program for OT Teams</h3>
+            <p>How to design and run effective cybersecurity awareness programs for engineering and operations staff in OT-heavy organizations — with real phishing simulation data.</p>
+            <button onclick="openGated('Webinar: Security Awareness')" class="btn btn-ghost btn-sm" style="margin-top:12px"><i class="fas fa-play"></i> Watch Recording</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="res-section" id="tab-tools">
+      <div class="tool-grid reveal">
+        <div class="tool-card" onclick="openGated('OT Security Maturity Assessment Tool')">
+          <div class="tool-icon">📊</div>
+          <h3>OT Security Maturity Self-Assessment</h3>
+          <p>30-question online assessment to benchmark your OT security maturity against IEC 62443. Get an instant score and prioritized improvement recommendations.</p>
+          <button class="btn btn-blue btn-sm"><i class="fas fa-chart-bar"></i> Take Assessment</button>
+        </div>
+        <div class="tool-card" onclick="openGated('IEC 62443 Gap Analysis Checklist')">
+          <div class="tool-icon">✅</div>
+          <h3>IEC 62443 Gap Analysis Checklist</h3>
+          <p>Comprehensive 120-point checklist covering all IEC 62443-4-2 requirements for IACS components. Excel format with automatic scoring and priority flagging.</p>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Download Excel</button>
+        </div>
+        <div class="tool-card" onclick="openGated('OT Asset Inventory Template')">
+          <div class="tool-icon">🗂️</div>
+          <h3>OT Asset Inventory Template</h3>
+          <p>Structured template for cataloguing OT assets per IEC 62443 requirements — device type, firmware version, communication protocols, criticality and security status.</p>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Download Template</button>
+        </div>
+        <div class="tool-card" onclick="openGated('Risk Register Template')">
+          <div class="tool-icon">📋</div>
+          <h3>OT Risk Register Template</h3>
+          <p>ISO 31000 and IEC 62443-3-2 aligned risk register template with built-in risk scoring matrix, likelihood/impact calculation and treatment tracking.</p>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Download Excel</button>
+        </div>
+        <div class="tool-card" onclick="openGated('Incident Response Playbook')">
+          <div class="tool-icon">🚨</div>
+          <h3>OT Incident Response Playbook Template</h3>
+          <p>Ready-to-use incident response playbook template for OT environments — detection, containment, eradication, recovery and lessons-learned framework.</p>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Download Word</button>
+        </div>
+        <div class="tool-card" onclick="openGated('Vendor Security Assessment')">
+          <div class="tool-icon">🔗</div>
+          <h3>Third-Party / Vendor Security Assessment</h3>
+          <p>Questionnaire and scoring tool for assessing cybersecurity posture of OT vendors, system integrators and maintenance contractors before granting network access.</p>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <h2 class="h2">Want Personalized <span class="accent">Expert Guidance?</span></h2>
+    <p class="body-lg">These resources are a starting point. Let our experts apply them to your specific environment with a free assessment.</p>
+    <div class="actions">
+      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="contact.html" class="btn btn-outline btn-lg"><i class="fas fa-comments"></i> Talk to an Expert</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand"><div class="footer-brand-logo"><img class="site-brand-logo" src="logo.png" alt="Jain Cyber Solutions"></div><p>India's premier OT/ICS cybersecurity firm. Reports, guides and expert assessments for critical infrastructure.</p><div class="footer-contact-row"><i class="fas fa-location-dot"></i><span>Indore, Madhya Pradesh, India</span></div><div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+919509679668">+91-9509679668</a></div><div class="footer-contact-row"><i class="fas fa-envelope"></i><a href="mailto:virendra.kothari@jaincybersolutions.com">virendra.kothari@jaincybersolutions.com</a></div></div>
+      <div class="footer-col"><h5>Resources</h5><ul><li><a href="#" onclick="switchTab('reports',document.querySelectorAll('.res-tab')[0]);return false">Reports</a></li><li><a href="#" onclick="switchTab('guides',document.querySelectorAll('.res-tab')[1]);return false">Standards Guides</a></li><li><a href="#" onclick="switchTab('webinars',document.querySelectorAll('.res-tab')[2]);return false">Webinars</a></li><li><a href="#" onclick="switchTab('tools',document.querySelectorAll('.res-tab')[3]);return false">Tools</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Security Assessment</a></li><li><a href="services.html">Risk Analysis</a></li><li><a href="services.html">Gap Analysis</a></li><li><a href="services.html">Training</a></li></ul></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="about.html">About Us</a></li><li><a href="case-studies.html">Case Studies</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Industries</h5><ul><li><a href="industries.html#railway">Railway & Metro</a></li><li><a href="industries.html#energy">Power & Energy</a></li><li><a href="industries.html#manufacturing">Manufacturing</a></li><li><a href="industries.html#healthcare">Healthcare</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Jain Cyber Solutions. All rights reserved.</p><div class="footer-socials"><a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a><a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a><a href="mailto:virendra.kothari@jaincybersolutions.com"><i class="fas fa-envelope"></i></a></div><div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms</a></div></div>
+  </div>
+</footer>
+
+<!-- Gated content modal -->
+<div class="gated-modal" id="gated-modal" onclick="if(event.target===this)closeGated()">
+  <div class="gated-box">
+    <button class="gated-close" onclick="closeGated()">×</button>
+    <div style="font-size:40px;margin-bottom:14px">📥</div>
+    <h3 id="gated-title">Download Resource</h3>
+    <p>Enter your details to access this free resource. We'll also send you our weekly OT security digest.</p>
+    <form onsubmit="submitGated(this);return false" style="display:flex;flex-direction:column;gap:12px">
+      <div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your name" required></div>
+      <div class="fg"><label class="fl">Work Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div>
+      <div class="fg"><label class="fl">Company</label><input name="company" class="fi" placeholder="Your organization"></div>
+      <button type="submit" class="btn-submit"><i class="fas fa-download"></i> Access Resource</button>
+      <p style="font-family:var(--mono);font-size:10px;color:var(--txt3);text-align:center">No spam. Unsubscribe anytime.</p>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-assessment" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box"><div class="modal-stripe"></div>
+    <div class="modal-head"><h3>Request Free Assessment</h3><p>Our team responds within 24 hours.</p><button class="modal-close" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><form onsubmit="submitLead(this);return false" style="display:flex;flex-direction:column;gap:14px">
+      <div class="f2"><div class="fg"><label class="fl">Full Name *</label><input name="name" class="fi" placeholder="Your name" required></div><div class="fg"><label class="fl">Phone *</label><input name="phone" class="fi" placeholder="+91-XXXXXXXXXX" required></div></div>
+      <div class="f2"><div class="fg"><label class="fl">Email *</label><input name="email" type="email" class="fi" placeholder="you@company.com" required></div><div class="fg"><label class="fl">Company</label><input name="company" class="fi" placeholder="Organization"></div></div>
+      <div class="fg"><label class="fl">Details</label><textarea name="message" class="fi" placeholder="Describe your environment..."></textarea></div>
+      <button type="submit" class="btn-submit"><i class="fas fa-shield-halved"></i> Submit Request</button>
+    </form></div>
+  </div>
+</div>
+<script src="js/main.js"></script>
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.res-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.res-section').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+let currentResource = '';
+function openGated(name) {
+  currentResource = name;
+  document.getElementById('gated-title').textContent = 'Access: ' + name;
+  document.getElementById('gated-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGated() {
+  document.getElementById('gated-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+async function submitGated(form) {
+  const btn = form.querySelector('[type=submit]');
+  const data = Object.fromEntries(new FormData(form));
+  if (!data.name || !data.email) { toast('Name and email required','error'); return; }
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+  await apiPost('/contacts', { ...data, subject: 'Resource Download: ' + currentResource });
+  toast('Access granted! Check your email for the download link.', 'success');
+  form.reset(); closeGated();
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-download"></i> Access Resource';
+}
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Services | JCS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="admin.css">
+<style>
+.svc-card-admin{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:border-color .2s;margin-bottom:14px}
+.svc-card-admin:hover{border-color:var(--line2)}
+.sca-head{padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;background:var(--ink3)}
+.sca-icon{font-size:22px;flex-shrink:0}
+.sca-num{font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em}
+.sca-head h3{font-size:15px;font-weight:700;flex:1}
+.sca-toggle-icon{color:var(--blue);font-size:13px;transition:transform .2s}
+.svc-card-admin.open .sca-toggle-icon{transform:rotate(180deg)}
+.sca-body{display:none;padding:20px;border-top:1px solid var(--line)}
+.svc-card-admin.open .sca-body{display:block}
+.drag-handle{cursor:grab;color:var(--txt3);font-size:14px;padding:4px;margin-right:4px}
+.drag-handle:active{cursor:grabbing}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Services Manager</div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="openAddService()"><i class="fas fa-plus"></i> Add Service</button>
+      <a href="../index.html" target="_blank" class="topbar-btn" style="margin-left:8px"><i class="fas fa-globe"></i> View Site</a>
+    </div>
+  </div>
+  <div class="content">
+    <div style="background:rgba(29,114,245,.06);border:1px solid rgba(29,114,245,.2);border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:var(--txt2);display:flex;align-items:center;gap:10px">
+      <i class="fas fa-circle-info" style="color:var(--blue)"></i>
+      Click any service to expand and edit. Changes are saved and reflected on the live website.
+    </div>
+    <div id="services-list"></div>
+  </div>
+</div>
+
+<!-- Service editor modal -->
+<div class="modal-bg" id="svc-modal" onclick="if(event.target===this)closeSvcModal()">
+  <div class="modal-box">
+    <div class="modal-stripe"></div>
+    <div class="modal-head">
+      <h3 id="svc-modal-title">Edit Service</h3>
+      <button class="modal-close" onclick="closeSvcModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <input type="hidden" id="svc-id">
+        <div class="form-grid">
+          <div class="fg"><label class="fl">Service Title *</label><input id="svc-title" class="fi" placeholder="Service name"></div>
+          <div class="fg"><label class="fl">Icon (emoji)</label><input id="svc-icon" class="fi" placeholder="🛡️" style="font-size:20px;text-align:center"></div>
+        </div>
+        <div class="fg"><label class="fl">Short Description *</label><textarea id="svc-short" class="fi" style="min-height:70px" placeholder="Brief description shown in service listings..."></textarea></div>
+        <div class="fg"><label class="fl">Full Description</label><textarea id="svc-full" class="fi" style="min-height:100px" placeholder="Detailed description for the service detail page..."></textarea></div>
+        <div class="fg"><label class="fl">Key Deliverable</label><input id="svc-del" class="fi" placeholder="e.g. Security Controls Assessment Report"></div>
+        <div class="fg"><label class="fl">Standards Applied (comma-separated)</label><input id="svc-std" class="fi" placeholder="IEC 62443-4-2, NIST CSF, ISO 27002"></div>
+        <div class="form-grid">
+          <div class="fg"><label class="fl">Display Order</label><input id="svc-order" class="fi" type="number" min="1" max="20"></div>
+          <div class="fg"><label class="fl">Active / Visible</label><select id="svc-active" class="fi"><option value="true">Active — Show on website</option><option value="false">Hidden — Not shown</option></select></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:6px">
+          <button class="cancel-btn" onclick="closeSvcModal()">Cancel</button>
+          <button class="save-btn" onclick="saveService()"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+<script>
+requireAuth();
+document.getElementById('sidebar').innerHTML = renderSidebar('services');
+loadBadges();
+
+let allServices = [];
+
+async function loadServices() {
+  allServices = getLocalData('services', DEMO_DATA.services) || DEMO_DATA.services;
+  try {
+    const r = await api('GET', '/services');
+    if (r?.ok && r.data.services?.length) {
+      allServices = r.data.services;
+      setLocalData('services', allServices);
+    }
+  } catch(e) {}
+  renderServices();
+}
+
+function renderServices() {
+  document.getElementById('services-list').innerHTML = allServices.sort((a,b)=>a.order-b.order).map(s => `
+    <div class="svc-card-admin" id="scard-${s._id}">
+      <div class="sca-head" onclick="toggleCard('${s._id}')">
+        <span class="drag-handle">⠿</span>
+        <span class="sca-icon">${s.icon||'🛡️'}</span>
+        <div style="flex:1">
+          <div class="sca-num">SERVICE ${String(s.order).padStart(2,'0')}</div>
+          <h3>${s.title}</h3>
+        </div>
+        <span class="status-badge ${s.active?'status-published':'status-draft'}" style="margin-right:10px">${s.active?'Active':'Hidden'}</span>
+        <i class="fas fa-chevron-down sca-toggle-icon"></i>
+      </div>
+      <div class="sca-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px">
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px">Short Description</div>
+            <div style="font-size:13px;color:var(--txt2);line-height:1.6">${s.shortDesc||'—'}</div>
+          </div>
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px">Deliverable</div>
+            <div style="font-size:13px;color:var(--teal)">${s.deliverable||'—'}</div>
+          </div>
+        </div>
+        ${s.standards?.length?`<div style="margin-bottom:14px"><div style="font-family:var(--mono);font-size:9px;color:var(--txt3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px">Standards Applied</div><div style="display:flex;gap:6px;flex-wrap:wrap">${s.standards.map(x=>`<span style="font-family:var(--mono);font-size:10px;color:var(--blue);background:rgba(29,114,245,.08);border:1px solid rgba(29,114,245,.2);padding:3px 9px;border-radius:100px">${x}</span>`).join('')}</div></div>`:''}
+        <div style="display:flex;gap:8px">
+          <button class="save-btn" onclick="openEditService('${s._id}')" style="padding:8px 16px"><i class="fas fa-edit"></i> Edit</button>
+          <button class="act-btn" onclick="toggleActive('${s._id}',${s.active})"><i class="fas fa-${s.active?'eye-slash':'eye'}"></i> ${s.active?'Hide':'Show'}</button>
+          <button class="act-btn danger" onclick="deleteService('${s._id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('scard-' + id);
+  card.classList.toggle('open');
+}
+
+function openAddService() {
+  document.getElementById('svc-modal-title').textContent = 'Add New Service';
+  document.getElementById('svc-id').value = '';
+  document.getElementById('svc-title').value = '';
+  document.getElementById('svc-icon').value = '🛡️';
+  document.getElementById('svc-short').value = '';
+  document.getElementById('svc-full').value = '';
+  document.getElementById('svc-del').value = '';
+  document.getElementById('svc-std').value = '';
+  document.getElementById('svc-order').value = allServices.length + 1;
+  document.getElementById('svc-active').value = 'true';
+  document.getElementById('svc-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openEditService(id) {
+  const s = allServices.find(x => x._id === id);
+  if (!s) return;
+  document.getElementById('svc-modal-title').textContent = 'Edit Service: ' + s.title;
+  document.getElementById('svc-id').value = s._id;
+  document.getElementById('svc-title').value = s.title;
+  document.getElementById('svc-icon').value = s.icon||'🛡️';
+  document.getElementById('svc-short').value = s.shortDesc||'';
+  document.getElementById('svc-full').value = s.fullDesc||'';
+  document.getElementById('svc-del').value = s.deliverable||'';
+  document.getElementById('svc-std').value = (s.standards||[]).join(', ');
+  document.getElementById('svc-order').value = s.order||1;
+  document.getElementById('svc-active').value = String(s.active !== false);
+  document.getElementById('svc-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeSvcModal() {
+  document.getElementById('svc-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+async function saveService() {
+  const id = document.getElementById('svc-id').value;
+  const title = document.getElementById('svc-title').value.trim();
+  if (!title) { toast('Title is required','error'); return; }
+  const payload = {
+    title, icon: document.getElementById('svc-icon').value,
+    shortDesc: document.getElementById('svc-short').value,
+    fullDesc: document.getElementById('svc-full').value,
+    deliverable: document.getElementById('svc-del').value,
+    standards: document.getElementById('svc-std').value.split(',').map(s=>s.trim()).filter(Boolean),
+    order: +document.getElementById('svc-order').value || 1,
+    active: document.getElementById('svc-active').value === 'true'
+  };
+  if (id) {
+    await api('PUT', '/services/' + id, payload);
+    const idx = allServices.findIndex(s => s._id === id);
+    if (idx >= 0) allServices[idx] = { ...allServices[idx], ...payload };
+  } else {
+    const r = await api('POST', '/services', payload);
+    const newSvc = r?.data?.service || { _id: 'local_' + Date.now(), ...payload };
+    allServices.push(newSvc);
+  }
+  closeSvcModal(); renderServices();
+  toast(id ? 'Service updated!' : 'Service added!', 'success');
+  setLocalData('services', allServices);
+}
+
+async function toggleActive(id, current) {
+  const newActive = !current;
+  await api('PUT', '/services/' + id, { active: newActive });
+  const s = allServices.find(x => x._id === id);
+  if (s) s.active = newActive;
+  renderServices();
+  toast('Service ' + (newActive ? 'activated' : 'hidden'), 'success');
+  setLocalData('services', allServices);
+}
+
+async function deleteService(id) {
+  if (!window.confirm('Delete this service?')) return;
+  await api('DELETE', '/services/' + id);
+  allServices = allServices.filter(s => s._id !== id);
+  renderServices(); toast('Service deleted','success');
+  setLocalData('services', allServices);
+}
+
+loadServices();
+</script>
+</body>
+</html>
