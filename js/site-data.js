@@ -59,5 +59,31 @@ function renderSiteBlogs() {
 
 // Auto-render on load
 window.addEventListener('load', () => {
+  if (location.protocol === 'file:') {
+    console.warn('Running site from file:// — localStorage changes from admin may not sync across tabs. Serve the site via http://localhost:8000 to enable live updates.');
+  }
   renderSiteBlogs();
+});
+
+// Re-render when admin updates localStorage in another tab (storage event)
+window.addEventListener('storage', (e) => {
+  try {
+    if (!e || !e.key) return;
+    // keys are stored with prefix `jcs_`
+    const key = e.key.replace(/^jcs_/, '');
+    const watch = ['blogs', 'services', 'leads', 'contacts', 'settings'];
+    if (watch.includes(key)) {
+      console.info('site-data: detected remote storage change for', key, '- re-rendering');
+      // Re-run renderers that derive from admin-local storage
+      renderSiteBlogs();
+      // future: call renderServices(), renderLeads(), etc. if implemented
+    }
+  } catch (err) {
+    console.error('site-data: storage event handler error', err);
+  }
+});
+
+// Also re-render when the tab gains focus (useful when storage events don't fire in same tab)
+window.addEventListener('focus', () => {
+  try { renderSiteBlogs(); } catch (e) {}
 });
