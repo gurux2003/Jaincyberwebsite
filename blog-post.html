@@ -189,7 +189,7 @@
       <span class="eyebrow">// Keep Reading</span>
       <h2 class="h2" style="font-size:clamp(22px,2.5vw,34px)">Related <span class="accent">Articles</span></h2>
     </div>
-    <div class="related-grid reveal">
+    <div class="related-grid reveal" id="related-grid">
       <a href="blog-post.html?id=2" class="related-card"><div class="rc-img"><span>📋</span><span class="rc-cat">Compliance</span></div><div class="rc-body"><h3>IEC 62443-3-2: A Practical Guide for OT Risk Assessment</h3><div class="rc-meta">Nov 2024 · 7 min read</div></div></a>
       <a href="blog-post.html?id=3" class="related-card"><div class="rc-img"><span>🔐</span><span class="rc-cat">OT Security</span></div><div class="rc-body"><h3>Top 5 OT Cybersecurity Threats Facing Indian Manufacturing</h3><div class="rc-meta">Oct 2024 · 6 min read</div></div></a>
       <a href="blog-post.html?id=4" class="related-card"><div class="rc-img"><span>📜</span><span class="rc-cat">Compliance</span></div><div class="rc-body"><h3>ISO 27001 vs IEC 62443: Which Does Your OT Network Need?</h3><div class="rc-meta">Sep 2024 · 9 min read</div></div></a>
@@ -234,149 +234,139 @@
 </div>
 
 <script src="js/main.js"></script>
-<script src="js/site-data.js"></script>
+<script src="js/api-client.js"></script>
 <script>
 const ICONS = {'OT Security':'🔐','Railway':'🚇','Compliance':'📋','IT Security':'💻','Case Study':'📊','Training':'🎓','News':'📰'};
 
-const FALLBACK_POSTS = {
-  '1': {
-    title: 'Why Railway OT Security Is India\'s #1 Cyber Priority for 2025',
-    category: 'Railway', author: 'Virendra Kothari', readTime: 8,
-    publishedAt: new Date('2024-12-10'), views: 1247, tags: ['Railway','SCADA','IEC 62443','OT Security','Critical Infrastructure'],
-    content: `
-      <h2>Introduction</h2>
-      <p>India's railway network — the fourth largest in the world, carrying over 23 million passengers daily — is undergoing rapid digital transformation. From automatic train protection systems and centralized traffic control to passenger information displays and smart ticketing, modern railways are increasingly dependent on connected operational technology (OT) systems.</p>
-      <p>This digitalization brings enormous efficiency benefits. It also creates a vastly expanded attack surface that sophisticated cyber adversaries are actively probing — and in some cases, successfully exploiting.</p>
-      <blockquote>A successful cyber attack on railway SCADA doesn't just cause financial damage. It can delay millions of commuters, disrupt supply chains, and in worst-case scenarios involving signaling systems, create conditions that endanger passenger safety.</blockquote>
-      <h2>The Evolving Threat Landscape</h2>
-      <p>In 2023, there were over 150 documented cyber incidents targeting railway infrastructure globally — a 340% increase from 2020. While many of these affected European and North American systems, Indian rail is increasingly in the crosshairs of sophisticated threat actors.</p>
-      <p>The threat actors targeting railway OT systems include:</p>
-      <ul>
-        <li><strong>Nation-state sponsored APT groups</strong> — seeking geopolitical leverage through infrastructure disruption</li>
-        <li><strong>Ransomware operators</strong> — targeting operational systems where disruption pressure maximizes ransom payment probability</li>
-        <li><strong>Hacktivists</strong> — seeking public visibility through high-profile critical infrastructure incidents</li>
-        <li><strong>Insiders</strong> — disgruntled employees or contractors with legitimate OT access</li>
-      </ul>
-      <h2>Why Railway OT Is Uniquely Vulnerable</h2>
-      <p>Railway OT environments present security challenges that simply don't exist in enterprise IT contexts:</p>
-      <h3>1. Legacy Systems With Decade-Long Lifecycles</h3>
-      <p>Railway signaling systems, control equipment, and embedded devices often run for 20-30 years. Many SCADA systems in active service today were designed and deployed in the early 2000s, long before cybersecurity was considered in OT design. Patching is constrained by operational requirements and vendor support timelines that have no parallel in IT.</p>
-      <h3>2. Safety-Critical Convergence</h3>
-      <p>Unlike manufacturing OT where a breach might halt production, railway OT includes systems where a security failure can directly impact physical safety. Automatic Train Protection (ATP), interlocking systems, and level crossing controls are safety-critical OT components increasingly connected to networks.</p>
-      <h3>3. Third-Party Vendor Access</h3>
-      <p>Railway OT is maintained by a complex ecosystem of OEMs, system integrators and maintenance contractors — each requiring remote access to operational systems. Managing this access securely while maintaining operational efficiency is one of the hardest problems in railway cybersecurity.</p>
-      <h3>4. OT/IT Convergence</h3>
-      <p>Digital transformation is driving connectivity between passenger information systems (IT), enterprise networks (IT) and operational control systems (OT). Each connection that crosses the OT/IT boundary is a potential attack pathway into safety-critical systems.</p>
-      <h2>The IEC 62443 Framework for Railway Security</h2>
-      <p>IEC 62443 — specifically the 62443-3-2 risk assessment standard — provides the most robust framework available for railway OT security. It introduces the concepts of Security Levels (SL) and Zones & Conduits that map naturally to railway network architecture.</p>
-      <p>A proper IEC 62443-3-2 assessment for a railway environment will:</p>
-      <ul>
-        <li>Identify and classify all OT assets across the network</li>
-        <li>Define Security Zones based on consequence of compromise</li>
-        <li>Identify Conduits between zones and assess their security</li>
-        <li>Assign Target Security Levels based on risk analysis</li>
-        <li>Gap analysis against current security capabilities</li>
-        <li>Generate a prioritized remediation roadmap</li>
-      </ul>
-      <h2>Practical Best Practices for Railway OT Security</h2>
-      <p>Based on our experience assessing railway and metro OT environments globally, the most impactful security improvements are:</p>
-      <h3>Network Segmentation Using Zone & Conduit Model</h3>
-      <p>Implementing proper OT/IT network segmentation using IEC 62443's Zone and Conduit model is the single highest-impact action. This creates defensible boundaries between safety-critical systems (signaling, interlocking) and lower-security-level systems (passenger information, enterprise IT).</p>
-      <h3>Passive Continuous Monitoring</h3>
-      <p>Deploying passive OT monitoring (critical — never active scanning in railway OT) provides visibility into what's actually happening on operational networks. This is typically the first time railway operators discover the full extent of their OT asset inventory and communications patterns.</p>
-      <h3>Secure Vendor Access Management</h3>
-      <p>Implementing just-in-time privileged access management for vendor and maintenance access, with full session recording, eliminates one of the highest-risk attack pathways in railway OT environments.</p>
-      <h3>Incident Response Planning</h3>
-      <p>Developing and exercising OT-specific incident response playbooks — separate from IT incident response — that account for the operational constraints of railway environments. Who do you call at 2 AM when the signaling SCADA shows anomalous behavior? The answer needs to be documented before the incident occurs.</p>
-      <h2>What India's Railway Sector Must Do Now</h2>
-      <p>The window for proactive security investment is narrowing. Based on global threat intelligence and our India-specific assessment experience, we recommend railway organizations prioritize:</p>
-      <ul>
-        <li>Immediate OT asset discovery and inventory using passive methods</li>
-        <li>IEC 62443-3-2 risk assessment to understand current security posture</li>
-        <li>Network segmentation to separate safety-critical OT from other systems</li>
-        <li>Vendor access management implementation</li>
-        <li>OT-specific cybersecurity awareness training for engineering and operations staff</li>
-      </ul>
-      <h2>Conclusion</h2>
-      <p>Railway OT security is not optional — it is a national security imperative. The organizations that invest in understanding and protecting their OT environments today will be far better positioned when — not if — they face a sophisticated cyber attack targeting their operational technology systems.</p>
-      <p>The good news: implementing effective railway OT security doesn't require replacing operational systems or disrupting services. With the right expertise and methodology, significant security improvements can be made passively, without touching a single operational system.</p>
-    `
-  },
-  '2': {
-    title: 'IEC 62443-3-2: A Practical Guide for OT Risk Assessment',
-    category: 'Compliance', author: 'Jain Cyber Team', readTime: 7,
-    publishedAt: new Date('2024-11-15'), views: 843, tags: ['IEC 62443','OT','Risk Assessment','Compliance','IACS'],
-    content: `
-      <h2>What is IEC 62443-3-2?</h2>
-      <p>IEC 62443-3-2 is the security risk assessment standard for Industrial Automation and Control Systems (IACS). It provides a systematic methodology for identifying, analyzing, and managing security risks in OT environments — and it's the most widely adopted framework for this purpose globally.</p>
-      <p>Unlike IT security risk frameworks that assume environments can be patched and updated freely, IEC 62443-3-2 is explicitly designed for the constraints of industrial OT environments: legacy systems, zero-downtime requirements, safety-critical systems, and proprietary industrial protocols.</p>
-      <h2>Key Concepts You Must Understand</h2>
-      <h3>Security Levels (SL)</h3>
-      <p>IEC 62443 defines four Security Levels (SL 1–4) based on the motivation and capability of potential attackers:</p>
-      <ul>
-        <li><strong>SL 1:</strong> Protection against casual or coincidental violation</li>
-        <li><strong>SL 2:</strong> Protection against intentional violation using simple means</li>
-        <li><strong>SL 3:</strong> Protection against sophisticated attack by motivated adversary</li>
-        <li><strong>SL 4:</strong> Protection against state-sponsored or highly sophisticated attack</li>
-      </ul>
-      <h3>Zones and Conduits</h3>
-      <p>The Zone and Conduit model is the architectural foundation of IEC 62443-3-2. A Zone is a grouping of assets with similar security requirements. A Conduit is a communication path between zones that must be secured and monitored. This model maps naturally to industrial network architectures and provides a practical framework for network segmentation decisions.</p>
-      <h2>The IEC 62443-3-2 Assessment Process</h2>
-      <p>A proper assessment follows these structured phases:</p>
-      <h3>Phase 1: Initial Risk Assessment</h3>
-      <p>Identify the system under consideration (SUC), document all assets, and conduct an initial risk assessment to understand the threat landscape relevant to your specific OT environment and sector.</p>
-      <h3>Phase 2: Zone and Conduit Design</h3>
-      <p>Group assets into Security Zones based on consequence of compromise and operational relationships. Define Conduits between zones and assess their current security state. This is where the real OT architecture expertise matters.</p>
-      <h3>Phase 3: Target Security Level Definition</h3>
-      <p>For each Zone, define the Target Security Level (SL-T) based on the risk analysis. This becomes the security requirement that the zone must achieve.</p>
-      <h3>Phase 4: Capability Assessment</h3>
-      <p>Assess the current Security Level (SL-C) of each zone against its Target. The gap between SL-C and SL-T defines the remediation scope.</p>
-      <h2>Common Implementation Mistakes</h2>
-      <p>Based on our experience conducting IEC 62443-3-2 assessments globally, the most common mistakes are:</p>
-      <ul>
-        <li>Using active scanning tools that can crash OT devices — always use passive methods</li>
-        <li>Defining zones too broadly, creating low-security islands around high-consequence assets</li>
-        <li>Forgetting to include vendor and contractor access pathways in the Conduit model</li>
-        <li>Setting unrealistic Target Security Levels that cannot be achieved within operational constraints</li>
-      </ul>
-      <h2>Conclusion</h2>
-      <p>IEC 62443-3-2 provides a robust, practical framework for OT risk assessment that genuinely accounts for industrial constraints. Implemented correctly with genuine OT domain expertise, it delivers a risk-prioritized roadmap that makes OT environments meaningfully more secure without disrupting operations.</p>
-    `
-  },
-  '3': {
-    title: 'Top 5 OT Cybersecurity Threats Facing Indian Manufacturing in 2025',
-    category: 'OT Security', author: 'Jain Cyber Team', readTime: 6,
-    publishedAt: new Date('2024-10-20'), views: 612, tags: ['Manufacturing','OT Security','Ransomware','Threats','PLC'],
-    content: `
-      <h2>Introduction</h2>
-      <p>Indian manufacturing is in the crosshairs of an escalating cyber threat. As production facilities modernize with connected PLCs, DCS systems, and industrial IoT devices, they simultaneously expand their attack surface and become more attractive targets for sophisticated threat actors.</p>
-      <p>Based on our threat intelligence and assessment experience across global manufacturing OT environments, here are the five most dangerous threats you need to be prepared for in 2025.</p>
-      <h2>Threat 1: OT-Targeting Ransomware</h2>
-      <p>Ransomware groups have learned that OT environments are uniquely valuable targets. Disrupting production lines creates immediate, quantifiable financial pressure — far more effective leverage than encrypting back-office systems.</p>
-      <p>Modern ransomware variants like EKANS (Snake) are specifically designed to kill OT processes before encrypting files, maximizing operational disruption. The average manufacturing ransomware incident in India costs ₹3.3 Cr and causes 5.7 days of production downtime.</p>
-      <h2>Threat 2: IT-to-OT Lateral Movement</h2>
-      <p>The most common attack pathway into manufacturing OT is through connected IT systems. Once an attacker compromises the enterprise IT network (often via phishing), they probe for connections into the OT network.</p>
-      <p>In our assessments, we find exploitable IT-to-OT connections in over 73% of manufacturing facilities — often connections that operations teams didn't know existed.</p>
-      <h2>Threat 3: Supply Chain and Third-Party Vendor Attacks</h2>
-      <p>OT vendors, system integrators, and maintenance contractors require remote access to production systems. Each of these access pathways is a potential attack vector — and vendor credentials are frequently compromised through IT-side breaches that the manufacturer never hears about.</p>
-      <h2>Threat 4: Legacy PLC and DCS Vulnerabilities</h2>
-      <p>Industrial control equipment often runs for 15-20 years. Many PLCs and DCS systems in active service have known, publicly documented vulnerabilities with no available patches — either because the vendor no longer supports the product or because patching requires production downtime that can't be scheduled.</p>
-      <h2>Threat 5: Insider Threats</h2>
-      <p>Disgruntled employees or contractors with legitimate OT access represent one of the most difficult threats to defend against. Unlike external attackers who must bypass network security, insiders already have authorized access to operational systems.</p>
-      <h2>Conclusion</h2>
-      <p>The good news: all five of these threats can be significantly mitigated with a comprehensive OT security program aligned to IEC 62443. Network segmentation eliminates lateral movement pathways. Vendor access management addresses supply chain risks. Continuous passive monitoring detects anomalous behavior from insiders. A proper risk assessment prioritizes remediation for legacy vulnerabilities.</p>
-      <p>The critical first step is understanding your current security posture through a professional OT risk assessment — before a threat actor does that assessment for you.</p>
-    `
-  }
-};
-
-function loadPost() {
+// Load blog post from backend API
+async function loadPost() {
   const params = new URLSearchParams(location.search);
-  const id = params.get('id') || '1';
-  // Prefer localStorage blog if available
-  const localBlogs = (window.getLocalDataSite ? getLocalDataSite('blogs', []) : null) || [];
-  const localPost = localBlogs.find(b => String(b._id) === String(id));
-  const post = localPost || FALLBACK_POSTS[id] || FALLBACK_POSTS['1'];
+  const id = params.get('id');
+  
+  if (!id) {
+    document.getElementById('post-content').innerHTML = '<p>No blog post selected. <a href="blog.html">← Back to Blog</a></p>';
+    return;
+  }
+  
+  try {
+    const post = await fetchBlog(id);
+    
+    // Update page title and meta
+    document.title = post.title + ' | Jain Cyber Solutions';
+    
+    // Update breadcrumb
+    const breadcrumb = document.getElementById('post-breadcrumb');
+    if (breadcrumb) breadcrumb.textContent = post.category || 'Blog';
+    
+    // Update icon
+    const icon = document.getElementById('post-icon');
+    if (icon) icon.textContent = ICONS[post.category] || '📄';
+    
+    // Update category badge
+    const cat = document.getElementById('post-cat');
+    if (cat) cat.textContent = post.category || 'News';
+    
+    // Update title
+    const title = document.getElementById('post-title');
+    if (title) title.textContent = post.title;
+    
+    // Update date
+    const date = document.getElementById('post-date');
+    if (date) date.textContent = new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    
+    // Update read time
+    const readTime = document.getElementById('post-read');
+    if (readTime) readTime.textContent = (post.readTime || Math.max(4, Math.round((post.content || '').split(' ').length / 200))) + ' min read';
+    
+    // Update author
+    const author = document.getElementById('post-author-name');
+    if (author) author.textContent = post.author || 'Jain Cyber Team';
+    const paName = document.getElementById('pa-name');
+    if (paName) paName.textContent = post.author || 'Jain Cyber Team';
+    
+    // Update views
+    const views = document.getElementById('post-views');
+    if (views) views.textContent = (post.views || 0).toLocaleString() + ' views';
+    
+    // Update main content
+    const content = document.getElementById('post-content');
+    if (content) content.innerHTML = post.content || '<p>No content available.</p>';
+    
+    // Update tags if present
+    if (post.tags && post.tags.length > 0) {
+      const tagsContainer = document.getElementById('post-tags');
+      if (tagsContainer) {
+        tagsContainer.innerHTML = post.tags.map(t => `<span class="post-tag">${t}</span>`).join('');
+      }
+    }
+    
+    // Load related posts
+    try {
+      const allBlogs = await fetchBlogs();
+      const published = allBlogs
+        .filter(b => String(b.id) !== String(post.id))
+        .slice(0, 3);
+      
+      // Related sidebar
+      const sidebar = document.getElementById('related-sidebar');
+      if (sidebar && published.length) {
+        sidebar.innerHTML = published.map(b => `
+          <a href="blog-post.html?id=${encodeURIComponent(b.id)}" class="related-post-link">
+            <span class="rpl-icon">${ICONS[b.category] || '📄'}</span>
+            <div>
+              <div class="rpl-title">${b.title || ''}</div>
+              <div class="rpl-meta">${b.readTime || Math.max(3, Math.round((b.content || '').split(' ').length / 200))} min read</div>
+            </div>
+          </a>
+        `).join('');
+      }
+      
+      // Related grid
+      const relatedGrid = document.getElementById('related-grid');
+      if (relatedGrid && published.length) {
+        relatedGrid.innerHTML = published.map(b => `
+          <a href="blog-post.html?id=${encodeURIComponent(b.id)}" class="related-card">
+            <div class="rc-img"><span>${ICONS[b.category] || '📄'}</span><span class="rc-cat">${b.category || 'News'}</span></div>
+            <div class="rc-body"><h3>${b.title || ''}</h3><div class="rc-meta">${new Date(b.publishedAt || b.createdAt).toLocaleString('en-US', { month: 'short', year: 'numeric' })} · ${b.readTime || 6} min read</div></div>
+          </a>
+        `).join('');
+      }
+    } catch (e) {
+      console.error('Error loading related posts:', e);
+    }
+    
+  } catch (e) {
+    console.error('Error loading blog post:', e);
+    document.getElementById('post-content').innerHTML = `<p>Blog post not found. <a href="blog.html">← Back to Blog</a></p>`;
+  }
+}
+
+function share(platform) {
+  const url = encodeURIComponent(location.href);
+  const title = encodeURIComponent(document.title);
+  const urls = {
+    linkedin: `https://linkedin.com/sharing/share-offsite/?url=${url}`,
+    twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}`
+  };
+  window.open(urls[platform], '_blank', 'width=600,height=400');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(() => toast('Link copied to clipboard!', 'success'));
+}
+
+// Load post on page load
+window.addEventListener('load', () => {
+  loadPost();
+});
+
+// Listen for real-time updates
+document.addEventListener('backend-update', (e) => {
+  if (e.detail.type.includes('blog')) {
+    loadPost();
+  }
+});
+</script>
 
   document.title = post.title + ' | Jain Cyber Solutions';
   document.getElementById('post-breadcrumb').textContent = post.category;
@@ -394,6 +384,36 @@ function loadPost() {
     document.getElementById('post-tags').innerHTML = post.tags.map(t =>
       `<span class="post-tag">${t}</span>`
     ).join('');
+  }
+
+  if (localBlogs.length) {
+    const published = localBlogs
+      .filter(b => b.status === 'published' && String(b._id) !== String(post._id || id))
+      .sort((a, b) => new Date(b.publishedAt || b.createdAt || 0) - new Date(a.publishedAt || a.createdAt || 0))
+      .slice(0, 3);
+
+    const sidebar = document.getElementById('related-sidebar');
+    if (sidebar && published.length) {
+      sidebar.innerHTML = published.map(b => `
+        <a href="blog-post.html?id=${encodeURIComponent(b._id)}" class="related-post-link">
+          <span class="rpl-icon">${ICONS[b.category] || '📄'}</span>
+          <div>
+            <div class="rpl-title">${b.title || ''}</div>
+            <div class="rpl-meta">${b.readTime || Math.max(3, Math.round((b.content || '').split(' ').length / 200))} min read</div>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    const relatedGrid = document.getElementById('related-grid');
+    if (relatedGrid && published.length) {
+      relatedGrid.innerHTML = published.map(b => `
+        <a href="blog-post.html?id=${encodeURIComponent(b._id)}" class="related-card">
+          <div class="rc-img"><span>${ICONS[b.category] || '📄'}</span><span class="rc-cat">${b.category || 'News'}</span></div>
+          <div class="rc-body"><h3>${b.title || ''}</h3><div class="rc-meta">${new Date(b.publishedAt || b.createdAt).toLocaleString('en-US', { month: 'short', year: 'numeric' })} · ${b.readTime || 6} min read</div></div>
+        </a>
+      `).join('');
+    }
   }
 
   // Try backend
@@ -430,7 +450,22 @@ function copyLink() {
   navigator.clipboard.writeText(location.href).then(() => toast('Link copied to clipboard!', 'success'));
 }
 
-loadPost();
+// Load post on page load
+window.addEventListener('load', () => {
+  loadPost();
+  renderSiteSettings();
+});
+
+// Listen for storage changes (admin updates)
+window.addEventListener('storage', (e) => {
+  if (e.key === 'jcs_blogs' || e.key === 'jcs_settings') {
+    loadPost();
+  }
+  if (e.key === 'jcs_settings') {
+    renderSiteSettings();
+  }
+});
+</script>
 </script>
 </body>
 </html>

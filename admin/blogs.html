@@ -159,23 +159,21 @@ function initQuill() {
 }
 
 async function loadBlogs() {
-  // Load from localStorage first (frontend-only persistence)
-  allBlogs = getLocalData('blogs', DEMO_DATA.blogs) || DEMO_DATA.blogs;
   try {
-    const r = await api('GET', '/blogs/admin/all');
-    if (r?.ok && r.data.blogs?.length) {
-      allBlogs = r.data.blogs;
-      // sync to local
-      setLocalData('blogs', allBlogs);
-    }
-  } catch(e) {}
-  renderTable();
+    allBlogs = await fetchAllBlogs();
+    renderTable();
+  } catch(e) {
+    console.error('Error loading blogs:', e);
+    toast('Error loading blogs. Please refresh.', 'error');
+    allBlogs = [];
+    renderTable();
+  }
 }
 
 function renderTable() {
   const search = document.getElementById('search').value.toLowerCase();
   let filtered = allBlogs.filter(b => {
-    const matchSearch = !search || b.title.toLowerCase().includes(search) || b.category.toLowerCase().includes(search);
+    const matchSearch = !search || b.title.toLowerCase().includes(search) || (b.category || '').toLowerCase().includes(search);
     const matchCat = currentFilter === 'all' || b.status === currentFilter || b.category === currentFilter;
     return matchSearch && matchCat;
   });
@@ -185,15 +183,15 @@ function renderTable() {
     <tr>
       <td><div class="blog-row-img">${ICONS[b.category]||'📄'}</div></td>
       <td style="max-width:320px"><div class="td-name" style="white-space:normal;line-height:1.4">${truncate(b.title,70)}</div>${b.featured?'<span style="font-family:var(--mono);font-size:9px;color:var(--blue)">⭐ FEATURED</span>':''}</td>
-      <td><span class="status-badge status-new">${b.category}</span></td>
+      <td><span class="status-badge status-new">${b.category || 'News'}</span></td>
       <td><span class="status-badge status-${b.status}">${b.status}</span></td>
       <td style="font-family:var(--mono);font-size:12px;color:var(--blue)">${(b.views||0).toLocaleString()}</td>
-      <td style="font-size:12px;color:var(--txt3)">${b.author||'—'}</td>
+      <td style="font-size:12px;color:var(--txt3)">${b.author||'Jain Cyber Team'}</td>
       <td style="font-family:var(--mono);font-size:11px;color:var(--txt3)">${fmtDate(b.publishedAt||b.createdAt)}</td>
       <td style="white-space:nowrap">
-        <button class="act-btn" onclick="editBlog('${b._id}')"><i class="fas fa-edit"></i> Edit</button>
-        <button class="act-btn" onclick="toggleStatus('${b._id}','${b.status}')" style="margin-left:4px"><i class="fas fa-${b.status==='published'?'eye-slash':'globe'}"></i></button>
-        <button class="act-btn danger" onclick="deleteBlog('${b._id}')" style="margin-left:4px"><i class="fas fa-trash"></i></button>
+        <button class="act-btn" onclick="editBlog('${b.id}')"><i class="fas fa-edit"></i> Edit</button>
+        <button class="act-btn" onclick="toggleStatus('${b.id}','${b.status}')" style="margin-left:4px"><i class="fas fa-${b.status==='published'?'eye-slash':'globe'}"></i></button>
+        <button class="act-btn danger" onclick="deleteBlog('${b.id}')" style="margin-left:4px"><i class="fas fa-trash"></i></button>
       </td>
     </tr>
   `).join('') : '<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--txt3);font-family:var(--mono);font-size:12px">No posts found.</td></tr>';
@@ -232,7 +230,7 @@ function closeEditor() {
 }
 
 function editBlog(id) {
-  const blog = allBlogs.find(b => b._id === id);
+  const blog = allBlogs.find(b => b.id === id);
   if (blog) openEditor(blog);
 }
 
@@ -283,56 +281,49 @@ async function saveBlog(status) {
     category: document.getElementById('b-category').value,
     author: document.getElementById('b-author').value,
     featured: document.getElementById('b-featured').value === 'true',
-    coverImage: document.getElementById('b-cover').value,
-    tags
+    tags: tags,
+    publishedAt: status === 'published' ? new Date().toISOString() : null
   };
-  const r = editId
-    ? await api('PUT', '/blogs/' + editId, payload)
-    : await api('POST', '/blogs', payload);
-  if (r?.ok) {
+  
+  try {
+    let result;
+    if (editId) {
+      result = await updateBlog(editId, payload);
+    } else {
+      result = await createBlog(payload);
+    }
+    
     toast(status === 'published' ? 'Post published!' : 'Draft saved!', 'success');
     closeEditor();
-    // Update local
-    if (editId) {
-      const idx = allBlogs.findIndex(b => b._id === editId);
-      if (idx >= 0) allBlogs[idx] = { ...allBlogs[idx], ...payload };
-    } else {
-      allBlogs.unshift({ _id: 'local_' + Date.now(), ...payload, views: 0, createdAt: new Date() });
-    }
-    renderTable();
-    // persist to localStorage so main site can read it
-    setLocalData('blogs', allBlogs);
-  } else {
-    // Demo mode: update locally
-    toast(status === 'published' ? 'Post published! (demo mode)' : 'Draft saved! (demo mode)', 'success');
-    if (editId) {
-      const idx = allBlogs.findIndex(b => b._id === editId);
-      if (idx >= 0) allBlogs[idx] = { ...allBlogs[idx], ...payload };
-    } else {
-      allBlogs.unshift({ _id: 'local_' + Date.now(), ...payload, views: 0, createdAt: new Date() });
-    }
-    closeEditor(); renderTable();
-    // persist to localStorage (demo mode)
-    setLocalData('blogs', allBlogs);
+    await loadBlogs();
+    
+  } catch(e) {
+    console.error('Save error:', e);
+    toast('Error saving blog: ' + e.message, 'error');
   }
 }
 
 async function toggleStatus(id, current) {
   const newStatus = current === 'published' ? 'draft' : 'published';
-  const r = await api('PUT', '/blogs/' + id, { status: newStatus });
-  const idx = allBlogs.findIndex(b => b._id === id);
-  if (idx >= 0) allBlogs[idx].status = newStatus;
-  toast('Status updated to ' + newStatus, 'success');
-  renderTable();
+  try {
+    await updateBlog(id, { status: newStatus });
+    toast('Status updated to ' + newStatus, 'success');
+    await loadBlogs();
+  } catch(e) {
+    toast('Error updating status: ' + e.message, 'error');
+  }
 }
 
 async function deleteBlog(id) {
   if (!window.confirm('Delete this blog post? This cannot be undone.')) return;
-  await api('DELETE', '/blogs/' + id);
-  allBlogs = allBlogs.filter(b => b._id !== id);
-  toast('Blog post deleted', 'success');
-  renderTable();
-  setLocalData('blogs', allBlogs);
+  try {
+    await deleteAdminBlog(id);
+    toast('Blog post deleted', 'success');
+    await loadBlogs();
+  } catch(e) {
+    console.error('Error deleting blog:', e);
+    toast('Error deleting blog: ' + e.message, 'error');
+  }
 }
 
 // Check URL for ?action=new

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Website Content | JCS Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="admin.css">
+<style>
+.tip{font-size:12px;color:var(--txt3);margin-top:4px}
+.block{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px;margin-bottom:16px}
+.block h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.json-help{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.06em}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar"></aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Website Content</div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="saveContent()"><i class="fas fa-save"></i> Save Content</button>
+      <a href="../index.html" target="_blank" class="topbar-btn" style="margin-left:8px"><i class="fas fa-globe"></i> View Homepage</a>
+    </div>
+  </div>
+  <div class="content">
+    <div style="background:rgba(29,114,245,.06);border:1px solid rgba(29,114,245,.2);border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:var(--txt2);display:flex;align-items:center;gap:10px">
+      <i class="fas fa-circle-info" style="color:var(--blue)"></i>
+      Edit homepage text and section content here. Changes are saved to admin data and reflected on the live homepage.
+    </div>
+
+    <div class="block">
+      <h3>Hero Section</h3>
+      <div class="form-grid">
+        <div class="fg"><label class="fl">Hero Chip</label><input id="h-chip" class="fi"></div>
+        <div class="fg"><label class="fl">Title Line 1</label><input id="h-line1" class="fi"></div>
+      </div>
+      <div class="form-grid">
+        <div class="fg"><label class="fl">Title Accent</label><input id="h-accent" class="fi"></div>
+        <div class="fg"><label class="fl">Subtitle</label><input id="h-subtitle" class="fi"></div>
+      </div>
+      <div class="fg"><label class="fl">Hero Description</label><textarea id="h-desc" class="fi" style="min-height:92px"></textarea></div>
+      <div class="form-grid">
+        <div class="fg"><label class="fl">Primary CTA Label</label><input id="h-cta1" class="fi"></div>
+        <div class="fg"><label class="fl">Secondary CTA Label</label><input id="h-cta2" class="fi"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Ticker Messages</h3>
+      <div class="json-help">One message per line</div>
+      <textarea id="c-ticker" class="fi" style="min-height:140px"></textarea>
+    </div>
+
+    <div class="block">
+      <h3>Standards Strip</h3>
+      <div class="json-help">One standard per line</div>
+      <textarea id="c-standards" class="fi" style="min-height:140px"></textarea>
+    </div>
+
+    <div class="block">
+      <h3>Industries Cards</h3>
+      <div class="tip">Format: icon|title|description|tag</div>
+      <textarea id="c-industries" class="fi" style="min-height:180px"></textarea>
+    </div>
+
+    <div class="block">
+      <h3>Stats Band</h3>
+      <div class="tip">Format: value|label|description</div>
+      <textarea id="c-stats" class="fi" style="min-height:140px"></textarea>
+    </div>
+
+    <div class="block">
+      <h3>FAQ</h3>
+      <div class="tip">Format: question|answer</div>
+      <textarea id="c-faq" class="fi" style="min-height:180px"></textarea>
+    </div>
+
+    <div class="block">
+      <h3>CTA Band</h3>
+      <div class="fg"><label class="fl">CTA Title</label><input id="c-title" class="fi"></div>
+      <div class="fg"><label class="fl">CTA Description</label><textarea id="c-desc" class="fi" style="min-height:90px"></textarea></div>
+      <div class="form-grid">
+        <div class="fg"><label class="fl">Primary Button Label</label><input id="c-btn1" class="fi"></div>
+        <div class="fg"><label class="fl">Secondary Button Label</label><input id="c-btn2" class="fi"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+<script>
+requireAuth();
+document.getElementById('sidebar').innerHTML = renderSidebar('content');
+loadBadges();
+
+function toLines(items, map) {
+  return (items || []).map(map).join('\n');
+}
+
+function fromLines(str) {
+  return String(str || '').split('\n').map(s => s.trim()).filter(Boolean);
+}
+
+function loadContent() {
+  const d = getLocalData('homeContent', DEMO_DATA.homeContent) || DEMO_DATA.homeContent;
+
+  document.getElementById('h-chip').value = d.hero?.chip || '';
+  document.getElementById('h-line1').value = d.hero?.titleLine1 || '';
+  document.getElementById('h-accent').value = d.hero?.titleAccent || '';
+  document.getElementById('h-subtitle').value = d.hero?.subtitle || '';
+  document.getElementById('h-desc').value = d.hero?.desc || '';
+  document.getElementById('h-cta1').value = d.hero?.primaryCta || '';
+  document.getElementById('h-cta2').value = d.hero?.secondaryCta || '';
+
+  document.getElementById('c-ticker').value = toLines(d.ticker, x => x);
+  document.getElementById('c-standards').value = toLines(d.standards, x => x);
+  document.getElementById('c-industries').value = toLines(d.industries, x => [x.icon || '•', x.title || '', x.desc || '', x.tag || ''].join('|'));
+  document.getElementById('c-stats').value = toLines(d.statsBand, x => [x.value || '', x.label || '', x.desc || ''].join('|'));
+  document.getElementById('c-faq').value = toLines(d.faq, x => [x.q || '', x.a || ''].join('|'));
+
+  document.getElementById('c-title').value = d.cta?.title || '';
+  document.getElementById('c-desc').value = d.cta?.desc || '';
+  document.getElementById('c-btn1').value = d.cta?.primary || '';
+  document.getElementById('c-btn2').value = d.cta?.secondary || '';
+}
+
+function parseKV(lines, count) {
+  return fromLines(lines).map(line => {
+    const parts = line.split('|').map(x => x.trim());
+    while (parts.length < count) parts.push('');
+    return parts.slice(0, count);
+  });
+}
+
+async function saveContent() {
+  const data = {
+    hero: {
+      chip: document.getElementById('h-chip').value.trim(),
+      titleLine1: document.getElementById('h-line1').value.trim(),
+      titleAccent: document.getElementById('h-accent').value.trim(),
+      subtitle: document.getElementById('h-subtitle').value.trim(),
+      desc: document.getElementById('h-desc').value.trim(),
+      primaryCta: document.getElementById('h-cta1').value.trim(),
+      secondaryCta: document.getElementById('h-cta2').value.trim()
+    },
+    ticker: fromLines(document.getElementById('c-ticker').value),
+    standards: fromLines(document.getElementById('c-standards').value),
+    industries: parseKV(document.getElementById('c-industries').value, 4).map(x => ({ icon: x[0], title: x[1], desc: x[2], tag: x[3] })),
+    statsBand: parseKV(document.getElementById('c-stats').value, 3).map(x => ({ value: x[0], label: x[1], desc: x[2] })),
+    faq: parseKV(document.getElementById('c-faq').value, 2).map(x => ({ q: x[0], a: x[1] })),
+    cta: {
+      title: document.getElementById('c-title').value.trim(),
+      desc: document.getElementById('c-desc').value.trim(),
+      primary: document.getElementById('c-btn1').value.trim(),
+      secondary: document.getElementById('c-btn2').value.trim()
+    }
+  };
+
+  const r = await api('PUT', '/settings/home-content', data);
+  setLocalData('homeContent', data);
+  if (r?.ok) toast('Homepage content saved', 'success');
+  else toast('Homepage content saved locally (demo mode)', 'success');
+}
+
+loadContent();
+</script>
+</body>
+</html>

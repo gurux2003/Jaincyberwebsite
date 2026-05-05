@@ -270,7 +270,7 @@
   <div class="hero-left">
     <div class="hero-chip">
       <div class="hero-chip-dot"></div>
-      <span>Specialization: Railway & Metro SCADA Security</span>
+      <span>Registration Number: 23AOZPK5376A1ZQ</span>
     </div>
     <h1 class="hero-h1">
       Defend What<br>
@@ -281,8 +281,8 @@
       Globally premier OT/ICS cybersecurity firm delivering <strong>IEC 62443-aligned security assessments</strong> for Railway, Metro, Power, Manufacturing & Government infrastructure. From gap analysis to full remediation.
     </p>
     <div class="hero-actions">
-      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
-      <a href="services.html" class="btn btn-outline btn-lg"><i class="fas fa-list"></i> Explore Services</a>
+      <button class="btn btn-blue btn-lg" id="hero-primary-cta" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="services.html" class="btn btn-outline btn-lg" id="hero-secondary-cta"><i class="fas fa-list"></i> Explore Services</a>
     </div>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n"><span data-v="20" data-s="+">0+</span></div><div class="hstat-l">Years Experience</div></div>
@@ -298,7 +298,7 @@
     <div class="float-badge fb2"><div class="fb-lbl">OT Risk Level</div><div class="fb-val red">HIGH</div><div class="fb-sub">Global Critical Infra</div></div>
     <div class="float-badge fb3"><div class="fb-lbl">Standard</div><div class="fb-val teal">IEC 62443</div><div class="fb-sub">Certified Assessments</div></div>
     <div class="live-ticker">
-      <div class="ticker-track">
+      <div class="ticker-track" id="home-ticker-track">
         <span class="ticker-item">SCADA Vulnerability Detected — Railway OT Network</span>
         <span class="ticker-item">IEC 62443-3-2 Assessment Completed — Metro Systems</span>
         <span class="ticker-item">Ransomware Attempt Blocked — Manufacturing SCADA</span>
@@ -319,7 +319,7 @@
 <!-- STANDARDS STRIP -->
 <div class="std-strip">
   <div class="wrap">
-    <div class="std-strip-inner">
+    <div class="std-strip-inner" id="home-standards-strip">
       <span style="font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:.18em;text-transform:uppercase;flex-shrink:0">Standards We Work With</span>
       <span class="std-pill">IEC 62443-3-2</span>
       <span class="std-pill">IEC 62443-4-2</span>
@@ -343,7 +343,7 @@
       <p class="sec-lead">Every engagement delivers a clear, actionable report. Built for OT, IT, IoT and ITES — with deep Railway & Metro SCADA expertise.</p>
     </div>
     <div class="svc-layout reveal">
-      <div class="svc-tabs">
+      <div class="svc-tabs" id="home-services-tabs">
         <div class="svc-tab active" onclick="switchSvc(0,this)"><span class="svc-tab-icon">🛡️</span><span class="svc-tab-name">Security Assessment</span><span class="svc-tab-n">01</span></div>
         <div class="svc-tab" onclick="switchSvc(1,this)"><span class="svc-tab-icon">📊</span><span class="svc-tab-name">Risk Analysis</span><span class="svc-tab-n">02</span></div>
         <div class="svc-tab" onclick="switchSvc(2,this)"><span class="svc-tab-icon">🔍</span><span class="svc-tab-name">Gap Analysis</span><span class="svc-tab-n">03</span></div>
@@ -352,7 +352,7 @@
         <div class="svc-tab" onclick="switchSvc(5,this)"><span class="svc-tab-icon">🔧</span><span class="svc-tab-name">Remediation</span><span class="svc-tab-n">06</span></div>
         <div class="svc-tab" onclick="switchSvc(6,this)"><span class="svc-tab-icon">🤖</span><span class="svc-tab-name">AI Risk</span><span class="svc-tab-n">07</span></div>
       </div>
-      <div class="svc-content">
+      <div class="svc-content" id="home-services-panels">
         <div class="svc-panel active">
           <div class="svc-panel-hd"><div class="svc-icon-big">🛡️</div><div><h3>Security Control Assessment</h3><p>Meticulous evaluation of your existing security controls guided by IEC 62443-4-2, NIST CSF, and ISO 27002 — covering all policies, procedures, and technical safeguards.</p></div></div>
           <div class="svc-panel-body">
@@ -420,7 +420,7 @@
 <!-- STATS -->
 <div class="stats-band">
   <div class="wrap">
-    <div class="stats-cells reveal">
+    <div class="stats-cells reveal" id="home-stats-band">
       <div class="stat-cell"><div class="stat-n"><span data-v="20" data-s="+">0+</span></div><div class="stat-l">Years Experience</div><div class="stat-d">Deep OT/ICS domain expertise across critical sectors</div></div>
       <div class="stat-cell"><div class="stat-n"><span data-v="50" data-s="+">0+</span></div><div class="stat-l">Projects Delivered</div><div class="stat-d">Successful engagements across global sectors</div></div>
       <div class="stat-cell"><div class="stat-n"><span data-v="9">0</span></div><div class="stat-l">Standards Frameworks</div><div class="stat-d">IEC 62443, ISO 27001, NIST and 6 more</div></div>
@@ -437,7 +437,7 @@
       <h2 class="h2">Specialized Across<br><span class="accent">Critical Sectors</span></h2>
       <p class="sec-lead">From legacy railway signaling to modern cloud infrastructure — we protect what keeps India running.</p>
     </div>
-    <div class="ind-grid reveal">
+    <div class="ind-grid reveal" id="home-industries-grid">
       <div class="ind-card"><div class="ind-icon">🚇</div><h3>Railway & Metro</h3><p>SCADA, signaling systems, OT networks and passenger infrastructure security</p><span class="ind-tag">Core Specialization</span></div>
       <div class="ind-card"><div class="ind-icon">⚡</div><h3>Power & Energy</h3><p>Grid security, SCADA protection, substation hardening</p><span class="ind-tag">Critical Infrastructure</span></div>
       <div class="ind-card"><div class="ind-icon">🏭</div><h3>Manufacturing</h3><p>OT/IT convergence, PLC/DCS security, production continuity</p><span class="ind-tag">ICS / OT Focus</span></div>
@@ -569,7 +569,7 @@
       </div>
       <a href="blog.html" class="btn btn-ghost reveal d2">All Articles <i class="fas fa-arrow-right"></i></a>
     </div>
-    <div class="blog-home-grid reveal">
+    <div class="blog-home-grid reveal" id="home-blog-grid">
       <a href="blog-post.html?id=1" class="blog-home-card">
         <div class="bhc-img">🚇<span class="bhc-cat">Railway</span></div>
         <div class="bhc-body">
@@ -609,7 +609,7 @@
       <h2 class="h2">Frequently Asked <span class="accent">Questions</span></h2>
       <p class="sec-lead">Everything you need to know before engaging with us.</p>
     </div>
-    <div class="faq-grid reveal">
+    <div class="faq-grid reveal" id="home-faq-grid">
       <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Why is OT security different from IT security?<div class="faq-icon">+</div></div><div class="faq-a">OT environments have unique constraints — zero-downtime requirements, legacy equipment that cannot be patched, proprietary industrial protocols (Modbus, DNP3), and safety-critical systems where a breach can cause physical harm or operational shutdown. Standard IT security tools don't account for these and can actually disrupt operations if applied incorrectly to OT networks.</div></div>
       <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Will your assessments disrupt our OT operations?<div class="faq-icon">+</div></div><div class="faq-a">No. We use passive, non-intrusive assessment methodologies specifically designed for OT environments where operational continuity is non-negotiable. Our team has extensive experience working in live railway, power, and manufacturing environments without causing any operational disruption whatsoever.</div></div>
       <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What is included in a Security Control Assessment?<div class="faq-icon">+</div></div><div class="faq-a">Our Security Control Assessment evaluates effectiveness of your existing security controls — from policies and procedures to technical safeguards. Guided by IEC 62443-4-2, NIST CSF, and ISO 27002, you receive a comprehensive Security Controls Assessment Report as your definitive blueprint for confidence in your security posture.</div></div>
@@ -623,11 +623,11 @@
 <!-- CTA -->
 <div class="cta-band">
   <div class="wrap">
-    <h2 class="h2">Build Resilience &amp; Keep<br>Threats at Bay</h2>
-    <p class="body-lg">Protect your critical infrastructure with Globally premier OT cybersecurity experts. First assessment is free.</p>
+    <h2 class="h2" id="home-cta-title">Build Resilience &amp; Keep<br>Threats at Bay</h2>
+    <p class="body-lg" id="home-cta-desc">Protect your critical infrastructure with Globally premier OT cybersecurity experts. First assessment is free.</p>
     <div class="actions">
-      <button class="btn btn-blue btn-lg" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
-      <a href="contact.html" class="btn btn-outline btn-lg"><i class="fas fa-envelope"></i> Contact Our Experts</a>
+      <button class="btn btn-blue btn-lg" id="home-cta-primary" onclick="openModal()"><i class="fas fa-shield-halved"></i> Request Free Assessment</button>
+      <a href="contact.html" class="btn btn-outline btn-lg" id="home-cta-secondary"><i class="fas fa-envelope"></i> Contact Our Experts</a>
     </div>
   </div>
 </div>
@@ -715,16 +715,6 @@
 
 <script src="js/main.js"></script>
 <script src="js/site-data.js"></script>
-<script>
-window.addEventListener('load', () => {
-  const s = (window.getLocalDataSite ? getLocalDataSite('settings', {}) : {}) || {};
-  try {
-    if (s.address) document.querySelector('#footer .footer-contact-row:nth-child(1) span').textContent = s.address;
-    if (s.phone) document.querySelector('#footer .footer-contact-row:nth-child(2) a').textContent = s.phone;
-    if (s.email) document.querySelector('#footer .footer-contact-row:nth-child(3) a').textContent = s.email;
-  } catch(e) {}
-});
-</script>
 <script>
 function switchSvc(idx, el) {
   document.querySelectorAll('.svc-tab').forEach(t => t.classList.remove('active'));

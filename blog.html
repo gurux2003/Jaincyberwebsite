@@ -109,96 +109,11 @@
       <button class="blog-filter" onclick="filterBlogs('Training',this)">Training</button>
     </div>
 
-    <!-- Featured row -->
-    <div class="blog-featured-row reveal" id="featured-row">
-      <a href="blog-post.html?id=1" class="blog-featured-card">
-        <div class="bfc-img"><span>🚇</span><span class="bfc-badge">Railway</span><span class="bfc-feat-badge">⭐ Featured</span></div>
-        <div class="bfc-body">
-          <div class="bfc-meta"><span>December 2024</span><span>·</span><span>8 min read</span><span>·</span><span>Virendra Kothari</span></div>
-          <h3>Why Railway OT Security Is India's #1 Cyber Priority for 2025</h3>
-          <p>Modern railway systems rely on SCADA and OT networks increasingly targeted by nation-state actors and ransomware groups. India's rail modernization is creating new attack surfaces faster than security teams can address. Here's what must change — and how.</p>
-          <span class="bfc-link">Read Full Article <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
-        </div>
-      </a>
-      <div class="blog-secondary">
-        <a href="blog-post.html?id=2" class="blog-featured-card">
-          <div class="bfc-img sm"><span>📋</span><span class="bfc-badge">Compliance</span></div>
-          <div class="bfc-body">
-            <div class="bfc-meta"><span>November 2024</span><span>·</span><span>7 min read</span></div>
-            <h3 class="sm">IEC 62443-3-2: A Practical Guide for OT Risk Assessment</h3>
-            <p class="sm">Implementing IEC 62443-3-2 in real-world industrial control system environments, step by step — without disrupting operations.</p>
-            <span class="bfc-link">Read Article <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
-          </div>
-        </a>
-        <a href="blog-post.html?id=3" class="blog-featured-card">
-          <div class="bfc-img sm"><span>🔐</span><span class="bfc-badge">OT Security</span></div>
-          <div class="bfc-body">
-            <div class="bfc-meta"><span>October 2024</span><span>·</span><span>6 min read</span></div>
-            <h3 class="sm">Top 5 OT Cybersecurity Threats Facing Indian Manufacturing</h3>
-            <p class="sm">The 5 most dangerous attack vectors targeting manufacturing OT networks in India right now and how to defend against each one.</p>
-            <span class="bfc-link">Read Article <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
-          </div>
-        </a>
-      </div>
-    </div>
+    <!-- Featured row - populated by renderSiteBlogs() from admin data -->
+    <div class="blog-featured-row reveal" id="featured-row"></div>
 
-    <!-- Main grid -->
-    <div class="blog-main-grid reveal" id="blog-grid">
-      <a href="blog-post.html?id=4" class="blog-card" data-cat="Compliance">
-        <div class="bc-img"><span>📜</span><span class="bc-cat">Compliance</span></div>
-        <div class="bc-body">
-          <div class="bc-meta"><span>Sep 2024</span><span>·</span><span>9 min</span></div>
-          <h3>ISO 27001 vs IEC 62443: Which Does Your OT Network Need?</h3>
-          <p>Understanding the critical differences between IT and OT security standards and when to apply each framework to your specific environment.</p>
-          <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
-        </div>
-      </a>
-      <a href="blog-post.html?id=5" class="blog-card" data-cat="Case Study">
-        <div class="bc-img"><span>🏭</span><span class="bc-cat">Case Study</span></div>
-        <div class="bc-body">
-          <div class="bc-meta"><span>Aug 2024</span><span>·</span><span>11 min</span></div>
-          <h3>How We Recovered a Factory from Ransomware in 72 Hours</h3>
-          <p>A detailed case study of how our team responded to a ransomware attack on a manufacturing OT network and rebuilt from the ground up.</p>
-          <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
-        </div>
-      </a>
-      <a href="blog-post.html?id=6" class="blog-card" data-cat="Training">
-        <div class="bc-img"><span>🎓</span><span class="bc-cat">Training</span></div>
-        <div class="bc-body">
-          <div class="bc-meta"><span>Jul 2024</span><span>·</span><span>6 min</span></div>
-          <h3>Building a Cybersecurity Culture in OT-Heavy Organizations</h3>
-          <p>Why human error remains the biggest OT security risk and the practical steps to build a security-first culture across engineering and operations teams.</p>
-          <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
-        </div>
-      </a>
-      <a href="blog-post.html?id=7" class="blog-card" data-cat="Railway">
-        <div class="bc-img"><span>🚇</span><span class="bc-cat">Railway</span></div>
-        <div class="bc-body">
-          <div class="bc-meta"><span>Jun 2024</span><span>·</span><span>10 min</span></div>
-          <h3>SCADA Security Architecture Best Practices for Metro Rail</h3>
-          <p>Designing defense-in-depth security architectures for metropolitan rail SCADA networks per IEC 62443 zone and conduit model.</p>
-          <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
-        </div>
-      </a>
-      <a href="blog-post.html?id=8" class="blog-card" data-cat="OT Security">
-        <div class="bc-img"><span>⚡</span><span class="bc-cat">OT Security</span></div>
-        <div class="bc-body">
-          <div class="bc-meta"><span>May 2024</span><span>·</span><span>7 min</span></div>
-          <h3>Why Passive OT Monitoring Is Non-Negotiable in 2025</h3>
-          <p>Active scanning in OT environments can crash PLCs and disrupt operations. Here's why passive monitoring is the only safe approach — and what to look for in a solution.</p>
-          <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
-        </div>
-      </a>
-      <a href="blog-post.html?id=9" class="blog-card" data-cat="IT Security">
-        <div class="bc-img"><span>🏦</span><span class="bc-cat">IT Security</span></div>
-        <div class="bc-body">
-          <div class="bc-meta"><span>Apr 2024</span><span>·</span><span>8 min</span></div>
-          <h3>RBI Cybersecurity Framework 2024: What Banks Must Do Now</h3>
-          <p>Breaking down the RBI's updated cybersecurity framework circular and the specific actions Indian banks must take to achieve compliance by the deadline.</p>
-          <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
-        </div>
-      </a>
-    </div>
+    <!-- Main grid - populated by renderSiteBlogs() from admin data -->
+    <div class="blog-main-grid reveal" id="blog-grid"></div>
 
     <div class="pagination reveal" id="pagination">
       <button class="page-btn active">1</button>
@@ -257,21 +172,104 @@
   </div>
 </div>
 <script src="js/main.js"></script>
-<script src="js/site-data.js"></script>
+<script src="js/api-client.js"></script>
 <script>
+// Render blogs from backend API
+async function loadAndRenderBlogs() {
+  try {
+    const blogs = await fetchBlogs();
+    const featuredRow = document.getElementById('featured-row');
+    const blogGrid = document.getElementById('blog-grid');
+    
+    if (!blogs || blogs.length === 0) {
+      if (featuredRow) featuredRow.innerHTML = '';
+      if (blogGrid) {
+        blogGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:26px;border:1px solid var(--line);border-radius:var(--r);color:var(--txt3);font-family:var(--mono);font-size:12px">No published blog posts yet. Check back soon!</div>';
+      }
+      return;
+    }
+    
+    // Sort by published date and featured flag
+    const featured = blogs.slice(0, 3);
+    const remaining = blogs.slice(3);
+    
+    // Render featured row
+    if (featuredRow) {
+      featuredRow.innerHTML = '';
+      if (featured.length > 0) {
+        featuredRow.style.display = 'grid';
+        featured.forEach((blog, i) => {
+          const isMain = i === 0;
+          const excerpt = blog.excerpt || (blog.content || '').substring(0, 150);
+          featuredRow.innerHTML += `
+            <a href="blog-post.html?id=${encodeURIComponent(blog.id)}" class="blog-featured-card">
+              <div class="bfc-img${isMain ? '' : ' sm'}"><span>📄</span><span class="bfc-badge">${blog.category || 'News'}</span>${blog.featured ? '<span class="bfc-feat-badge">⭐ Featured</span>' : ''}</div>
+              <div class="bfc-body">
+                <div class="bfc-meta">${new Date(blog.publishedAt || blog.createdAt).toLocaleString('en-US', { month: 'long', year: 'numeric' })} · ${blog.readTime || Math.max(3, Math.round((blog.content || '').split(' ').length / 200))} min read ${blog.author ? '· ' + blog.author : ''}</div>
+                <h3${isMain ? '' : ' class="sm"'}>${blog.title}</h3>
+                <p${isMain ? '' : ' class="sm"'}>${excerpt}</p>
+                <span class="bfc-link">Read ${isMain ? 'Full Article' : 'Article'} <i class="fas fa-arrow-right" style="font-size:10px"></i></span>
+              </div>
+            </a>
+          `;
+        });
+      } else {
+        featuredRow.style.display = 'none';
+      }
+    }
+    
+    // Render grid
+    if (blogGrid) {
+      blogGrid.innerHTML = remaining.map(blog => `
+        <a href="blog-post.html?id=${encodeURIComponent(blog.id)}" class="blog-card" data-cat="${blog.category || ''}">
+          <div class="bc-img"><span>📄</span><span class="bc-cat">${blog.category || ''}</span></div>
+          <div class="bc-body">
+            <div class="bc-meta">${new Date(blog.publishedAt || blog.createdAt).toLocaleString('en-US', { month: 'short', year: 'numeric' })} · ${blog.readTime || Math.max(3, Math.round((blog.content || '').split(' ').length / 200))} min</div>
+            <h3>${blog.title}</h3>
+            <p>${blog.excerpt || (blog.content || '').substring(0, 100)}</p>
+            <span class="bc-link">Read More <i class="fas fa-arrow-right" style="font-size:9px"></i></span>
+          </div>
+        </a>
+      `).join('');
+
+      if (!blogs.length) {
+        blogGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:26px;border:1px solid var(--line);border-radius:var(--r);color:var(--txt3);font-family:var(--mono);font-size:12px">No published blog posts yet. Check back soon!</div>';
+      }
+    }
+  } catch (e) {
+    console.error('Error loading blogs:', e);
+    document.getElementById('blog-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:26px;color:var(--txt3);font-family:var(--mono);font-size:12px">Error loading blog posts. Please refresh.</div>';
+  }
+}
+
+window.refreshPageData = loadAndRenderBlogs;
+
+// Load blogs on page load
+window.addEventListener('load', loadAndRenderBlogs);
+
+// Listen for real-time updates from backend
+document.addEventListener('backend-update', (e) => {
+  if (e.detail.type.includes('blog')) {
+    loadAndRenderBlogs();
+  }
+});
+
 function filterBlogs(cat, btn) {
   document.querySelectorAll('.blog-filter').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (cat === 'all') {
     document.querySelectorAll('.blog-card').forEach(c => c.style.display = 'flex');
-    document.getElementById('featured-row').style.display = 'grid';
+    const featuredRow = document.getElementById('featured-row');
+    if (featuredRow) featuredRow.style.display = 'grid';
   } else {
-    document.getElementById('featured-row').style.display = 'none';
+    const featuredRow = document.getElementById('featured-row');
+    if (featuredRow) featuredRow.style.display = 'none';
     document.querySelectorAll('.blog-card').forEach(c => {
       c.style.display = c.dataset.cat === cat ? 'flex' : 'none';
     });
   }
 }
+
 function subscribeNL(btn) {
   const input = btn.previousElementSibling;
   if (!input.value || !input.value.includes('@')) { alert('Please enter a valid email'); return; }

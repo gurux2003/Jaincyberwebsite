@@ -70,6 +70,7 @@ function renderSidebar(activePage) {
     { id: 'leads', icon: 'fa-bullseye', label: 'Leads', href: 'leads.html', badge: 'leads' },
     { id: 'contacts', icon: 'fa-envelope', label: 'Contact Messages', href: 'contacts.html', badge: 'contacts' },
     { id: 'services', icon: 'fa-shield-halved', label: 'Services', href: 'services-admin.html' },
+    { id: 'content', icon: 'fa-pen-ruler', label: 'Website Content', href: 'content-admin.html' },
     { id: 'settings', icon: 'fa-gear', label: 'Settings', href: 'settings.html' },
   ];
 
@@ -165,7 +166,57 @@ const DEMO_DATA = {
     { _id:'s5', title:'Cybersecurity Awareness Training', icon:'🎓', shortDesc:'Phishing, insider threats, OT security training for all staff levels', order:5, active:true },
     { _id:'s6', title:'Remediation Support & Implementation', icon:'🔧', shortDesc:'Hands-on implementation support for all remediation items', order:6, active:true },
     { _id:'s7', title:'AI Risk Assessment', icon:'🤖', shortDesc:'NIST AI RMF, ISO/IEC 42001, EU AI Act compliance assessment', order:7, active:true },
-  ]
+  ],
+  homeContent: {
+    hero: {
+      chip: 'Registration Number: 23AOZPK5376A1ZQ',
+      titleLine1: 'Defend What',
+      titleAccent: 'Powers the World',
+      subtitle: 'OT · ICS · SCADA · Critical Infrastructure',
+      desc: 'Globally premier OT/ICS cybersecurity firm delivering IEC 62443-aligned security assessments for Railway, Metro, Power, Manufacturing & Government infrastructure. From gap analysis to full remediation.',
+      primaryCta: 'Request Free Assessment',
+      secondaryCta: 'Explore Services'
+    },
+    ticker: [
+      'SCADA Vulnerability Detected — Railway OT Network',
+      'IEC 62443-3-2 Assessment Completed — Metro Systems',
+      'Ransomware Attempt Blocked — Manufacturing SCADA',
+      'ISO 27001 Audit Passed — Energy Sector Client',
+      'OT Network Segmentation Deployed — Oil & Gas Refinery',
+      'AI Risk Assessment Completed — ITES Infrastructure'
+    ],
+    standards: ['IEC 62443-3-2','IEC 62443-4-2','ISO 27001','ISO 31000','NIST CSF','NIST SP 800-30','ISO 27005','MITRE ATT&CK ICS','ISO 27002'],
+    statsBand: [
+      { value: '20+', label: 'Years Experience', desc: 'Deep OT/ICS domain expertise across critical sectors' },
+      { value: '50+', label: 'Projects Delivered', desc: 'Successful engagements across global sectors' },
+      { value: '9', label: 'Standards Frameworks', desc: 'IEC 62443, ISO 27001, NIST and 6 more' },
+      { value: '100%', label: 'Client Satisfaction', desc: 'Every client receives a clear, actionable deliverable' }
+    ],
+    industries: [
+      { icon: '🚇', title: 'Railway & Metro', desc: 'SCADA, signaling systems, OT networks and passenger infrastructure security', tag: 'Core Specialization' },
+      { icon: '⚡', title: 'Power & Energy', desc: 'Grid security, SCADA protection, substation hardening', tag: 'Critical Infrastructure' },
+      { icon: '🏭', title: 'Manufacturing', desc: 'OT/IT convergence, PLC/DCS security, production continuity', tag: 'ICS / OT Focus' },
+      { icon: '🛢️', title: 'Oil & Gas', desc: 'Pipeline SCADA, refinery OT, offshore platform security', tag: 'High Risk' },
+      { icon: '🏥', title: 'Healthcare', desc: 'IoMT devices, medical OT, patient data protection', tag: 'Safety-Critical' },
+      { icon: '✈️', title: 'Aviation', desc: 'Air traffic OT, airport infrastructure security', tag: 'High Consequence' },
+      { icon: '🏛️', title: 'Government', desc: 'National critical infrastructure, smart city OT', tag: 'National Security' },
+      { icon: '💻', title: 'IT, ITES & BFSI', desc: 'Data centers, cloud infrastructure, fintech security', tag: 'Enterprise Scale' }
+    ],
+    faq: [
+      { q: 'Why is OT security different from IT security?', a: 'OT environments have unique constraints — zero-downtime requirements, legacy equipment that cannot be patched, proprietary industrial protocols and safety-critical systems. Standard IT security tools can disrupt OT if applied incorrectly.' },
+      { q: 'Will your assessments disrupt our OT operations?', a: 'No. We use passive, non-intrusive assessment methodologies specifically designed for live OT environments where operational continuity is non-negotiable.' },
+      { q: 'What is included in a Security Control Assessment?', a: 'We evaluate policies, procedures and technical safeguards guided by IEC 62443-4-2, NIST CSF and ISO 27002 and provide an actionable assessment report.' },
+      { q: 'Do you provide ongoing support after assessment?', a: 'Yes. We provide remediation implementation support and verification so recommendations are executed, not just documented.' },
+      { q: 'Can you help us qualify for cyber insurance?', a: 'Yes. Our reports and controls mapping help organizations meet insurer requirements and improve coverage outcomes.' },
+      { q: 'Which industries do you specialize in?', a: 'Railway/Metro, Manufacturing, Power & Energy, Healthcare, Oil & Gas, Government, IT/ITES, Aviation, and BFSI.' }
+    ],
+    cta: {
+      title: 'Build Resilience & Keep Threats at Bay',
+      desc: 'Protect your critical infrastructure with Globally premier OT cybersecurity experts. First assessment is free.',
+      primary: 'Request Free Assessment',
+      secondary: 'Contact Our Experts'
+    }
+  }
 };
 
 /* ── Local storage helpers (frontend-only persistence) ───────────────── */
@@ -177,12 +228,37 @@ function setLocalData(k, v) {
   try { localStorage.setItem(_lsKey(k), JSON.stringify(v)); return true; } catch (e) { return false; }
 }
 
+/* ── API Wrapper Functions for Admin Panels ───────────────── */
+async function fetchAllBlogs() {
+  return apiCall('GET', '/admin/blogs').then(r => r?.ok ? r.data : []);
+}
+
+async function createBlog(data) {
+  return apiCall('POST', '/blogs', data);
+}
+
+async function updateBlog(id, data) {
+  return apiCall('PUT', '/blogs/' + id, data);
+}
+
+async function deleteAdminBlog(id) {
+  return apiCall('DELETE', '/blogs/' + id);
+}
+
 // Ensure demo data seeds localStorage on first run
 if (!getLocalData('initialized')) {
   setLocalData('blogs', DEMO_DATA.blogs);
   setLocalData('leads', DEMO_DATA.leads);
   setLocalData('contacts', DEMO_DATA.contacts);
   setLocalData('services', DEMO_DATA.services);
+  setLocalData('homeContent', DEMO_DATA.homeContent);
   setLocalData('settings', { address: 'Indore, Madhya Pradesh, India — 452001' });
   setLocalData('initialized', true);
 }
+
+if (!getLocalData('blogs')) setLocalData('blogs', DEMO_DATA.blogs);
+if (!getLocalData('leads')) setLocalData('leads', DEMO_DATA.leads);
+if (!getLocalData('contacts')) setLocalData('contacts', DEMO_DATA.contacts);
+if (!getLocalData('services')) setLocalData('services', DEMO_DATA.services);
+if (!getLocalData('homeContent')) setLocalData('homeContent', DEMO_DATA.homeContent);
+if (!getLocalData('settings')) setLocalData('settings', { address: 'Indore, Madhya Pradesh, India — 452001' });
